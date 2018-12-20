@@ -5,8 +5,8 @@ This project is an extension of a previous repo ([SFMLHitbox](https://github.com
 
 The user will be able to use the Polygon shape in two different ways:
 
-    - By providing a texture to the constructor which will identify important pixels to be included as verticies and create the shape based on these. This will also allow for the user to define the level of accuracy as either pixel perfect or approximate.
-    - By proving a vector of pre assembled verticies, possibly from some other SFML class by using the getPoints() method.
+1. By providing a texture to the constructor which will identify important pixels to be included as verticies and create the shape based on these. This will also allow for the user to define the level of accuracy as either pixel perfect or approximate.
+2. By proving a vector of pre assembled verticies, possibly from some other SFML class by using the getPoints() method.
 
 
 ## Theory
@@ -29,3 +29,10 @@ To properly implement barycentric coordinates in our polygon, we need to divide 
 we need to find the centroid of our polygon to act as the central vertex for every triangle. Since we want to be able to model all types of shapes -- convex, concave, regular, irregular, etc. -- we need a consistent way to determine the "center" of the our shape.
 
 The way we are going to do this is by finding the leftmost, rightmost, highest, and lowest, coordinate components and creating a rectangle. We can then take the center of this rectangle as the approximate centroid of our polygon.
+
+
+## References / More Information
+
+1. [Juan José Jiménez, Rafael J. Segura, Francisco R. Feito, Efficient Collision Detection between 2D Polygons, 2004](http://wscg.zcu.cz/wscg2004/Papers_2004_Full/B83.pdf)
+2. [Barycentric coordinate calculation](https://gamedev.stackexchange.com/questions/23743/whats-the-most-efficient-way-to-find-barycentric-coordinates)
+3. [General barycentric coordinate info](https://en.wikipedia.org/wiki/Barycentric_coordinate_system)
