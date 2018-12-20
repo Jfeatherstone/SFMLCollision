@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/collision.dir/src/Line.cpp.o CMakeFiles/collision.dir/src/main.cpp.o  -o collision /usr/lib/libsfml-graphics.so.2.5.1 /usr/lib/libsfml-audio.so.2.5.1 /usr/lib/libsfml-window.so.2.5.1 /usr/lib/libsfml-system.so.2.5.1 
