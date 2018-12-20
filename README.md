@@ -18,7 +18,7 @@ There are several aspects to how this library will work, many of which are compl
 
 The intersection algorithm will be based around the idea of barycentric coordinates, which center around a triangle. Every triangle has three verticies, and thus three sides. This coordinate system consists of three values that represent the point's relationship to each individual vertex. If all three of the barycentric are positive, it means that the point is located inside of the triangle. The figure below shows an example of what values you would get for different point locations relative to a given triangle.
 
-!(diagram1)[https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/diagram1.png]
+![diagram1](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/diagram1.png)
 
 
 This will be implemented in our Polygon class, along with several other algorithms to reduce the amount of computations per collision detection.
