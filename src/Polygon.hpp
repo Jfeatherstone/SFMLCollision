@@ -92,7 +92,24 @@ public:
     */
     Polygon(vector<Vector2f> points);
 
-    int getPointCount();
-    Vector2f getPoint(size_t index);
+    /*
+    The following two methods are overridden from Shape
+    */
+    virtual size_t getPointCount() const;
+    virtual Vector2f getPoint(size_t index) const;
+
     vector<Vector2f> getPoints();
+
+    /*
+    The big boys
+    The latter three will actually just convert each respective shape into a polygon type and call the first
+    intersection function
+
+    It is also important to note that these (due to their complexity) are not defined within Polygon.cpp but rather
+    Intersects.cpp
+    */
+    bool intersects(Polygon shape);
+    bool intersects(FloatRect shape);
+    bool intersects(CircleShape shape);
+    bool intersects(ConvexShape shape);
 };

@@ -31,16 +31,13 @@ void Triangle::precomputeBarycentric() {
     m_invDenom = 1.0f / (m_dot11 * m_dot22 - m_dot12 * m_dot12);
 }
 
-Vector3f Triangle::computeBarycentric(Vector2f p) {
+void Triangle::computeBarycentric(Vector2f p, Vector3f& result) {
     Vector2f v3 = p - m_verticies[0];
 
     float dot13 = VectorMath::dot(m_v1, v3);
     float dot23 = VectorMath::dot(m_v2, v3);
 
-    Vector3f v;
-    v.x = (m_dot22 * dot13 - m_dot12 * dot23) * m_invDenom;
-    v.y = (m_dot11 * dot23 - m_dot12 * dot13) * m_invDenom;
-    v.z = 1.0f - v.x - v.y;
-
-    return v;
+    result.x = (m_dot22 * dot13 - m_dot12 * dot23) * m_invDenom;
+    result.y = (m_dot11 * dot23 - m_dot12 * dot13) * m_invDenom;
+    result.z = 1.0f - result.x - result.y;
 }

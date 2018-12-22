@@ -100,5 +100,5 @@ public:
     /*
     The meat of the class right here, and its main function
     */
-    Vector3f computeBarycentric(Vector2f p);
+    void computeBarycentric(Vector2f p, Vector3f& result);
 };

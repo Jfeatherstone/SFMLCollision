@@ -302,6 +302,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors = 
      * 
      * ******************************************/
 
+    findCentroid();
     createTriangles();
 }
 
@@ -343,14 +344,26 @@ Polygon::Polygon(vector<Vector2f> points) {
     m_points = points;
 
     m_numVerticies = m_points.size();
+
+    findCentroid();
     createTriangles();
 }
 
 /*
     Spitting our polygon into triangles
+
+We always take our centroid as one of the verticies, and then te other two will just be two
+consectutive points on the polygon
 */
 void Polygon::createTriangles() {
 
+    m_triangles.resize(m_numVerticies);
+
+    for (int i = 0; i < m_points.size() - 1; i++) {
+        m_triangles[i] = Triangle(m_centroid, m_points[i], m_points[i+1]);
+    }
+
+    m_triangles[m_numVerticies - 1] = Triangle(m_centroid, m_points[m_numVerticies - 1], m_points[0]);
 }
 
 /*
@@ -386,4 +399,12 @@ void Polygon::findCentroid() {
     // Now we just take the center of our rectangle
     m_centroid.x = left + (right - left) / 2;
     m_centroid.y = top + (bottom - top) / 2;
+}
+
+size_t Polygon::getPointCount() const {
+    return m_numVerticies;
+}
+
+Vector2f Polygon::getPoint(size_t index) const {
+    return m_points[index];
 }
