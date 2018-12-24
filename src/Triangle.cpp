@@ -1,5 +1,13 @@
 #include "Triangle.hpp"
 
+Triangle::Triangle() {
+    m_verticies.resize(3);
+    for (int i = 0; i < 3; i++) {
+        m_verticies[i] = Vector2f(0, 0);
+    }
+
+}
+
 Triangle::Triangle(Vector2f v1, Vector2f v2, Vector2f v3) {
     m_verticies.resize(3);
 

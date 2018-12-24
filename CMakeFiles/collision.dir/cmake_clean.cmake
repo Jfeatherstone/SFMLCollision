@@ -1,5 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/collision.dir/src/Line.cpp.o"
+  "CMakeFiles/collision.dir/src/Polygon.cpp.o"
+  "CMakeFiles/collision.dir/src/Triangle.cpp.o"
+  "CMakeFiles/collision.dir/src/VectorMath.cpp.o"
   "CMakeFiles/collision.dir/src/main.cpp.o"
   "collision.pdb"
   "collision"

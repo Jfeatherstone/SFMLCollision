@@ -5,7 +5,7 @@
 
 This will generate a list of verticies based on the pixels in an image (texture)
 */
-Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors = {}) {
+Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
     /*****************************************
      * 
@@ -304,6 +304,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors = 
 
     findCentroid();
     createTriangles();
+    update(); // This makes the shape actually drawable
 }
 
 /*
@@ -332,7 +333,7 @@ bool Polygon::hitboxContainsPoint(vector<Vector2f>& hitboxVerticies, Vector2f po
 
 
 /*
-    The more basic constructor
+    The more basic constructors
 
 This constructor is rather basic, and I can only think of one real scenario where it would be useful:
 
@@ -347,8 +348,56 @@ Polygon::Polygon(vector<Vector2f> points) {
 
     findCentroid();
     createTriangles();
+    update(); // This makes the shape actually drawable
 }
 
+Polygon::Polygon(CircleShape shape) {
+    vector<Vector2f> points;
+    points.resize(shape.getPointCount());
+    for (int i = 0; i < shape.getPointCount(); i++) {
+        points[i] = shape.getPoint(i);
+    }
+
+    m_points = points;
+
+    m_numVerticies = m_points.size();
+
+    findCentroid();
+    createTriangles();
+    update(); // This makes the shape actually drawable
+}
+
+Polygon::Polygon(RectangleShape shape) {
+    vector<Vector2f> points;
+    points.resize(shape.getPointCount());
+    for (int i = 0; i < shape.getPointCount(); i++) {
+        points[i] = shape.getPoint(i);
+    }
+
+    m_points = points;
+
+    m_numVerticies = m_points.size();
+
+    findCentroid();
+    createTriangles();
+    update(); // This makes the shape actually drawable
+}
+
+Polygon::Polygon(ConvexShape shape) {
+    vector<Vector2f> points;
+    points.resize(shape.getPointCount());
+    for (int i = 0; i < shape.getPointCount(); i++) {
+        points[i] = shape.getPoint(i);
+    }
+
+    m_points = points;
+
+    m_numVerticies = m_points.size();
+
+    findCentroid();
+    createTriangles();
+    update(); // This makes the shape actually drawable
+}
 /*
     Spitting our polygon into triangles
 
@@ -407,4 +456,8 @@ size_t Polygon::getPointCount() const {
 
 Vector2f Polygon::getPoint(size_t index) const {
     return m_points[index];
+}
+
+vector<Vector2f> Polygon::getPoints() {
+    return m_points;
 }

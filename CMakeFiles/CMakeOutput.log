@@ -28,28 +28,28 @@ The CXX compiler identification is GNU, found in "/home/jack/cpp-workspace/SFMLC
 Determining if the C compiler works passed with the following output:
 Change Dir: /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_a126c/fast"
-/usr/bin/make -f CMakeFiles/cmTC_a126c.dir/build.make CMakeFiles/cmTC_a126c.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_b7d58/fast"
+/usr/bin/make -f CMakeFiles/cmTC_b7d58.dir/build.make CMakeFiles/cmTC_b7d58.dir/build
 make[1]: Entering directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_a126c.dir/testCCompiler.c.o
-/usr/bin/cc    -o CMakeFiles/cmTC_a126c.dir/testCCompiler.c.o   -c /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp/testCCompiler.c
-Linking C executable cmTC_a126c
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a126c.dir/link.txt --verbose=1
-/usr/bin/cc      CMakeFiles/cmTC_a126c.dir/testCCompiler.c.o  -o cmTC_a126c 
+Building C object CMakeFiles/cmTC_b7d58.dir/testCCompiler.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_b7d58.dir/testCCompiler.c.o   -c /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_b7d58
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b7d58.dir/link.txt --verbose=1
+/usr/bin/cc      CMakeFiles/cmTC_b7d58.dir/testCCompiler.c.o  -o cmTC_b7d58 
 make[1]: Leaving directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
 
 
 Detecting C compiler ABI info compiled with the following output:
 Change Dir: /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_9af68/fast"
-/usr/bin/make -f CMakeFiles/cmTC_9af68.dir/build.make CMakeFiles/cmTC_9af68.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_c2f9d/fast"
+/usr/bin/make -f CMakeFiles/cmTC_c2f9d.dir/build.make CMakeFiles/cmTC_c2f9d.dir/build
 make[1]: Entering directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_9af68.dir/CMakeCCompilerABI.c.o
-/usr/bin/cc    -o CMakeFiles/cmTC_9af68.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.13/Modules/CMakeCCompilerABI.c
-Linking C executable cmTC_9af68
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9af68.dir/link.txt --verbose=1
-/usr/bin/cc     -v CMakeFiles/cmTC_9af68.dir/CMakeCCompilerABI.c.o  -o cmTC_9af68 
+Building C object CMakeFiles/cmTC_c2f9d.dir/CMakeCCompilerABI.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_c2f9d.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.13/Modules/CMakeCCompilerABI.c
+Linking C executable cmTC_c2f9d
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c2f9d.dir/link.txt --verbose=1
+/usr/bin/cc     -v CMakeFiles/cmTC_c2f9d.dir/CMakeCCompilerABI.c.o  -o cmTC_c2f9d 
 Using built-in specs.
 COLLECT_GCC=/usr/bin/cc
 COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/lto-wrapper
@@ -59,9 +59,9 @@ Thread model: posix
 gcc version 8.2.1 20181127 (GCC) 
 COMPILER_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/
 LIBRARY_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/:/lib/../lib/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_9af68' '-mtune=generic' '-march=x86-64'
- /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/collect2 -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/ccA98q8H.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_9af68 /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../.. CMakeFiles/cmTC_9af68.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/crtn.o
-COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_9af68' '-mtune=generic' '-march=x86-64'
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_c2f9d' '-mtune=generic' '-march=x86-64'
+ /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/collect2 -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/cc2oa6VS.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_c2f9d /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../.. CMakeFiles/cmTC_c2f9d.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_c2f9d' '-mtune=generic' '-march=x86-64'
 make[1]: Leaving directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
 
 
@@ -69,14 +69,14 @@ Parsed C implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
   ignore line: [Change Dir: /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_9af68/fast"]
-  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_9af68.dir/build.make CMakeFiles/cmTC_9af68.dir/build]
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_c2f9d/fast"]
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_c2f9d.dir/build.make CMakeFiles/cmTC_c2f9d.dir/build]
   ignore line: [make[1]: Entering directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp']
-  ignore line: [Building C object CMakeFiles/cmTC_9af68.dir/CMakeCCompilerABI.c.o]
-  ignore line: [/usr/bin/cc    -o CMakeFiles/cmTC_9af68.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.13/Modules/CMakeCCompilerABI.c]
-  ignore line: [Linking C executable cmTC_9af68]
-  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9af68.dir/link.txt --verbose=1]
-  ignore line: [/usr/bin/cc     -v CMakeFiles/cmTC_9af68.dir/CMakeCCompilerABI.c.o  -o cmTC_9af68 ]
+  ignore line: [Building C object CMakeFiles/cmTC_c2f9d.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/bin/cc    -o CMakeFiles/cmTC_c2f9d.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.13/Modules/CMakeCCompilerABI.c]
+  ignore line: [Linking C executable cmTC_c2f9d]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c2f9d.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/cc     -v CMakeFiles/cmTC_c2f9d.dir/CMakeCCompilerABI.c.o  -o cmTC_c2f9d ]
   ignore line: [Using built-in specs.]
   ignore line: [COLLECT_GCC=/usr/bin/cc]
   ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/lto-wrapper]
@@ -86,13 +86,13 @@ Parsed C implicit link information from above output:
   ignore line: [gcc version 8.2.1 20181127 (GCC) ]
   ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/]
   ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/:/lib/../lib/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../:/lib/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_9af68' '-mtune=generic' '-march=x86-64']
-  link line: [ /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/collect2 -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/ccA98q8H.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_9af68 /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../.. CMakeFiles/cmTC_9af68.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/crtn.o]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_c2f9d' '-mtune=generic' '-march=x86-64']
+  link line: [ /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/collect2 -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/cc2oa6VS.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_c2f9d /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../.. CMakeFiles/cmTC_c2f9d.dir/CMakeCCompilerABI.c.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/crtn.o]
     arg [/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/collect2] ==> ignore
     arg [-plugin] ==> ignore
     arg [/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/liblto_plugin.so] ==> ignore
     arg [-plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/lto-wrapper] ==> ignore
-    arg [-plugin-opt=-fresolution=/tmp/ccA98q8H.res] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/cc2oa6VS.res] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
     arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -107,7 +107,7 @@ Parsed C implicit link information from above output:
     arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
     arg [-pie] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_9af68] ==> ignore
+    arg [cmTC_c2f9d] ==> ignore
     arg [/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/Scrt1.o] ==> ignore
     arg [/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/crti.o] ==> ignore
     arg [/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/crtbeginS.o] ==> ignore
@@ -116,7 +116,7 @@ Parsed C implicit link information from above output:
     arg [-L/lib/../lib] ==> dir [/lib/../lib]
     arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
     arg [-L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../..] ==> dir [/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../..]
-    arg [CMakeFiles/cmTC_9af68.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [CMakeFiles/cmTC_c2f9d.dir/CMakeCCompilerABI.c.o] ==> ignore
     arg [-lgcc] ==> lib [gcc]
     arg [--as-needed] ==> ignore
     arg [-lgcc_s] ==> lib [gcc_s]
@@ -143,14 +143,14 @@ Parsed C implicit link information from above output:
 Detecting C [-std=c11] compiler features compiled with the following output:
 Change Dir: /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_17d2f/fast"
-/usr/bin/make -f CMakeFiles/cmTC_17d2f.dir/build.make CMakeFiles/cmTC_17d2f.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_e7178/fast"
+/usr/bin/make -f CMakeFiles/cmTC_e7178.dir/build.make CMakeFiles/cmTC_e7178.dir/build
 make[1]: Entering directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_17d2f.dir/feature_tests.c.o
-/usr/bin/cc   -std=c11 -o CMakeFiles/cmTC_17d2f.dir/feature_tests.c.o   -c /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/feature_tests.c
-Linking C executable cmTC_17d2f
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_17d2f.dir/link.txt --verbose=1
-/usr/bin/cc      CMakeFiles/cmTC_17d2f.dir/feature_tests.c.o  -o cmTC_17d2f 
+Building C object CMakeFiles/cmTC_e7178.dir/feature_tests.c.o
+/usr/bin/cc   -std=c11 -o CMakeFiles/cmTC_e7178.dir/feature_tests.c.o   -c /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/feature_tests.c
+Linking C executable cmTC_e7178
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e7178.dir/link.txt --verbose=1
+/usr/bin/cc      CMakeFiles/cmTC_e7178.dir/feature_tests.c.o  -o cmTC_e7178 
 make[1]: Leaving directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
 
 
@@ -163,14 +163,14 @@ make[1]: Leaving directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CM
 Detecting C [-std=c99] compiler features compiled with the following output:
 Change Dir: /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_54baf/fast"
-/usr/bin/make -f CMakeFiles/cmTC_54baf.dir/build.make CMakeFiles/cmTC_54baf.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_9e31b/fast"
+/usr/bin/make -f CMakeFiles/cmTC_9e31b.dir/build.make CMakeFiles/cmTC_9e31b.dir/build
 make[1]: Entering directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_54baf.dir/feature_tests.c.o
-/usr/bin/cc   -std=c99 -o CMakeFiles/cmTC_54baf.dir/feature_tests.c.o   -c /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/feature_tests.c
-Linking C executable cmTC_54baf
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_54baf.dir/link.txt --verbose=1
-/usr/bin/cc      CMakeFiles/cmTC_54baf.dir/feature_tests.c.o  -o cmTC_54baf 
+Building C object CMakeFiles/cmTC_9e31b.dir/feature_tests.c.o
+/usr/bin/cc   -std=c99 -o CMakeFiles/cmTC_9e31b.dir/feature_tests.c.o   -c /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/feature_tests.c
+Linking C executable cmTC_9e31b
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9e31b.dir/link.txt --verbose=1
+/usr/bin/cc      CMakeFiles/cmTC_9e31b.dir/feature_tests.c.o  -o cmTC_9e31b 
 make[1]: Leaving directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
 
 
@@ -183,14 +183,14 @@ make[1]: Leaving directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CM
 Detecting C [-std=c90] compiler features compiled with the following output:
 Change Dir: /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_eec9b/fast"
-/usr/bin/make -f CMakeFiles/cmTC_eec9b.dir/build.make CMakeFiles/cmTC_eec9b.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_c95b5/fast"
+/usr/bin/make -f CMakeFiles/cmTC_c95b5.dir/build.make CMakeFiles/cmTC_c95b5.dir/build
 make[1]: Entering directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_eec9b.dir/feature_tests.c.o
-/usr/bin/cc   -std=c90 -o CMakeFiles/cmTC_eec9b.dir/feature_tests.c.o   -c /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/feature_tests.c
-Linking C executable cmTC_eec9b
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_eec9b.dir/link.txt --verbose=1
-/usr/bin/cc      CMakeFiles/cmTC_eec9b.dir/feature_tests.c.o  -o cmTC_eec9b 
+Building C object CMakeFiles/cmTC_c95b5.dir/feature_tests.c.o
+/usr/bin/cc   -std=c90 -o CMakeFiles/cmTC_c95b5.dir/feature_tests.c.o   -c /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/feature_tests.c
+Linking C executable cmTC_c95b5
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c95b5.dir/link.txt --verbose=1
+/usr/bin/cc      CMakeFiles/cmTC_c95b5.dir/feature_tests.c.o  -o cmTC_c95b5 
 make[1]: Leaving directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
 
 
@@ -201,28 +201,28 @@ make[1]: Leaving directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CM
 Determining if the CXX compiler works passed with the following output:
 Change Dir: /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_78ed1/fast"
-/usr/bin/make -f CMakeFiles/cmTC_78ed1.dir/build.make CMakeFiles/cmTC_78ed1.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_2c133/fast"
+/usr/bin/make -f CMakeFiles/cmTC_2c133.dir/build.make CMakeFiles/cmTC_2c133.dir/build
 make[1]: Entering directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_78ed1.dir/testCXXCompiler.cxx.o
-/usr/bin/c++    -std=gnu++17 -o CMakeFiles/cmTC_78ed1.dir/testCXXCompiler.cxx.o -c /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
-Linking CXX executable cmTC_78ed1
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_78ed1.dir/link.txt --verbose=1
-/usr/bin/c++       CMakeFiles/cmTC_78ed1.dir/testCXXCompiler.cxx.o  -o cmTC_78ed1 
+Building CXX object CMakeFiles/cmTC_2c133.dir/testCXXCompiler.cxx.o
+/usr/bin/c++    -std=gnu++17 -o CMakeFiles/cmTC_2c133.dir/testCXXCompiler.cxx.o -c /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTC_2c133
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2c133.dir/link.txt --verbose=1
+/usr/bin/c++       CMakeFiles/cmTC_2c133.dir/testCXXCompiler.cxx.o  -o cmTC_2c133 
 make[1]: Leaving directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
 
 
 Detecting CXX compiler ABI info compiled with the following output:
 Change Dir: /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_d9cba/fast"
-/usr/bin/make -f CMakeFiles/cmTC_d9cba.dir/build.make CMakeFiles/cmTC_d9cba.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_42e63/fast"
+/usr/bin/make -f CMakeFiles/cmTC_42e63.dir/build.make CMakeFiles/cmTC_42e63.dir/build
 make[1]: Entering directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_d9cba.dir/CMakeCXXCompilerABI.cpp.o
-/usr/bin/c++    -std=gnu++17 -o CMakeFiles/cmTC_d9cba.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.13/Modules/CMakeCXXCompilerABI.cpp
-Linking CXX executable cmTC_d9cba
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d9cba.dir/link.txt --verbose=1
-/usr/bin/c++      -v CMakeFiles/cmTC_d9cba.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_d9cba 
+Building CXX object CMakeFiles/cmTC_42e63.dir/CMakeCXXCompilerABI.cpp.o
+/usr/bin/c++    -std=gnu++17 -o CMakeFiles/cmTC_42e63.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.13/Modules/CMakeCXXCompilerABI.cpp
+Linking CXX executable cmTC_42e63
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_42e63.dir/link.txt --verbose=1
+/usr/bin/c++      -v CMakeFiles/cmTC_42e63.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_42e63 
 Using built-in specs.
 COLLECT_GCC=/usr/bin/c++
 COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/lto-wrapper
@@ -232,9 +232,9 @@ Thread model: posix
 gcc version 8.2.1 20181127 (GCC) 
 COMPILER_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/
 LIBRARY_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/:/lib/../lib/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_d9cba' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
- /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/collect2 -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/cc4tSo7j.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_d9cba /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../.. CMakeFiles/cmTC_d9cba.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/crtn.o
-COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_d9cba' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_42e63' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/collect2 -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/ccFdoRYq.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_42e63 /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../.. CMakeFiles/cmTC_42e63.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_42e63' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
 make[1]: Leaving directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
 
 
@@ -242,14 +242,14 @@ Parsed CXX implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
   ignore line: [Change Dir: /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_d9cba/fast"]
-  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_d9cba.dir/build.make CMakeFiles/cmTC_d9cba.dir/build]
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_42e63/fast"]
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_42e63.dir/build.make CMakeFiles/cmTC_42e63.dir/build]
   ignore line: [make[1]: Entering directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp']
-  ignore line: [Building CXX object CMakeFiles/cmTC_d9cba.dir/CMakeCXXCompilerABI.cpp.o]
-  ignore line: [/usr/bin/c++    -std=gnu++17 -o CMakeFiles/cmTC_d9cba.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.13/Modules/CMakeCXXCompilerABI.cpp]
-  ignore line: [Linking CXX executable cmTC_d9cba]
-  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d9cba.dir/link.txt --verbose=1]
-  ignore line: [/usr/bin/c++      -v CMakeFiles/cmTC_d9cba.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_d9cba ]
+  ignore line: [Building CXX object CMakeFiles/cmTC_42e63.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/usr/bin/c++    -std=gnu++17 -o CMakeFiles/cmTC_42e63.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.13/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Linking CXX executable cmTC_42e63]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_42e63.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/c++      -v CMakeFiles/cmTC_42e63.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_42e63 ]
   ignore line: [Using built-in specs.]
   ignore line: [COLLECT_GCC=/usr/bin/c++]
   ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/lto-wrapper]
@@ -259,13 +259,13 @@ Parsed CXX implicit link information from above output:
   ignore line: [gcc version 8.2.1 20181127 (GCC) ]
   ignore line: [COMPILER_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/]
   ignore line: [LIBRARY_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/:/lib/../lib/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../:/lib/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_d9cba' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
-  link line: [ /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/collect2 -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/cc4tSo7j.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_d9cba /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../.. CMakeFiles/cmTC_d9cba.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/crtn.o]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_42e63' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
+  link line: [ /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/collect2 -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/lto-wrapper -plugin-opt=-fresolution=/tmp/ccFdoRYq.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o cmTC_42e63 /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1 -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../.. CMakeFiles/cmTC_42e63.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/crtn.o]
     arg [/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/collect2] ==> ignore
     arg [-plugin] ==> ignore
     arg [/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/liblto_plugin.so] ==> ignore
     arg [-plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/lto-wrapper] ==> ignore
-    arg [-plugin-opt=-fresolution=/tmp/cc4tSo7j.res] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/ccFdoRYq.res] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
     arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -280,7 +280,7 @@ Parsed CXX implicit link information from above output:
     arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
     arg [-pie] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_d9cba] ==> ignore
+    arg [cmTC_42e63] ==> ignore
     arg [/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/Scrt1.o] ==> ignore
     arg [/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/crti.o] ==> ignore
     arg [/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/crtbeginS.o] ==> ignore
@@ -289,7 +289,7 @@ Parsed CXX implicit link information from above output:
     arg [-L/lib/../lib] ==> dir [/lib/../lib]
     arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
     arg [-L/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../..] ==> dir [/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../..]
-    arg [CMakeFiles/cmTC_d9cba.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [CMakeFiles/cmTC_42e63.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
     arg [-lstdc++] ==> lib [stdc++]
     arg [-lm] ==> lib [m]
     arg [-lgcc_s] ==> lib [gcc_s]
@@ -314,14 +314,14 @@ Parsed CXX implicit link information from above output:
 Detecting CXX [-std=c++2a] compiler features compiled with the following output:
 Change Dir: /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_03383/fast"
-/usr/bin/make -f CMakeFiles/cmTC_03383.dir/build.make CMakeFiles/cmTC_03383.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_09b72/fast"
+/usr/bin/make -f CMakeFiles/cmTC_09b72.dir/build.make CMakeFiles/cmTC_09b72.dir/build
 make[1]: Entering directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_03383.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++2a -std=gnu++17 -o CMakeFiles/cmTC_03383.dir/feature_tests.cxx.o -c /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_03383
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_03383.dir/link.txt --verbose=1
-/usr/bin/c++       CMakeFiles/cmTC_03383.dir/feature_tests.cxx.o  -o cmTC_03383 
+Building CXX object CMakeFiles/cmTC_09b72.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++2a -std=gnu++17 -o CMakeFiles/cmTC_09b72.dir/feature_tests.cxx.o -c /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_09b72
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_09b72.dir/link.txt --verbose=1
+/usr/bin/c++       CMakeFiles/cmTC_09b72.dir/feature_tests.cxx.o  -o cmTC_09b72 
 make[1]: Leaving directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
 
 
@@ -387,14 +387,14 @@ make[1]: Leaving directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CM
 Detecting CXX [-std=c++17] compiler features compiled with the following output:
 Change Dir: /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_f087f/fast"
-/usr/bin/make -f CMakeFiles/cmTC_f087f.dir/build.make CMakeFiles/cmTC_f087f.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_8914b/fast"
+/usr/bin/make -f CMakeFiles/cmTC_8914b.dir/build.make CMakeFiles/cmTC_8914b.dir/build
 make[1]: Entering directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_f087f.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++17 -std=gnu++17 -o CMakeFiles/cmTC_f087f.dir/feature_tests.cxx.o -c /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_f087f
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f087f.dir/link.txt --verbose=1
-/usr/bin/c++       CMakeFiles/cmTC_f087f.dir/feature_tests.cxx.o  -o cmTC_f087f 
+Building CXX object CMakeFiles/cmTC_8914b.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++17 -std=gnu++17 -o CMakeFiles/cmTC_8914b.dir/feature_tests.cxx.o -c /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_8914b
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8914b.dir/link.txt --verbose=1
+/usr/bin/c++       CMakeFiles/cmTC_8914b.dir/feature_tests.cxx.o  -o cmTC_8914b 
 make[1]: Leaving directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
 
 
@@ -460,14 +460,14 @@ make[1]: Leaving directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CM
 Detecting CXX [-std=c++14] compiler features compiled with the following output:
 Change Dir: /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_95bf8/fast"
-/usr/bin/make -f CMakeFiles/cmTC_95bf8.dir/build.make CMakeFiles/cmTC_95bf8.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_4a6c8/fast"
+/usr/bin/make -f CMakeFiles/cmTC_4a6c8.dir/build.make CMakeFiles/cmTC_4a6c8.dir/build
 make[1]: Entering directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_95bf8.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++14 -std=gnu++17 -o CMakeFiles/cmTC_95bf8.dir/feature_tests.cxx.o -c /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_95bf8
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_95bf8.dir/link.txt --verbose=1
-/usr/bin/c++       CMakeFiles/cmTC_95bf8.dir/feature_tests.cxx.o  -o cmTC_95bf8 
+Building CXX object CMakeFiles/cmTC_4a6c8.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++14 -std=gnu++17 -o CMakeFiles/cmTC_4a6c8.dir/feature_tests.cxx.o -c /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_4a6c8
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4a6c8.dir/link.txt --verbose=1
+/usr/bin/c++       CMakeFiles/cmTC_4a6c8.dir/feature_tests.cxx.o  -o cmTC_4a6c8 
 make[1]: Leaving directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
 
 
@@ -533,14 +533,14 @@ make[1]: Leaving directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CM
 Detecting CXX [-std=c++11] compiler features compiled with the following output:
 Change Dir: /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_302eb/fast"
-/usr/bin/make -f CMakeFiles/cmTC_302eb.dir/build.make CMakeFiles/cmTC_302eb.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_7aa49/fast"
+/usr/bin/make -f CMakeFiles/cmTC_7aa49.dir/build.make CMakeFiles/cmTC_7aa49.dir/build
 make[1]: Entering directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_302eb.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++11 -std=gnu++17 -o CMakeFiles/cmTC_302eb.dir/feature_tests.cxx.o -c /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_302eb
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_302eb.dir/link.txt --verbose=1
-/usr/bin/c++       CMakeFiles/cmTC_302eb.dir/feature_tests.cxx.o  -o cmTC_302eb 
+Building CXX object CMakeFiles/cmTC_7aa49.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++11 -std=gnu++17 -o CMakeFiles/cmTC_7aa49.dir/feature_tests.cxx.o -c /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_7aa49
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7aa49.dir/link.txt --verbose=1
+/usr/bin/c++       CMakeFiles/cmTC_7aa49.dir/feature_tests.cxx.o  -o cmTC_7aa49 
 make[1]: Leaving directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
 
 
@@ -606,14 +606,14 @@ make[1]: Leaving directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CM
 Detecting CXX [-std=c++98] compiler features compiled with the following output:
 Change Dir: /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_12463/fast"
-/usr/bin/make -f CMakeFiles/cmTC_12463.dir/build.make CMakeFiles/cmTC_12463.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_ce1c6/fast"
+/usr/bin/make -f CMakeFiles/cmTC_ce1c6.dir/build.make CMakeFiles/cmTC_ce1c6.dir/build
 make[1]: Entering directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_12463.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++98 -std=gnu++17 -o CMakeFiles/cmTC_12463.dir/feature_tests.cxx.o -c /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_12463
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_12463.dir/link.txt --verbose=1
-/usr/bin/c++       CMakeFiles/cmTC_12463.dir/feature_tests.cxx.o  -o cmTC_12463 
+Building CXX object CMakeFiles/cmTC_ce1c6.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++98 -std=gnu++17 -o CMakeFiles/cmTC_ce1c6.dir/feature_tests.cxx.o -c /home/jack/cpp-workspace/SFMLCollision/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_ce1c6
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ce1c6.dir/link.txt --verbose=1
+/usr/bin/c++       CMakeFiles/cmTC_ce1c6.dir/feature_tests.cxx.o  -o cmTC_ce1c6 
 make[1]: Leaving directory '/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/CMakeTmp'
 
 

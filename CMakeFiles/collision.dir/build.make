@@ -70,9 +70,48 @@ CMakeFiles/collision.dir/src/Line.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/collision.dir/src/Line.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jack/cpp-workspace/SFMLCollision/src/Line.cpp -o CMakeFiles/collision.dir/src/Line.cpp.s
 
+CMakeFiles/collision.dir/src/Polygon.cpp.o: CMakeFiles/collision.dir/flags.make
+CMakeFiles/collision.dir/src/Polygon.cpp.o: src/Polygon.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jack/cpp-workspace/SFMLCollision/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/collision.dir/src/Polygon.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/collision.dir/src/Polygon.cpp.o -c /home/jack/cpp-workspace/SFMLCollision/src/Polygon.cpp
+
+CMakeFiles/collision.dir/src/Polygon.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/collision.dir/src/Polygon.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jack/cpp-workspace/SFMLCollision/src/Polygon.cpp > CMakeFiles/collision.dir/src/Polygon.cpp.i
+
+CMakeFiles/collision.dir/src/Polygon.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/collision.dir/src/Polygon.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jack/cpp-workspace/SFMLCollision/src/Polygon.cpp -o CMakeFiles/collision.dir/src/Polygon.cpp.s
+
+CMakeFiles/collision.dir/src/Triangle.cpp.o: CMakeFiles/collision.dir/flags.make
+CMakeFiles/collision.dir/src/Triangle.cpp.o: src/Triangle.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jack/cpp-workspace/SFMLCollision/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/collision.dir/src/Triangle.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/collision.dir/src/Triangle.cpp.o -c /home/jack/cpp-workspace/SFMLCollision/src/Triangle.cpp
+
+CMakeFiles/collision.dir/src/Triangle.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/collision.dir/src/Triangle.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jack/cpp-workspace/SFMLCollision/src/Triangle.cpp > CMakeFiles/collision.dir/src/Triangle.cpp.i
+
+CMakeFiles/collision.dir/src/Triangle.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/collision.dir/src/Triangle.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jack/cpp-workspace/SFMLCollision/src/Triangle.cpp -o CMakeFiles/collision.dir/src/Triangle.cpp.s
+
+CMakeFiles/collision.dir/src/VectorMath.cpp.o: CMakeFiles/collision.dir/flags.make
+CMakeFiles/collision.dir/src/VectorMath.cpp.o: src/VectorMath.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jack/cpp-workspace/SFMLCollision/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/collision.dir/src/VectorMath.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/collision.dir/src/VectorMath.cpp.o -c /home/jack/cpp-workspace/SFMLCollision/src/VectorMath.cpp
+
+CMakeFiles/collision.dir/src/VectorMath.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/collision.dir/src/VectorMath.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jack/cpp-workspace/SFMLCollision/src/VectorMath.cpp > CMakeFiles/collision.dir/src/VectorMath.cpp.i
+
+CMakeFiles/collision.dir/src/VectorMath.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/collision.dir/src/VectorMath.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jack/cpp-workspace/SFMLCollision/src/VectorMath.cpp -o CMakeFiles/collision.dir/src/VectorMath.cpp.s
+
 CMakeFiles/collision.dir/src/main.cpp.o: CMakeFiles/collision.dir/flags.make
 CMakeFiles/collision.dir/src/main.cpp.o: src/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jack/cpp-workspace/SFMLCollision/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/collision.dir/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jack/cpp-workspace/SFMLCollision/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/collision.dir/src/main.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/collision.dir/src/main.cpp.o -c /home/jack/cpp-workspace/SFMLCollision/src/main.cpp
 
 CMakeFiles/collision.dir/src/main.cpp.i: cmake_force
@@ -86,12 +125,18 @@ CMakeFiles/collision.dir/src/main.cpp.s: cmake_force
 # Object files for target collision
 collision_OBJECTS = \
 "CMakeFiles/collision.dir/src/Line.cpp.o" \
+"CMakeFiles/collision.dir/src/Polygon.cpp.o" \
+"CMakeFiles/collision.dir/src/Triangle.cpp.o" \
+"CMakeFiles/collision.dir/src/VectorMath.cpp.o" \
 "CMakeFiles/collision.dir/src/main.cpp.o"
 
 # External object files for target collision
 collision_EXTERNAL_OBJECTS =
 
 collision: CMakeFiles/collision.dir/src/Line.cpp.o
+collision: CMakeFiles/collision.dir/src/Polygon.cpp.o
+collision: CMakeFiles/collision.dir/src/Triangle.cpp.o
+collision: CMakeFiles/collision.dir/src/VectorMath.cpp.o
 collision: CMakeFiles/collision.dir/src/main.cpp.o
 collision: CMakeFiles/collision.dir/build.make
 collision: /usr/lib/libsfml-graphics.so.2.5.1
@@ -99,7 +144,7 @@ collision: /usr/lib/libsfml-audio.so.2.5.1
 collision: /usr/lib/libsfml-window.so.2.5.1
 collision: /usr/lib/libsfml-system.so.2.5.1
 collision: CMakeFiles/collision.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jack/cpp-workspace/SFMLCollision/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable collision"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jack/cpp-workspace/SFMLCollision/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable collision"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/collision.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

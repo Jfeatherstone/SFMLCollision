@@ -5,12 +5,16 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/jack/cpp-workspace/SFMLCollision/src/Line.cpp" "/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/collision.dir/src/Line.cpp.o"
+  "/home/jack/cpp-workspace/SFMLCollision/src/Polygon.cpp" "/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/collision.dir/src/Polygon.cpp.o"
+  "/home/jack/cpp-workspace/SFMLCollision/src/Triangle.cpp" "/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/collision.dir/src/Triangle.cpp.o"
+  "/home/jack/cpp-workspace/SFMLCollision/src/VectorMath.cpp" "/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/collision.dir/src/VectorMath.cpp.o"
   "/home/jack/cpp-workspace/SFMLCollision/src/main.cpp" "/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/collision.dir/src/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
+  "src"
   )
 
 # Targets to which this target links.

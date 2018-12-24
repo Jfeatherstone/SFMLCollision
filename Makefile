@@ -150,6 +150,87 @@ src/Line.cpp.s:
 	$(MAKE) -f CMakeFiles/collision.dir/build.make CMakeFiles/collision.dir/src/Line.cpp.s
 .PHONY : src/Line.cpp.s
 
+src/Polygon.o: src/Polygon.cpp.o
+
+.PHONY : src/Polygon.o
+
+# target to build an object file
+src/Polygon.cpp.o:
+	$(MAKE) -f CMakeFiles/collision.dir/build.make CMakeFiles/collision.dir/src/Polygon.cpp.o
+.PHONY : src/Polygon.cpp.o
+
+src/Polygon.i: src/Polygon.cpp.i
+
+.PHONY : src/Polygon.i
+
+# target to preprocess a source file
+src/Polygon.cpp.i:
+	$(MAKE) -f CMakeFiles/collision.dir/build.make CMakeFiles/collision.dir/src/Polygon.cpp.i
+.PHONY : src/Polygon.cpp.i
+
+src/Polygon.s: src/Polygon.cpp.s
+
+.PHONY : src/Polygon.s
+
+# target to generate assembly for a file
+src/Polygon.cpp.s:
+	$(MAKE) -f CMakeFiles/collision.dir/build.make CMakeFiles/collision.dir/src/Polygon.cpp.s
+.PHONY : src/Polygon.cpp.s
+
+src/Triangle.o: src/Triangle.cpp.o
+
+.PHONY : src/Triangle.o
+
+# target to build an object file
+src/Triangle.cpp.o:
+	$(MAKE) -f CMakeFiles/collision.dir/build.make CMakeFiles/collision.dir/src/Triangle.cpp.o
+.PHONY : src/Triangle.cpp.o
+
+src/Triangle.i: src/Triangle.cpp.i
+
+.PHONY : src/Triangle.i
+
+# target to preprocess a source file
+src/Triangle.cpp.i:
+	$(MAKE) -f CMakeFiles/collision.dir/build.make CMakeFiles/collision.dir/src/Triangle.cpp.i
+.PHONY : src/Triangle.cpp.i
+
+src/Triangle.s: src/Triangle.cpp.s
+
+.PHONY : src/Triangle.s
+
+# target to generate assembly for a file
+src/Triangle.cpp.s:
+	$(MAKE) -f CMakeFiles/collision.dir/build.make CMakeFiles/collision.dir/src/Triangle.cpp.s
+.PHONY : src/Triangle.cpp.s
+
+src/VectorMath.o: src/VectorMath.cpp.o
+
+.PHONY : src/VectorMath.o
+
+# target to build an object file
+src/VectorMath.cpp.o:
+	$(MAKE) -f CMakeFiles/collision.dir/build.make CMakeFiles/collision.dir/src/VectorMath.cpp.o
+.PHONY : src/VectorMath.cpp.o
+
+src/VectorMath.i: src/VectorMath.cpp.i
+
+.PHONY : src/VectorMath.i
+
+# target to preprocess a source file
+src/VectorMath.cpp.i:
+	$(MAKE) -f CMakeFiles/collision.dir/build.make CMakeFiles/collision.dir/src/VectorMath.cpp.i
+.PHONY : src/VectorMath.cpp.i
+
+src/VectorMath.s: src/VectorMath.cpp.s
+
+.PHONY : src/VectorMath.s
+
+# target to generate assembly for a file
+src/VectorMath.cpp.s:
+	$(MAKE) -f CMakeFiles/collision.dir/build.make CMakeFiles/collision.dir/src/VectorMath.cpp.s
+.PHONY : src/VectorMath.cpp.s
+
 src/main.o: src/main.cpp.o
 
 .PHONY : src/main.o
@@ -189,6 +270,15 @@ help:
 	@echo "... src/Line.o"
 	@echo "... src/Line.i"
 	@echo "... src/Line.s"
+	@echo "... src/Polygon.o"
+	@echo "... src/Polygon.i"
+	@echo "... src/Polygon.s"
+	@echo "... src/Triangle.o"
+	@echo "... src/Triangle.i"
+	@echo "... src/Triangle.s"
+	@echo "... src/VectorMath.o"
+	@echo "... src/VectorMath.i"
+	@echo "... src/VectorMath.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

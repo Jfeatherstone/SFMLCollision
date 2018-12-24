@@ -26,6 +26,7 @@ SOFTWARE.
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Triangle.hpp"
+#include <iostream>
 
 using namespace sf;
 using namespace std;
@@ -85,12 +86,15 @@ public:
     vector<Color>: In case we want to ignore certain parts of a sprite, we can provide their rgb values
     and the parser will pass over them
     */
-    Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors = {});
+    Polygon(Texture* texture, Detail detail = Detail::Less, vector<Color> ignoredColors = {});
 
     /*
-    This one will take in an array of points to define our shape
+    The following ones are going to be for converting other objects into a polygon
     */
     Polygon(vector<Vector2f> points);
+    Polygon(CircleShape shape);
+    Polygon(RectangleShape shape);
+    Polygon(ConvexShape shape);
 
     /*
     The following two methods are overridden from Shape
@@ -109,7 +113,7 @@ public:
     Intersects.cpp
     */
     bool intersects(Polygon shape);
-    bool intersects(FloatRect shape);
+    bool intersects(RectangleShape shape);
     bool intersects(CircleShape shape);
     bool intersects(ConvexShape shape);
 };

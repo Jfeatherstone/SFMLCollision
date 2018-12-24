@@ -78,11 +78,15 @@ private:
     void precomputeBarycentric();
 public:
     /*
-        Our one and only constructor  
+        Our one and (sorta) only constructor  
     
     */
     Triangle(Vector2f v1, Vector2f v2, Vector2f v3);
-
+    
+    /*
+    This constructor must exist such that we can create a resized vector of triangles, but will never really be used
+    */
+    Triangle();
 
     /*
     Since we shouldn't ever need these, and I don't feel like implementing them right now,

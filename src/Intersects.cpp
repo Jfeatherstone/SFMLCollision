@@ -1,23 +1,35 @@
 #include "Polygon.cpp"
 
+/*
+    TODO:
+If the first 3 methods are called, a polygon with window-based coordinates will be passed
+into the last one, which won't happen if the last one is just called on its own. Figure out
+a way to make sure that either method will result in the correct decision being made
+*/
 
-bool Polygon::intersects(FloatRect shape) {
-    // Since there isn't a getPoints() method, we have to do a little work ourselves
+bool Polygon::intersects(RectangleShape shape) {
+    // Since there is a getPoint() method for this, we don't have to do any math, just add the points to a vector
     vector<Vector2f> points;
-    points.resize(4);
-    points[0] = Vector2f(shape.left, shape.top); // Top left
-    points[1] = Vector2f(shape.left, shape.top + shape.height); // Bottom left
-    points[2] = Vector2f(shape.left + shape.width, shape.top); // Top right
-    points[3] = Vector2f(shape.left + shape.width, shape.top + shape.height); // Bottom right
 
-    // Now we just run our other intersection as promised
+    points.resize(shape.getPointCount());
+    for (int i = 0; i < shape.getPointCount(); i++) {
+        points[i] = shape.getPoint(i);
+    }
+
     Polygon poly(points);
     return intersects(poly);
+    
 }
+
+/*
+For these next two, it is important to note that we don't have to do any math on the verticies because
+they are given in local coordinates, in relation to 0, 0 being at the top left of the actual shape's rectangle
+*/
 
 bool Polygon::intersects(CircleShape shape) {
     // Since there is a getPoint() method for this, we don't have to do any math, just add the points to a vector
     vector<Vector2f> points;
+
     points.resize(shape.getPointCount());
     for (int i = 0; i < shape.getPointCount(); i++) {
         points[i] = shape.getPoint(i);
@@ -59,5 +71,27 @@ the polygons' location with the setPosition() properly
 */
 
 bool Polygon::intersects(Polygon shape) {
-    
+
+    /*
+    Since we don't want to do too many calculations if they are not necessary, we first check to see if the 
+     */
+    /*
+    The next order of business here is that we need to adjust our verticies to be relative to the window they are
+    drawn on
+     */
+    vector<Vector2f> v1;
+    vector<Vector2f> v2;
+
+    v1.resize(getPointCount());
+    v2.resize(shape.getPointCount());
+
+    FloatRect r = getGlobalBounds();
+    for (int i = 0; i < getPointCount(); i++) {
+        v1[i] = getPoint(i) + Vector2f(r.left, r.top);
+    }
+
+    r = shape.getGlobalBounds();
+    for (int i = 0; i < shape.getPointCount(); i++) {
+        v2[i] = shape.getPoint(i) + Vector2f(r.left, r.top);
+    }
 }
