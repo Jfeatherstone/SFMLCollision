@@ -16,7 +16,6 @@ CMakeFiles/collision.dir/src/Triangle.cpp.o: src/VectorMath.hpp
 CMakeFiles/collision.dir/src/VectorMath.cpp.o: src/VectorMath.cpp
 CMakeFiles/collision.dir/src/VectorMath.cpp.o: src/VectorMath.hpp
 
-CMakeFiles/collision.dir/src/main.cpp.o: src/Line.hpp
 CMakeFiles/collision.dir/src/main.cpp.o: src/Polygon.hpp
 CMakeFiles/collision.dir/src/main.cpp.o: src/Triangle.hpp
 CMakeFiles/collision.dir/src/main.cpp.o: src/VectorMath.hpp

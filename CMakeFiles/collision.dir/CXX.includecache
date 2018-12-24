@@ -6,14 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/jack/cpp-workspace/SFMLCollision/src/Line.hpp
-SFML/Graphics.hpp
--
-iostream
--
-tgmath.h
--
-
 /home/jack/cpp-workspace/SFMLCollision/src/Polygon.hpp
 SFML/Graphics.hpp
 -
@@ -33,8 +25,6 @@ SFML/Graphics.hpp
 -
 
 /home/jack/cpp-workspace/SFMLCollision/src/main.cpp
-Line.hpp
-/home/jack/cpp-workspace/SFMLCollision/src/Line.hpp
 Polygon.hpp
 /home/jack/cpp-workspace/SFMLCollision/src/Polygon.hpp
 

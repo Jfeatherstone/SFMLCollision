@@ -35,6 +35,13 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     // This will be the number of pixels in the image
     int length = image.getSize().x * image.getSize().y;
 
+    //cout << length << endl;
+    if (length == 0) {
+        // This will happen if our image is empty (the file doesn't exist)
+        cout << "Attempt to pass in empty image to constructor!\n In Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors)" << endl;
+        return;
+    }
+
     // Reassign our pixel vector
     pixels.clear();
     pixels.resize(length);
