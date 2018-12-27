@@ -43,7 +43,7 @@ doesn't have a member variable to store the level of detail,  since it is only u
 constructor.
 */
 
-enum class Detail {Less, More};
+enum class Detail {Less, More, Perfect};
 
 
 
@@ -73,6 +73,7 @@ private:
 	bool hitboxContainsPoint(vector<Vector2f>& hitboxVerticies, Vector2f point);
     void createTriangles();
     void findCentroid();
+    int sign(float value);
 public:
 
     /*

@@ -22,6 +22,11 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
      * 
      * Consider yourself warned...
      * 
+     * Although it may look terrible, it actually isn't *that* bad
+     * Most of the code that looks horrible is actually just if statements that are very similar to each other
+     * The reason we need to many is because we have to slightly change the indexing of what we are checking
+     * to check above, below, left, right, diagonals, etc.
+     * 
      * ******************************************/
 
     /*****************************************
@@ -35,7 +40,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     // This will be the number of pixels in the image
     int length = image.getSize().x * image.getSize().y;
 
-    //cout << length << endl;
+    //cout << length / 4 << endl;
     if (length == 0) {
         // This will happen if our image is empty (the file doesn't exist)
         cout << "Attempt to pass in empty image to constructor!\n In Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors)" << endl;
@@ -56,7 +61,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         int blue = (int) arr[4*i + 2];
         int alpha = (int) arr[4*i + 3];
         Color c(red, green, blue, alpha);
-        pixels.push_back(c);
+        pixels[i] = c;
     }
 
     /*****************************************
@@ -156,7 +161,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             && (hitboxInclude[(i-1)*textureSize.x + j + 1] == 0 || hitboxInclude[(i-1)*textureSize.x + j + 1] == 2)
             && (hitboxInclude[(i+1)*textureSize.x + j - 1] == 0 || hitboxInclude[(i+1)*textureSize.x + j - 1] == 2)
             && (hitboxInclude[(i+1)*textureSize.x + j + 1] == 0 || hitboxInclude[(i+1)*textureSize.x + j + 1] == 2))
-            newHitbox[i*textureSize.x + j] = 3;
+                newHitbox[i*textureSize.x + j] = 3;
                 
             /*
             This statement is much simpler, and the previous could probably be too, but I don't feel like doing that
@@ -165,12 +170,90 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             */
             if ((hitboxInclude[i*textureSize.x + j - 1] == 1 && i*textureSize.x + j - 1 >= i*textureSize.x)
             && (hitboxInclude[i*textureSize.x + j + 1] == 1 && i*textureSize.x + j + 1 < (i+1)*textureSize.x))
-            newHitbox[i*textureSize.x + j] = 3;
+                newHitbox[i*textureSize.x + j] = 3;
 
         }
     }
     hitboxInclude = newHitbox;
 
+    /*cout << endl;
+    for (int i = 0; i < hitboxInclude.size(); i++) {
+        if (i % (int)(textureSize.x) == 0 && i > 0)
+            cout << endl;
+        cout << hitboxInclude[i];
+
+    } */
+
+    /*
+    Remove diagonal verticies
+
+    What this method  does:
+
+    001     001
+    011 ->  010
+    110     100
+
+    It removes the "squareness" of diagonal lines by removing extra verticies
+    */
+    for (int i = 0; i < textureSize.y; i++) {
+        for (int j = 0; j < textureSize.x; j++) {
+
+            // Top right diagonal
+            if (hitboxInclude[i*textureSize.x + j] == 1 // The current point is a vertex
+            && hitboxInclude[(i-1)*textureSize.x + j + 1] == 1 // The top right point is a vertex
+            && (i-1)*textureSize.x > 0 && j + 1 < textureSize.x) { // Make sure we are within bounds
+            // We want to make sure that the vertex was actually a point before (might be unnecessary)
+                if (hitboxInclude[i*textureSize.x + j + 1] == 1)
+                    hitboxInclude[i*textureSize.x + j + 1] = 0; // right
+                if (hitboxInclude[(i-1)*textureSize.x + j] == 1) 
+                    hitboxInclude[(i-1)*textureSize.x + j] = 0; // above
+            }
+
+            // Bottom right diagonal
+            if (hitboxInclude[i*textureSize.x + j] == 1 // The current point is a vertex
+            && hitboxInclude[(i+1)*textureSize.x + j + 1] == 1 // The bottom right point is a vertex
+            && (i-1)*textureSize.x > 0 && j + 1 < textureSize.x) { // Make sure we are within bounds
+            // We want to make sure that the vertex was actually a point before (might be unnecessary)
+                if (hitboxInclude[i*textureSize.x + j + 1] == 1)
+                    hitboxInclude[i*textureSize.x + j + 1] = 0; // right
+                if (hitboxInclude[(i+1)*textureSize.x + j] == 1) 
+                    hitboxInclude[(i+1)*textureSize.x + j] = 0; // below
+            }
+
+            // Bottom left diagonal
+            if (hitboxInclude[i*textureSize.x + j] == 1 // The current point is a vertex
+            && hitboxInclude[(i+1)*textureSize.x + j - 1] == 1 // The top right point is a vertex
+            && (i-1)*textureSize.x > 0 && j + 1 < textureSize.x) { // Make sure we are within bounds
+            // We want to make sure that the vertex was actually a point before (might be unnecessary)
+                if (hitboxInclude[i*textureSize.x + j - 1] == 1)
+                    hitboxInclude[i*textureSize.x + j - 1] = 0; // left
+                if (hitboxInclude[(i+1)*textureSize.x + j] == 1) 
+                    hitboxInclude[(i+1)*textureSize.x + j] = 0; // below
+            }
+
+            // Top right diagonal
+            if (hitboxInclude[i*textureSize.x + j] == 1 // The current point is a vertex
+            && hitboxInclude[(i-1)*textureSize.x + j - 1] == 1 // The top right point is a vertex
+            && (i-1)*textureSize.x > 0 && j + 1 < textureSize.x) { // Make sure we are within bounds
+            // We want to make sure that the vertex was actually a point before (might be unnecessary)
+                if (hitboxInclude[i*textureSize.x + j - 1] == 1)
+                    hitboxInclude[i*textureSize.x + j - 1] = 0; // left
+                if (hitboxInclude[(i-1)*textureSize.x + j] == 1) 
+                    hitboxInclude[(i-1)*textureSize.x + j] = 0; // above
+            }
+
+        }
+    }
+
+
+    // Print out our current verticies to help debug
+    cout << endl;
+    for (int i = 0; i < hitboxInclude.size(); i++) {
+        if (i % (int)(textureSize.x) == 0 && i > 0)
+            cout << endl;
+        cout << hitboxInclude[i];
+
+    }
 
     /*****************************************
      *      Add verticies in order
@@ -197,20 +280,29 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     // Setup our polygon
 
     m_numVerticies = 0;
+    int count = 0;
     for (int i: hitboxInclude) {
-        if (i == 1)
+        if (i == 1) {
+            //cout << (int)(count / (int)textureSize.x) << " " << count % (int)textureSize.x << "   " << m_numVerticies << endl;
             m_numVerticies++;
-    }
+        }
+        count++;
+    } 
     m_points.resize(m_numVerticies);
 
     while (vertexIndex < m_numVerticies) {
         if (hitboxInclude[currPixel.y*textureSize.x + currPixel.x] == 1 || hitboxInclude[currPixel.y*textureSize.x + currPixel.x] == 3) {
             // Even if it isn't an actual vertex, we record it in our other vector
             hitboxVerticies.push_back(currPixel);
-            
-            if (hitboxInclude[currPixel.y*textureSize.x + currPixel.x] == 1)
+            cout << currPixel.x << " " << currPixel.y;
+
+            if (hitboxInclude[currPixel.y*textureSize.x + currPixel.x] == 1) {
                 // We record the vertex in our polygon
+                cout << " - Added " << vertexIndex << endl;
                 m_points[vertexIndex++] = currPixel;
+            } else {
+                cout << endl;
+            }
             // We now look for the next pixel that is marked either as a 3 or a 1
             /*
             We check starting at the top and move clockwise 
@@ -219,15 +311,6 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             //for (Vector2f v: m_hitboxVertices)
               //  cout << v.x << " " << v.y << " --- ";
 
-            // Top
-            if ((hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x] == 1 
-            || hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x] == 3)
-            && ((currPixel.y - 1)*textureSize.x + currPixel.x >= 0 && (currPixel.y - 1)*textureSize.x + currPixel.x < hitboxInclude.size())
-            && !hitboxContainsPoint(hitboxVerticies, Vector2f(currPixel.x, currPixel.y - 1))) {
-                currPixel.x += 0;
-                currPixel.y += -1;
-                continue;
-            } else
             // Top right
             if ((hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x + 1] == 1 
             || hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x + 1] == 3)
@@ -291,12 +374,58 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
                 currPixel.y += -1;
                 continue;
             } else
+            // Top
+            if ((hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x] == 1 
+            || hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x] == 3)
+            && ((currPixel.y - 1)*textureSize.x + currPixel.x >= 0 && (currPixel.y - 1)*textureSize.x + currPixel.x < hitboxInclude.size())
+            && !hitboxContainsPoint(hitboxVerticies, Vector2f(currPixel.x, currPixel.y - 1))) {
+                currPixel.x += 0;
+                currPixel.y += -1;
+                continue;
+            } else {
+                cout << "Jump" << endl;
                 break;
-            
+            }
+
         } else {
             // Just move horizontally until we get on the path of the first vertex
             currPixel.x += 1;
+            // And reset if we get to the end
+            if (currPixel.x >= textureSize.x) {
+                currPixel.x = 0;
+                currPixel.y++;
+            }
+            
         }
+    }
+    cout << endl << endl;
+    cout << vertexIndex << " " << m_numVerticies << endl;
+     
+    // Remove diagonal repetitive verticies
+    if (detail != Detail::Perfect) {
+        for (int i = 0; i < m_numVerticies; i++) {
+            
+            //for (int j = 0; j < 4; j++) {
+                Vector2f diff1 = m_points[i+1] - m_points[i];
+                Vector2f diff2 = m_points[i+2] - m_points[i];
+                // Now we get the sign of the x difference
+                int xSign1 = sign(diff1.x);
+                int ySign1 = sign(diff1.y);
+                int xSign2 = sign(diff2.x);
+                int ySign2 = sign(diff2.y);
+
+                if ((xSign1 == xSign2 && ySign1 == ySign2) 
+                && (xSign1 != 0 && xSign2 != 0 && ySign1 != 0 && ySign2 != 0)) {
+                    // we can then remove the middle point
+                    m_points.erase(m_points.begin() + i + 1);
+                    //m_points.erase(m_points.begin() + i + 1);
+
+                    //i--;
+                }
+           // }
+
+        }
+        m_numVerticies = m_points.size();
     }
 
     /*****************************************
@@ -308,6 +437,27 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
      * I sincerely apologize for that mess
      * 
      * ******************************************/
+    
+    
+    // Take out some verticies if we have less detail
+    if (detail == Detail::Less || detail == Detail::More) {
+        int repeat = 1;
+        if (detail == Detail::Less) {
+            repeat = 2;
+        }
+        for (int j = 0; j < repeat; j++) {
+            vector<Vector2f> newVec;
+            for (int i = 0; i < m_numVerticies; i++) {
+                if (i % 2 == 0 || ((m_points[i+1] - m_points[i]).x == 0 || (m_points[i+1] - m_points[i]).y == 0)) {
+                    newVec.push_back(m_points[i]);
+                }
+            }
+            m_points = newVec;
+            m_numVerticies = newVec.size();
+        }
+    } 
+
+
 
     findCentroid();
     createTriangles();
@@ -336,6 +486,14 @@ bool Polygon::hitboxContainsPoint(vector<Vector2f>& hitboxVerticies, Vector2f po
     }
     //cout << "False" << endl;
     return false;
+}
+
+int Polygon::sign(float value) {
+    if (value > 0)
+        return 1;
+    if (value < 0)
+        return -1;
+    return 0;
 }
 
 
