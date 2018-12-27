@@ -7,7 +7,7 @@ int main() {
     r.setPosition(250, 0);
 
     Texture* t = new Texture();
-    t->loadFromFile("Images/test3.png");
+    t->loadFromFile("Images/test.png");
     
     Polygon poly(t, Detail::Less);
     poly.setScale(8, 8);

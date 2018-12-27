@@ -89,6 +89,16 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         i++;
     }
 
+    // Print out our current verticies to help debug
+    cout << endl;
+    for (int i = 0; i < hitboxInclude.size(); i++) {
+        if (i % (int)(textureSize.x) == 0 && i > 0)
+            cout << endl;
+        cout << hitboxInclude[i];
+
+    }
+    cout << "\n\n";
+
     /*****************************************
      *      Removing the inside
      * ******************************************/
@@ -127,6 +137,16 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         }
     }
     hitboxInclude = newHitbox;
+
+    // Print out our current verticies to help debug
+    cout << endl;
+    for (int i = 0; i < hitboxInclude.size(); i++) {
+        if (i % (int)(textureSize.x) == 0 && i > 0)
+            cout << endl;
+        cout << hitboxInclude[i];
+
+    }
+    cout << "\n\n";
 
     /*****************************************
      *      Remove excess verticies
@@ -176,13 +196,15 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     }
     hitboxInclude = newHitbox;
 
-    /*cout << endl;
+    // Print out our current verticies to help debug
+    cout << endl;
     for (int i = 0; i < hitboxInclude.size(); i++) {
         if (i % (int)(textureSize.x) == 0 && i > 0)
             cout << endl;
         cout << hitboxInclude[i];
 
-    } */
+    }
+    cout << "\n\n";
 
     /*
     Remove diagonal verticies
@@ -254,6 +276,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         cout << hitboxInclude[i];
 
     }
+    cout << "\n\n";
 
     /*****************************************
      *      Add verticies in order
