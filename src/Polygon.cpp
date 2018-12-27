@@ -100,6 +100,51 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     cout << "\n\n";
 
     /*****************************************
+     *      Fill in the inside
+     * ******************************************/
+    /*
+    for (int i = 0; i < textureSize.y; i++) {
+        int current;
+        bool found = true;
+        while (found) {
+            found = false;
+            int start = current;
+            int end;
+            for (int j = 0; j < textureSize.x; j++) {
+                if (hitboxInclude[i*textureSize.x + j] == 1)
+                    start = i*textureSize.x + j;
+                    break;
+            }
+
+            for (int j = start; j < textureSize.x; j++) {
+                if (hitboxInclude[i*textureSize.x + j] == 1) {
+                    end = i*textureSize.x + j;
+                    found = true;
+                    break;
+                }
+            }
+            if (start + 1 < end) {
+                for (int j = start; j < end; j++) {
+                    hitboxInclude[i*textureSize.x + j] = 1;
+                }
+            }
+            current = end + 1;
+        }
+ 
+    }
+ */   
+    // Print out our current verticies to help debug
+    cout << endl;
+    for (int i = 0; i < hitboxInclude.size(); i++) {
+        if (i % (int)(textureSize.x) == 0 && i > 0)
+            cout << endl;
+        cout << hitboxInclude[i];
+
+    }
+    cout << "\n\n";
+
+
+    /*****************************************
      *      Removing the inside
      * ******************************************/
     // Now, we go through and remove everything except for the outline
@@ -131,9 +176,8 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             if ((hitboxInclude[i*textureSize.x + j - 1] == 1 && i*textureSize.x + j - 1 >= i*textureSize.x)
             && (hitboxInclude[i*textureSize.x + j + 1] == 1 && i*textureSize.x + j + 1 < (i+1)*textureSize.x)
             && (hitboxInclude[(i-1)*textureSize.x + j] == 1) && (hitboxInclude[(i+1)*textureSize.x + j] == 1)
-            && ((i+1)*textureSize.x + j < hitboxInclude.size()))
-            
-            newHitbox[i*textureSize.x + j] = 2;
+            && ((i+1)*textureSize.x + j < hitboxInclude.size() && (i-1) >= 0))
+                newHitbox[i*textureSize.x + j] = 2;
         }
     }
     hitboxInclude = newHitbox;
@@ -173,16 +217,16 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             && (hitboxInclude[i*textureSize.x + j + 1] != 1)
             && (hitboxInclude[i*textureSize.x + j - 1] != 1))
             m_newHitbox[i*textureSize.x + j] = 3;
-                */
+                
             if (hitboxInclude[i*textureSize.x + j] == 1
             && ((hitboxInclude[i*textureSize.x + j - 1] == 0 || hitboxInclude[i*textureSize.x + j - 1] == 2) || i*textureSize.x + j - 1 < i*textureSize.x)
-            && ((hitboxInclude[i*textureSize.x + j + 1] == 0 || hitboxInclude[i*textureSize.x + j + 1] == 2) || i*textureSize.x + j + 1 > (i+1)*textureSize.x)
+            && ((hitboxInclude[i*textureSize.x + j + 1] == 0 || hitboxInclude[i*textureSize.x + j + 1] == 2) || i*textureSize.x + j + 1 >= (i+1)*textureSize.x)
             && (hitboxInclude[(i-1)*textureSize.x + j - 1] == 0 || hitboxInclude[(i-1)*textureSize.x + j - 1] == 2)
             && (hitboxInclude[(i-1)*textureSize.x + j + 1] == 0 || hitboxInclude[(i-1)*textureSize.x + j + 1] == 2)
             && (hitboxInclude[(i+1)*textureSize.x + j - 1] == 0 || hitboxInclude[(i+1)*textureSize.x + j - 1] == 2)
             && (hitboxInclude[(i+1)*textureSize.x + j + 1] == 0 || hitboxInclude[(i+1)*textureSize.x + j + 1] == 2))
                 newHitbox[i*textureSize.x + j] = 3;
-                
+                */
             /*
             This statement is much simpler, and the previous could probably be too, but I don't feel like doing that
             right now. This just checks that both the left and right pixels are either on a different line or are
@@ -190,6 +234,13 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             */
             if ((hitboxInclude[i*textureSize.x + j - 1] == 1 && i*textureSize.x + j - 1 >= i*textureSize.x)
             && (hitboxInclude[i*textureSize.x + j + 1] == 1 && i*textureSize.x + j + 1 < (i+1)*textureSize.x))
+                newHitbox[i*textureSize.x + j] = 3;
+
+            /*
+            Update, I got rid of the disgusting thing above and simplified it, like i said i might :)
+            */
+            if ((hitboxInclude[(i-1)*textureSize.x + j] == 1 && (i-1) >= 0)
+            && (hitboxInclude[(i+1)*textureSize.x + j] == 1 && (i+1) < textureSize.y))
                 newHitbox[i*textureSize.x + j] = 3;
 
         }
@@ -487,6 +538,24 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         }
     }
 
+    // 0, 0 has been causing some trouble, so we remove it if it isn't actually there
+    if (hitboxInclude[0] != 1) {
+        cout << "Excess zero present" << endl;
+        for (int i = 0; i < m_points.size(); i++) {
+            if (m_points[i] == Vector2f(0, 0)) {
+                m_points.erase(m_points.begin() + i);
+                i--; // So we don't skip certain ones
+            }
+        }
+    }
+    // Also remove neagtive points because it makes no sense
+    for (int i = 0; i < m_points.size(); i++) {
+        if (m_points[i].x < 0 || m_points[i].y < 0) {
+            m_points.erase(m_points.begin() + i);
+            i--;
+        }
+    }
+
     cout << endl << endl;
     m_numVerticies = m_points.size();
     //cout << vertexIndex << " " << m_numVerticies << endl;
@@ -659,7 +728,7 @@ void Polygon::findCentroid() {
     float right = 0.f;
     float top = 0.f;
     float bottom = 0.f;
-
+    
     for (Vector2f v: m_points) {
         // Check each condition and reassign if its true
         if (v.x < left)
