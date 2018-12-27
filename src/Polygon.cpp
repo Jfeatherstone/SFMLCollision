@@ -310,7 +310,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             m_numVerticies++;
         }
         count++;
-    } 
+    }
     m_points.resize(m_numVerticies);
 
     while (vertexIndex < m_numVerticies) {
