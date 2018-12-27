@@ -42,16 +42,16 @@ Note: the notation for images below is as follows
 
 
 The first operation that is performed isolates the important colors in the image. We divide the image into a vertex of colors and then decide whether or not we would like to include a given pixel in the polygon. By default, any color that isn't (0, 0, 0, 0) will be included, but if a list of ignored colors is provided, anything on that list will be excluded as well.
-![step1](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step1.png)
+![step1](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step1.jpg)
 
 Now that we have a vertex of 1s representing parts to be included and 0s that represent empty space, we begin removing excess points. The most obvious part to remove here is the inside of the shape. To properly represent our image, we really only need to identify the outline, so we remove anything that isn't accessible to an outside shape. In this stage, we also fill in any inside details such that they are removed. An example of this would be a donut, whose empty center would be filled in and then subsequently removed. In this example, both a donut and a cicle would translate to the exact same polygon.
-![step2](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step2.png)
+![step2](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step2.jpg)
 
 The next group of verticies to be removed are those that are in a straight line, of which we really only need to two endpoints of said line. This is really just checking above and below and left and right of a point and removing the intermediate verticies.
-![step3](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step3.png)
+![step3](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step3.jpg)
 
 The last step of identify verticies is very similar to the previous one, but instead works with diagonal lines.
-![step4](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step4.png)
+![step4](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step4.jpg)
 
 These steps remove just about all of the excess verticies we have, and provide a rather good, just-about pixel-perfect representation of our texture.
 
