@@ -454,7 +454,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             // Top
             if ((hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x] == 1 
             || hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x] == 3)
-            && ((currPixel.y - 1)*textureSize.x + currPixel.x >= 0 && (currPixel.y - 1)*textureSize.x + currPixel.x < hitboxInclude.size())
+            && ((currPixel.y - 1) >= 0 && (currPixel.y - 1)*textureSize.x + currPixel.x < hitboxInclude.size())
             && !hitboxContainsPoint(hitboxVerticies, Vector2f(currPixel.x, currPixel.y - 1))) {
                 currPixel.x += 0;
                 currPixel.y += -1;
@@ -463,7 +463,8 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             // Top right
             if ((hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x + 1] == 1 
             || hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x + 1] == 3)
-            && ((currPixel.y - 1)*textureSize.x + currPixel.x + 1 >= 0 && (currPixel.y - 1)*textureSize.x + currPixel.x + 1 < hitboxInclude.size())
+            && ((currPixel.y - 1) >= 0 && (currPixel.y - 1)*textureSize.x + currPixel.x + 1 < hitboxInclude.size())
+            && (currPixel.x + 1 < textureSize.x)
             && !hitboxContainsPoint(hitboxVerticies, Vector2f(currPixel.x + 1, currPixel.y - 1))) {
                 currPixel.x += 1;
                 currPixel.y += -1;
@@ -473,6 +474,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             if ((hitboxInclude[(currPixel.y)*textureSize.x + currPixel.x + 1] == 1 
             || hitboxInclude[(currPixel.y)*textureSize.x + currPixel.x + 1] == 3)
             && ((currPixel.y)*textureSize.x + currPixel.x + 1 >= 0 && (currPixel.y)*textureSize.x + currPixel.x + 1 < hitboxInclude.size())
+            && (currPixel.x + 1 < textureSize.x)
             && !hitboxContainsPoint(hitboxVerticies, Vector2f(currPixel.x + 1, currPixel.y))) {
                 currPixel.x += 1;
                 currPixel.y += 0;
@@ -482,6 +484,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             if ((hitboxInclude[(currPixel.y + 1)*textureSize.x + currPixel.x + 1] == 1 
             || hitboxInclude[(currPixel.y + 1)*textureSize.x + currPixel.x + 1] == 3)
             && ((currPixel.y + 1)*textureSize.x + currPixel.x + 1 >= 0 && (currPixel.y + 1)*textureSize.x + currPixel.x + 1 < hitboxInclude.size())
+            && (currPixel.x + 1 < textureSize.x)
             && !hitboxContainsPoint(hitboxVerticies, Vector2f(currPixel.x + 1, currPixel.y + 1))) {
                 currPixel.x += 1;
                 currPixel.y += 1;
@@ -500,6 +503,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             if ((hitboxInclude[(currPixel.y + 1)*textureSize.x + currPixel.x - 1] == 1 
             || hitboxInclude[(currPixel.y + 1)*textureSize.x + currPixel.x - 1] == 3)
             && ((currPixel.y + 1)*textureSize.x + currPixel.x - 1 >= 0 && (currPixel.y + 1)*textureSize.x + currPixel.x - 1 < hitboxInclude.size())
+            && (currPixel.x - 1 >= 0)
             && !hitboxContainsPoint(hitboxVerticies, Vector2f(currPixel.x - 1, currPixel.y + 1))) {
                 currPixel.x += -1;
                 currPixel.y += 1;
@@ -509,6 +513,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             if ((hitboxInclude[(currPixel.y)*textureSize.x + currPixel.x - 1] == 1 
             || hitboxInclude[(currPixel.y)*textureSize.x + currPixel.x - 1] == 3)
             && ((currPixel.y)*textureSize.x + currPixel.x - 1 >= 0 && (currPixel.y)*textureSize.x + currPixel.x - 1 < hitboxInclude.size())
+            && (currPixel.x - 1 >= 0)
             && !hitboxContainsPoint(hitboxVerticies, Vector2f(currPixel.x - 1, currPixel.y))) {
                 currPixel.x += -1;
                 currPixel.y += 0;
@@ -518,6 +523,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             if ((hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x - 1] == 1 
             || hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x - 1] == 3)
             && ((currPixel.y - 1)*textureSize.x + currPixel.x - 1 >= 0 && (currPixel.y - 1)*textureSize.x + currPixel.x - 1 < hitboxInclude.size())
+            && (currPixel.x - 1 >= 0)
             && !hitboxContainsPoint(hitboxVerticies, Vector2f(currPixel.x - 1, currPixel.y - 1))) {
                 currPixel.x += -1;
                 currPixel.y += -1;
