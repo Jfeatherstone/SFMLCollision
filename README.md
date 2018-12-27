@@ -53,8 +53,12 @@ Now that we have a vertex of 1s representing parts to be included and 0s that re
 The next group of verticies to be removed are those that are in a straight line, of which we really only need to two endpoints of said line. This is really just checking above and below and left and right of a point and removing the intermediate verticies.
 ![step3](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step3.jpg)
 
-The last step of identify verticies is very similar to the previous one, but instead works with diagonal lines.
+The next step of identify verticies is very similar to the previous one, but instead works with diagonal lines.
 ![step4](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step4.jpg)
+
+Finally, we remove any intermediate points along the horizontals, similar to what we did earlier with verticle and horizontal lines.
+![step5](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step5.jpg)
+
 
 These steps remove just about all of the excess verticies we have, and provide a rather good, just-about pixel-perfect representation of our texture.
 

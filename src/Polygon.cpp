@@ -267,6 +267,71 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         }
     }
 
+    /*
+    Remove diagonal verticies part 2 - Lines
+
+    What this method  does:
+
+    001     001
+    010 ->  030
+    100     100
+
+    */
+    for (int i = 0; i < textureSize.y; i++) {
+        for (int j = 0; j < textureSize.x; j++) {
+            /*
+            What we are doing here is the same as we did for straight lines before
+            We want to remove any intermediate points from the line and only leave the endpoints
+            */
+            if (hitboxInclude[i*textureSize.x + j] == 1
+            && (hitboxInclude[(i-1)*textureSize.x + j - 1] == 1 || hitboxInclude[(i-1)*textureSize.x + j - 1] == 3)
+            && (hitboxInclude[(i+1)*textureSize.x + j + 1] == 1 || hitboxInclude[(i+1)*textureSize.x + j + 1] == 3)
+            && (hitboxInclude[(i)*textureSize.x + j + 1] != 1 && hitboxInclude[(i)*textureSize.x + j - 1] != 1
+            && hitboxInclude[(i+1)*textureSize.x + j] != 1 && hitboxInclude[(i-1)*textureSize.x + j] != 1))
+                hitboxInclude[i*textureSize.x + j] = 3;
+
+            if (hitboxInclude[i*textureSize.x + j] == 1
+            && (hitboxInclude[(i+1)*textureSize.x + j - 1] == 1 || hitboxInclude[(i+1)*textureSize.x + j - 1] == 3)
+            && (hitboxInclude[(i-1)*textureSize.x + j + 1] == 1 || hitboxInclude[(i-1)*textureSize.x + j + 1] == 3)
+            && (hitboxInclude[(i)*textureSize.x + j + 1] != 1 && hitboxInclude[(i)*textureSize.x + j - 1] != 1
+            && hitboxInclude[(i+1)*textureSize.x + j] != 1 && hitboxInclude[(i-1)*textureSize.x + j] != 1))
+                hitboxInclude[i*textureSize.x + j] = 3;
+
+        }
+    }
+
+    /*
+    Lastly, we want to remove any spots that are connected to 3 or more other verticies
+    
+    for (int i = 0; i < textureSize.y; i++) {
+        for (int j = 0; j < textureSize.x; j++) {
+            int count = 0;
+            if ((i-1) > 0) {
+                if (hitboxInclude[(i-1)*textureSize.x + j - 1] == 1)
+                    count++;
+                if (hitboxInclude[(i-1)*textureSize.x + j] == 1)
+                    count++;
+                if (hitboxInclude[(i-1)*textureSize.x + j + 1] == 1)
+                    count++;
+            }
+            if (hitboxInclude[(i)*textureSize.x + j - 1] == 1)
+                count++;
+            if (hitboxInclude[(i)*textureSize.x + j + 1] == 1)
+                count++;
+            if (i+1 < textureSize.y) {
+                if (hitboxInclude[(i+1)*textureSize.x + j - 1] == 1)
+                    count++;
+                if (hitboxInclude[(i+1)*textureSize.x + j] == 1)
+                    count++;
+                if (hitboxInclude[(i+1)*textureSize.x + j + 1] == 1)
+                    count++;
+            }
+            cout << count << endl;
+            if (count >= 3)
+                hitboxInclude[i*textureSize.x + j] = 0;
+
+        }
+    } */
 
     // Print out our current verticies to help debug
     cout << endl;
@@ -334,6 +399,16 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             //for (Vector2f v: m_hitboxVertices)
               //  cout << v.x << " " << v.y << " --- ";
 
+
+            // Top
+            if ((hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x] == 1 
+            || hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x] == 3)
+            && ((currPixel.y - 1)*textureSize.x + currPixel.x >= 0 && (currPixel.y - 1)*textureSize.x + currPixel.x < hitboxInclude.size())
+            && !hitboxContainsPoint(hitboxVerticies, Vector2f(currPixel.x, currPixel.y - 1))) {
+                currPixel.x += 0;
+                currPixel.y += -1;
+                continue;
+            } else
             // Top right
             if ((hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x + 1] == 1 
             || hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x + 1] == 3)
@@ -396,20 +471,10 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
                 currPixel.x += -1;
                 currPixel.y += -1;
                 continue;
-            } else
-            // Top
-            if ((hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x] == 1 
-            || hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x] == 3)
-            && ((currPixel.y - 1)*textureSize.x + currPixel.x >= 0 && (currPixel.y - 1)*textureSize.x + currPixel.x < hitboxInclude.size())
-            && !hitboxContainsPoint(hitboxVerticies, Vector2f(currPixel.x, currPixel.y - 1))) {
-                currPixel.x += 0;
-                currPixel.y += -1;
-                continue;
             } else {
-                cout << "Jump" << endl;
+                cout << "Done" << endl;
                 break;
             }
-
         } else {
             // Just move horizontally until we get on the path of the first vertex
             currPixel.x += 1;
@@ -421,36 +486,10 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             
         }
     }
+
     cout << endl << endl;
-    cout << vertexIndex << " " << m_numVerticies << endl;
-     
-    // Remove diagonal repetitive verticies
-    if (detail != Detail::Perfect) {
-        for (int i = 0; i < m_numVerticies; i++) {
-            
-            //for (int j = 0; j < 4; j++) {
-                Vector2f diff1 = m_points[i+1] - m_points[i];
-                Vector2f diff2 = m_points[i+2] - m_points[i];
-                // Now we get the sign of the x difference
-                int xSign1 = sign(diff1.x);
-                int ySign1 = sign(diff1.y);
-                int xSign2 = sign(diff2.x);
-                int ySign2 = sign(diff2.y);
-
-                if ((xSign1 == xSign2 && ySign1 == ySign2) 
-                && (xSign1 != 0 && xSign2 != 0 && ySign1 != 0 && ySign2 != 0)) {
-                    // we can then remove the middle point
-                    m_points.erase(m_points.begin() + i + 1);
-                    //m_points.erase(m_points.begin() + i + 1);
-
-                    //i--;
-                }
-           // }
-
-        }
-        m_numVerticies = m_points.size();
-    }
-
+    m_numVerticies = m_points.size();
+    //cout << vertexIndex << " " << m_numVerticies << endl;
     /*****************************************
      * 
      * END OF SHAPE GENERATION
