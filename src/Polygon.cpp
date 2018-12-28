@@ -651,6 +651,8 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     
     // Take out some verticies if we have less detail
     /*
+    Turns out this is a terrible way to remove verticies
+    Who would've thought...
     if (detail == Detail::Less || detail == Detail::More) {
         int repeat = 1;
         if (detail == Detail::Less) {
