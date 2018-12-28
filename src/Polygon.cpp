@@ -24,7 +24,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
      * 
      * Although it may look terrible, it actually isn't *that* bad
      * Most of the code that looks horrible is actually just if statements that are very similar to each other
-     * The reason we need to many is because we have to slightly change the indexing of what we are checking
+     * The reason we need so many is because we have to slightly change the indexing of what we are checking
      * to check above, below, left, right, diagonals, etc.
      * 
      * ******************************************/
@@ -103,7 +103,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
      *      Fill in the inside
      * ******************************************/
     /*
-    We want to check, for every point that has a value of 0, whether it is bounded on all four sides
+    We want to check, for every point that has a value of 0, whether it is bounded on all four sides as well as on the diagonals
         */
     for (int i = 0; i < textureSize.y; i++) {
         for (int j = 0; j < textureSize.x; j++) {
@@ -657,8 +657,13 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         }
         for (int j = 0; j < repeat; j++) {
             vector<Vector2f> newVec;
+            /*
+            This is kinda just a mess down here.
+            There's no real equation or guideline here, I've just been messing around with it
+            until the shapes look good :/
+            */
             for (int i = 0; i < m_numVerticies; i++) {
-                if (i % 2 == 0 || ((m_points[i+1] - m_points[i]).x == 0 || (m_points[i+1] - m_points[i]).y == 0)) {
+                if (i % 2 == 0 || ((m_points[i+1] - m_points[i]).x == 0 || (m_points[i+1] - m_points[i]).y == 0)) { 
                     newVec.push_back(m_points[i]);
                 }
             }
@@ -835,4 +840,20 @@ Vector2f Polygon::getPoint(size_t index) const {
 
 vector<Vector2f> Polygon::getPoints() {
     return m_points;
+}
+
+void Polygon::getArea(float& value) {
+     Polygon::getArea(getPoints(), value);
+}
+
+void Polygon::getArea(vector<Vector2f> points, float& value) {
+    value = 0;
+    for (int i = 0; i < points.size() - 1; i++) {
+        float avgY = (points[i].y + points[i+1].y) / 2;
+        float dX = (points[i+1].x - points[i].x);
+        value += avgY*dX;
+    }
+    value += ((points[points.size()-1].y + points[0].x) / 2) * (points[0].x - points[points.size()-1].y);
+    value *= -1;
+    cout << value << endl;
 }

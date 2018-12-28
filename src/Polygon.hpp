@@ -117,4 +117,10 @@ public:
     bool intersects(RectangleShape shape);
     bool intersects(CircleShape shape);
     bool intersects(ConvexShape shape);
+
+    /*
+    For finding the area of our polygons both given either a set of points or an actual polygon
+    */
+    static void getArea(vector<Vector2f> points, float& value);
+    void getArea(float& value);
 };
