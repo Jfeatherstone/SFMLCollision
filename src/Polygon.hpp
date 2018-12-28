@@ -43,7 +43,7 @@ doesn't have a member variable to store the level of detail,  since it is only u
 constructor.
 */
 
-enum class Detail {Less, More, Perfect};
+enum class Detail {Less, More, Optimal};
 
 
 

@@ -9,7 +9,7 @@ int main() {
     r.setPosition(250, 0);
 
     Texture* t = new Texture();
-    t->loadFromFile("Images/test.png");
+    t->loadFromFile("Images/test6.png");
     
     clock.restart();
     Polygon poly(t, Detail::Less);
@@ -19,7 +19,7 @@ int main() {
     Polygon poly2(t, Detail::More);
     poly2.setPosition(poly.getGlobalBounds().width + 40, 0);
     poly2.scale(8, 8);
-    Polygon poly3(t, Detail::Perfect);
+    Polygon poly3(t, Detail::Optimal);
     poly3.setPosition(2*(poly.getGlobalBounds().width + 30) + 10, 0);
     poly3.setScale(8, 8);
     poly3.setFillColor(Color::Red);
@@ -33,6 +33,7 @@ int main() {
     s.setPosition(2*(poly.getGlobalBounds().width + 30) + 10, 0);
     s.setScale(8, 8);
     s.setColor(Color(0, 0, 0, 150));
+
     /*
     cout << endl << "Points (" << poly3.getPointCount() << "):" << endl;
     int i = 0;

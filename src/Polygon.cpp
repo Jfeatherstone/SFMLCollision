@@ -650,6 +650,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     
     
     // Take out some verticies if we have less detail
+    /*
     if (detail == Detail::Less || detail == Detail::More) {
         int repeat = 1;
         if (detail == Detail::Less) {
@@ -661,7 +662,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             This is kinda just a mess down here.
             There's no real equation or guideline here, I've just been messing around with it
             until the shapes look good :/
-            */
+            
             for (int i = 0; i < m_numVerticies; i++) {
                 if (i % 2 == 0 || ((m_points[i+1] - m_points[i]).x == 0 || (m_points[i+1] - m_points[i]).y == 0)) { 
                     newVec.push_back(m_points[i]);
@@ -670,8 +671,36 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             m_points = newVec;
             m_numVerticies = newVec.size();
         }
-    } 
+    }  */
 
+    /*
+    Area optimization
+    */
+    float diff = .01f;
+    if (detail == Detail::Less)
+        diff = .15f;
+    if (detail == Detail::More)
+        diff = .075f;
+
+    while (true) {
+        bool reduced = false;
+        for (int i = 0; i < m_points.size(); i++) {
+            vector<Vector2f> old = m_points;
+            m_points.erase(m_points.begin() + i);
+            float a1, a2;
+            Polygon::getArea(m_points, a1);
+            Polygon::getArea(old, a2);
+            float dA = abs(a2 - a1);
+            if (dA / a2 >= diff)
+                m_points = old;
+            else
+                reduced = true;
+        }
+        if (!reduced)
+            break;
+    }
+
+    m_numVerticies = m_points.size();
 
 
     findCentroid();
