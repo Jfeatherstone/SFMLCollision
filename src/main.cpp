@@ -9,7 +9,7 @@ int main() {
     r.setPosition(250, 0);
 
     Texture* t = new Texture();
-    t->loadFromFile("Images/test3.png");
+    t->loadFromFile("Images/test6.png");
     
     clock.restart();
     Polygon poly(t, Detail::Less);

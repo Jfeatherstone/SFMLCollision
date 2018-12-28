@@ -103,36 +103,99 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
      *      Fill in the inside
      * ******************************************/
     /*
+    We want to check, for every point that has a value of 0, whether it is bounded on all four sides
+        */
     for (int i = 0; i < textureSize.y; i++) {
-        int current;
-        bool found = true;
-        while (found) {
-            found = false;
-            int start = current;
-            int end;
-            for (int j = 0; j < textureSize.x; j++) {
-                if (hitboxInclude[i*textureSize.x + j] == 1)
-                    start = i*textureSize.x + j;
-                    break;
-            }
-
-            for (int j = start; j < textureSize.x; j++) {
-                if (hitboxInclude[i*textureSize.x + j] == 1) {
-                    end = i*textureSize.x + j;
-                    found = true;
-                    break;
+        for (int j = 0; j < textureSize.x; j++) {
+            if (hitboxInclude[i*textureSize.x + j] == 0) {
+                bool right = false, left = false, up = false, down = false; // Our cardinal directions
+                bool upright = false, downright = false, upleft = false, downleft = false; // We also want to check diagonals
+                // Right
+                for (int k = j+1; k < textureSize.x; k++) {
+                    if (hitboxInclude[i*textureSize.x + k] == 1) {
+                        right = true;
+                        break;
+                    }
                 }
-            }
-            if (start + 1 < end) {
-                for (int j = start; j < end; j++) {
+                // Left
+                for (int k = j-1; k >= 0; k--) {
+                    if (hitboxInclude[i*textureSize.x + k] == 1) {
+                        left = true;
+                        break;
+                    }
+                }
+                // Up
+                for (int k = i-1; k >= 0; k--) {
+                    if (hitboxInclude[k*textureSize.x + j] == 1) {
+                        up = true;
+                        break;
+                    }
+                }
+                // Down
+                for (int k = i+1; k < textureSize.y; k++) {
+                    if (hitboxInclude[k*textureSize.x + j] == 1) {
+                        down = true;
+                        break;
+                    }
+                }
+                // Up Right
+                /*
+                The sum in the conditional part of this loop is not a precise amount, since the diagonals
+                could be a few blocks long or much longer, but this value will assure that we will never
+                check too little values, but it could probably be optimized later
+                */
+                for (int k = 0; k < textureSize.x + textureSize.y; k++) {
+                    // We also will have another if as to optimize our code
+                    if (i-k < 0 || j + k > textureSize.x)
+                        break;
+                    
+                    if (hitboxInclude[(i-k)*textureSize.x + j + k] == 1) {
+                        upright = true;
+                        break;
+                    }
+                }
+                // Down right
+                for (int k = 0; k < textureSize.x + textureSize.y; k++) {
+                    // We also will have another if as to optimize our code
+                    if (i+k > textureSize.y || j + k > textureSize.x)
+                        break;
+                    
+                    if (hitboxInclude[(i+k)*textureSize.x + j + k] == 1) {
+                        downright = true;
+                        break;
+                    }
+                }
+                // Down left
+                for (int k = 0; k < textureSize.x + textureSize.y; k++) {
+                    // We also will have another if as to optimize our code
+                    if (i+k > textureSize.y || j - k < 0)
+                        break;
+                    
+                    if (hitboxInclude[(i+k)*textureSize.x + j - k] == 1) {
+                        downleft = true;
+                        break;
+                    }
+                }
+                // Up left
+                for (int k = 0; k < textureSize.x + textureSize.y; k++) {
+                    // We also will have another if as to optimize our code
+                    if (i-k < 0 || j - k < 0)
+                        break;
+                    
+                    if (hitboxInclude[(i-k)*textureSize.x + j - k] == 1) {
+                        upleft = true;
+                        break;
+                    }
+                }
+
+                if (left && right && up && down && upleft && upright && downleft && downright) {
                     hitboxInclude[i*textureSize.x + j] = 1;
                 }
             }
-            current = end + 1;
         }
- 
-    }
- */   
+    } 
+
+    
     // Print out our current verticies to help debug
     cout << endl;
     for (int i = 0; i < hitboxInclude.size(); i++) {
@@ -273,8 +336,8 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
             // Top right diagonal
             if (hitboxInclude[i*textureSize.x + j] == 1 // The current point is a vertex
-            && hitboxInclude[(i-1)*textureSize.x + j + 1] == 1 // The top right point is a vertex
-            && (i-1)*textureSize.x > 0 && j + 1 < textureSize.x) { // Make sure we are within bounds
+            && hitboxInclude[(i-1)*textureSize.x + j + 1] == 1 // The top right point is a vertex and in our vector
+            && (i-1) >= 0 && j + 1 < textureSize.x) { // Make sure we are within bounds
             // We want to make sure that the vertex was actually a point before (might be unnecessary)
                 if (hitboxInclude[i*textureSize.x + j + 1] == 1)
                     hitboxInclude[i*textureSize.x + j + 1] = 0; // right
@@ -285,7 +348,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             // Bottom right diagonal
             if (hitboxInclude[i*textureSize.x + j] == 1 // The current point is a vertex
             && hitboxInclude[(i+1)*textureSize.x + j + 1] == 1 // The bottom right point is a vertex
-            && (i-1)*textureSize.x > 0 && j + 1 < textureSize.x) { // Make sure we are within bounds
+            && (i+1)*textureSize.x + j < hitboxInclude.size() && j + 1 < textureSize.x) { // Make sure we are within bounds
             // We want to make sure that the vertex was actually a point before (might be unnecessary)
                 if (hitboxInclude[i*textureSize.x + j + 1] == 1)
                     hitboxInclude[i*textureSize.x + j + 1] = 0; // right
@@ -295,8 +358,8 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
             // Bottom left diagonal
             if (hitboxInclude[i*textureSize.x + j] == 1 // The current point is a vertex
-            && hitboxInclude[(i+1)*textureSize.x + j - 1] == 1 // The top right point is a vertex
-            && (i-1)*textureSize.x > 0 && j + 1 < textureSize.x) { // Make sure we are within bounds
+            && hitboxInclude[(i+1)*textureSize.x + j - 1] == 1 // The bottom left point is a vertex
+            && (i+1)*textureSize.x + j < hitboxInclude.size() && j - 1 >= 0) { // Make sure we are within bounds
             // We want to make sure that the vertex was actually a point before (might be unnecessary)
                 if (hitboxInclude[i*textureSize.x + j - 1] == 1)
                     hitboxInclude[i*textureSize.x + j - 1] = 0; // left
@@ -304,7 +367,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
                     hitboxInclude[(i+1)*textureSize.x + j] = 0; // below
             }
 
-            // Top right diagonal
+            // Top left diagonal
             if (hitboxInclude[i*textureSize.x + j] == 1 // The current point is a vertex
             && hitboxInclude[(i-1)*textureSize.x + j - 1] == 1 // The top right point is a vertex
             && (i-1)*textureSize.x > 0 && j + 1 < textureSize.x) { // Make sure we are within bounds
@@ -317,6 +380,16 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
         }
     }
+
+    // Print out our current verticies to help debug
+    cout << endl;
+    for (int i = 0; i < hitboxInclude.size(); i++) {
+        if (i % (int)(textureSize.x) == 0 && i > 0)
+            cout << endl;
+        cout << hitboxInclude[i];
+
+    }
+    cout << "\n\n";
 
     /*
     Remove diagonal verticies part 2 - Lines
