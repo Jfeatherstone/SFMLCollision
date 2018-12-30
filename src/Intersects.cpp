@@ -1,4 +1,4 @@
-#include "Polygon.cpp"
+#include "Polygon.hpp"
 
 /*
     TODO:
@@ -71,27 +71,75 @@ the polygons' location with the setPosition() properly
 */
 
 bool Polygon::intersects(Polygon shape) {
-
     /*
-    Since we don't want to do too many calculations if they are not necessary, we first check to see if the 
-     */
+    We first check to make sure the two polygons are actually capable of intersecting
+    */
+    float distance = sqrt(pow(getPosition().x - shape.getPosition().x, 2) + pow(getPosition().y - shape.getPosition().y, 2));
+    if (distance > getFarthestVertex() + shape.getFarthestVertex())
+        return false;
     /*
-    The next order of business here is that we need to adjust our verticies to be relative to the window they are
+    The next order of business here is that we need to adjust our triangles to be relative to the window they are
     drawn on
      */
-    vector<Vector2f> v1;
-    vector<Vector2f> v2;
-
-    v1.resize(getPointCount());
-    v2.resize(shape.getPointCount());
+    vector<Triangle> t1 = getTriangles();
+    vector<Triangle> t2 = shape.getTriangles();
 
     FloatRect r = getGlobalBounds();
-    for (int i = 0; i < getPointCount(); i++) {
-        v1[i] = getPoint(i) + Vector2f(r.left, r.top);
+    for (int i = 0; i < t1.size(); i++) {
+        t1[i].offset(Vector2f(r.left, r.top));
     }
 
     r = shape.getGlobalBounds();
-    for (int i = 0; i < shape.getPointCount(); i++) {
-        v2[i] = shape.getPoint(i) + Vector2f(r.left, r.top);
+    for (int i = 0; i < t2.size(); i++) {
+        t2[i].offset(Vector2f(r.left, r.top));
     }
+
+    // Next up, we want to remove as many triangles as we can, so we find the centroid of our shapes distance from each triangle
+    vector<int> trianglesToRemove;
+    for (int i = 0; i < t1.size(); i++) {
+        if (m_triangleHeights[i] < distance - shape.getFarthestVertex()) {
+            trianglesToRemove.push_back(i);
+        }
+    }
+
+    for (int i = 0; i < trianglesToRemove.size(); i++) {
+        t1.erase(t1.begin() + trianglesToRemove[i]);
+        //i--;
+    }
+
+    trianglesToRemove.clear();
+    for (int i = 0; i < t2.size(); i++) {
+        if (shape.getTriangleHeights()[i] < distance - getFarthestVertex()) {
+            trianglesToRemove.push_back(i);
+        }
+    }
+
+    for (int i = 0; i < trianglesToRemove.size(); i++) {
+        t2.erase(t2.begin() + trianglesToRemove[i]);
+        //i--;
+    }
+
+
+    for (int i = 0; i < t2.size(); i++) {
+        for (int j = 0; j < getPointCount(); j++) {
+            Vector3f bc;
+            t2[i].computeBarycentric(getPoints()[j], bc);
+            //cout << bc.x << " " << bc.y << " " << bc.z << endl;
+            if ((bc.x >= 0 && bc.x <= 1) && (bc.y >= 0 && bc.y <= 1) && (bc.z >= 0 && bc.z <= 1))
+                return true;
+        }
+    }
+
+    for (int i = 0; i < t1.size(); i++) {
+        for (int j = 0; j < shape.getPointCount(); j++) {
+            Vector3f bc;
+            t1[i].computeBarycentric(shape.getPoints()[j], bc);
+            //cout << bc.x << " " << bc.y << " " << bc.z << endl;
+            if ((bc.x >= 0 && bc.x <= 1) && (bc.y >= 0 && bc.y <= 1) && (bc.z >= 0 && bc.z <= 1))
+                return true;
+        }
+    }
+
+    
+    return false;
 }

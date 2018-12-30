@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 project(collision)
 
-file(GLOB SRC src/Line.cpp src/main.cpp src/Polygon.cpp src/Triangle.cpp src/VectorMath.cpp)
+file(GLOB SRC src/Line.cpp src/main.cpp src/Polygon.cpp src/Triangle.cpp src/VectorMath.cpp src/Intersects.cpp)
 
 # Set our include directories
 include_directories(src/)

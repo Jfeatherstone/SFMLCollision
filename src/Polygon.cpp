@@ -680,9 +680,9 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     */
     float diff = .01f;
     if (detail == Detail::Less)
-        diff = .15f;
+        diff = .1f;
     if (detail == Detail::More)
-        diff = .075f;
+        diff = .05f;
 
     while (true) {
         bool reduced = false;
@@ -704,11 +704,11 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
     m_numVerticies = m_points.size();
 
-
     findCentroid();
     createTriangles();
+    setOutlineThickness(1);
     update(); // This makes the shape actually drawable
-}
+}   
 
 /*
     The following methods are used in the above constructor
@@ -824,6 +824,30 @@ void Polygon::createTriangles() {
     }
 
     m_triangles[m_numVerticies - 1] = Triangle(m_centroid, m_points[m_numVerticies - 1], m_points[0]);
+
+    // We also want to find the "heights" of the triangles here, or the distance from the centroid to the exposed edge that makes
+    // a 90 degree angle
+    /*
+    We can do this by first finding the line from the two exposed verticies, taking the negative reciprical of the slope. This will
+    give us the slope the line that includes our height line. We can then create the line for this perdendicular line and find the point
+    where the tangent and perpendicular intersect. Finally, we take the distance between this point and our centroid
+
+    So this would work, but is a bit uneccessary because we can just use the midpoint of the first two to find our point as an approximation
+    */
+    m_triangleHeights.resize(m_numVerticies);
+    for (int i = 0; i < m_triangles.size(); i++) {
+        // We skip one since that will be our centroid
+        Vector2f v1 = m_triangles[i].getVertex2();
+        Vector2f v2 = m_triangles[i].getVertex3();
+        float d1 = sqrt(pow(v1.x - m_centroid.x, 2) + pow(v1.y - m_centroid.y, 2));
+        float d2 = sqrt(pow(v2.x - m_centroid.x, 2) + pow(v2.y - m_centroid.y, 2));
+
+        if (d1 >= d2)
+            m_triangleHeights[i] = d1;
+        else
+            m_triangleHeights[i] = d2;
+    }
+
 }
 
 /*
@@ -859,6 +883,13 @@ void Polygon::findCentroid() {
     // Now we just take the center of our rectangle
     m_centroid.x = left + (right - left) / 2;
     m_centroid.y = top + (bottom - top) / 2;
+
+    // Now, we record the farthest vertex from the centroid
+    for (int i = 0; i < m_numVerticies; i++) {
+        float d = sqrt(pow(m_centroid.x - m_points[i].x , 2) + pow(m_centroid.y - m_points[i].y, 2));
+        if (d > m_farthestVertex)
+            m_farthestVertex = d;
+    }
 }
 
 size_t Polygon::getPointCount() const {
@@ -887,4 +918,16 @@ void Polygon::getArea(vector<Vector2f> points, float& value) {
     value += ((points[points.size()-1].y + points[0].x) / 2) * (points[0].x - points[points.size()-1].y);
     value *= -1;
     cout << value << endl;
+}
+
+vector<Triangle> Polygon::getTriangles() {
+    return m_triangles;
+}
+
+float Polygon::getFarthestVertex() {
+    return m_farthestVertex;
+}
+
+vector<float> Polygon::getTriangleHeights() {
+    return m_triangleHeights;
 }

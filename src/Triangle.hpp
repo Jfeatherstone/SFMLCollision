@@ -67,6 +67,8 @@ private:
     float m_dot12;
     float m_dot22;
     
+    Vector2f m_offset;
+
     /*
     This will compute a few values that should save resources later
 
@@ -89,17 +91,20 @@ public:
     Triangle();
 
     /*
-    Since we shouldn't ever need these, and I don't feel like implementing them right now,
-    they will stay commented out
-
     In case we need to access our verticies
-    
+    */
     Vector2f getVertex1();
     Vector2f getVertex2();
     Vector2f getVertex3();
 
     vector<Vector2f> getVerticies();
+    
+
+    /*
+    Since our triangles will be moving around the screen (since our objects will be) we will need
+    a way to offset their origins to properly represent our shape as far as location goes.
     */
+    void offset(Vector2f offset);
 
     /*
     The meat of the class right here, and its main function

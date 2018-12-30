@@ -123,6 +123,33 @@ collision/fast:
 	$(MAKE) -f CMakeFiles/collision.dir/build.make CMakeFiles/collision.dir/build
 .PHONY : collision/fast
 
+src/Intersects.o: src/Intersects.cpp.o
+
+.PHONY : src/Intersects.o
+
+# target to build an object file
+src/Intersects.cpp.o:
+	$(MAKE) -f CMakeFiles/collision.dir/build.make CMakeFiles/collision.dir/src/Intersects.cpp.o
+.PHONY : src/Intersects.cpp.o
+
+src/Intersects.i: src/Intersects.cpp.i
+
+.PHONY : src/Intersects.i
+
+# target to preprocess a source file
+src/Intersects.cpp.i:
+	$(MAKE) -f CMakeFiles/collision.dir/build.make CMakeFiles/collision.dir/src/Intersects.cpp.i
+.PHONY : src/Intersects.cpp.i
+
+src/Intersects.s: src/Intersects.cpp.s
+
+.PHONY : src/Intersects.s
+
+# target to generate assembly for a file
+src/Intersects.cpp.s:
+	$(MAKE) -f CMakeFiles/collision.dir/build.make CMakeFiles/collision.dir/src/Intersects.cpp.s
+.PHONY : src/Intersects.cpp.s
+
 src/Line.o: src/Line.cpp.o
 
 .PHONY : src/Line.o
@@ -267,6 +294,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... collision"
 	@echo "... edit_cache"
+	@echo "... src/Intersects.o"
+	@echo "... src/Intersects.i"
+	@echo "... src/Intersects.s"
 	@echo "... src/Line.o"
 	@echo "... src/Line.i"
 	@echo "... src/Line.s"

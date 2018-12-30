@@ -49,3 +49,31 @@ void Triangle::computeBarycentric(Vector2f p, Vector3f& result) {
     result.y = (m_dot11 * dot23 - m_dot12 * dot13) * m_invDenom;
     result.z = 1.0f - result.x - result.y;
 }
+
+void Triangle::offset(Vector2f offset) {
+    // First we remove the previous offset
+    for (int i = 0; i < 3; i++) {
+        m_verticies[i] = m_verticies[i] - m_offset;
+    }
+    // Now we store the new offset and add it to the points
+    m_offset = offset;
+    for (int i = 0; i < 3; i++) {
+        m_verticies[i] = m_verticies[i] + m_offset;
+    }
+}
+
+Vector2f Triangle::getVertex1() {
+    return m_verticies[0];
+}
+
+Vector2f Triangle::getVertex2() {
+    return m_verticies[1];
+}
+
+Vector2f Triangle::getVertex3() {
+    return m_verticies[2];
+}
+
+vector<Vector2f> Triangle::getVerticies() {
+    return m_verticies;
+}

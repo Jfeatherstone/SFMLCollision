@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/collision.dir/src/Intersects.cpp.o"
   "CMakeFiles/collision.dir/src/Line.cpp.o"
   "CMakeFiles/collision.dir/src/Polygon.cpp.o"
   "CMakeFiles/collision.dir/src/Triangle.cpp.o"

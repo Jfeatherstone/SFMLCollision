@@ -27,6 +27,7 @@ SOFTWARE.
 #include <SFML/Graphics.hpp>
 #include "Triangle.hpp"
 #include <iostream>
+#include <tgmath.h>
 
 using namespace sf;
 using namespace std;
@@ -61,13 +62,15 @@ private:
     */
     int m_numVerticies;
     Vector2f m_centroid;
-    
+    float m_farthestVertex;
+
     /*
     To detect collision, we will also want to divide our shape into triangles, so we can do that once on creation as to
     not have to repeat it ever again
     */
     vector<Triangle> m_triangles;
-
+    vector<float> m_triangleHeights;
+    
 	void getPixels();
 	bool contains(vector<Color> vec, Color c);
 	bool hitboxContainsPoint(vector<Vector2f>& hitboxVerticies, Vector2f point);
@@ -105,6 +108,9 @@ public:
 
     vector<Vector2f> getPoints();
 
+    vector<Triangle> getTriangles();
+    float getFarthestVertex();
+    vector<float> getTriangleHeights();
     /*
     The big boys
     The latter three will actually just convert each respective shape into a polygon type and call the first
