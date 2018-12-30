@@ -705,7 +705,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     m_numVerticies = m_points.size();
 
     findCentroid();
-    createTriangles();
+    createLines();
     setOutlineThickness(1);
     update(); // This makes the shape actually drawable
 }   
@@ -758,7 +758,7 @@ Polygon::Polygon(vector<Vector2f> points) {
     m_numVerticies = m_points.size();
 
     findCentroid();
-    createTriangles();
+    createLines();
     update(); // This makes the shape actually drawable
 }
 
@@ -774,7 +774,7 @@ Polygon::Polygon(CircleShape shape) {
     m_numVerticies = m_points.size();
 
     findCentroid();
-    createTriangles();
+    createLines();
     update(); // This makes the shape actually drawable
 }
 
@@ -790,7 +790,7 @@ Polygon::Polygon(RectangleShape shape) {
     m_numVerticies = m_points.size();
 
     findCentroid();
-    createTriangles();
+    createLines();
     update(); // This makes the shape actually drawable
 }
 
@@ -806,7 +806,7 @@ Polygon::Polygon(ConvexShape shape) {
     m_numVerticies = m_points.size();
 
     findCentroid();
-    createTriangles();
+    createLines();
     update(); // This makes the shape actually drawable
 }
 /*
@@ -815,38 +815,15 @@ Polygon::Polygon(ConvexShape shape) {
 We always take our centroid as one of the verticies, and then te other two will just be two
 consectutive points on the polygon
 */
-void Polygon::createTriangles() {
+void Polygon::createLines() {
 
-    m_triangles.resize(m_numVerticies);
+    m_lines.resize(m_numVerticies);
 
     for (int i = 0; i < m_points.size() - 1; i++) {
-        m_triangles[i] = Triangle(m_centroid, m_points[i], m_points[i+1]);
+        m_lines[i] = Line(m_points[i], m_points[i+1]);
     }
 
-    m_triangles[m_numVerticies - 1] = Triangle(m_centroid, m_points[m_numVerticies - 1], m_points[0]);
-
-    // We also want to find the "heights" of the triangles here, or the distance from the centroid to the exposed edge that makes
-    // a 90 degree angle
-    /*
-    We can do this by first finding the line from the two exposed verticies, taking the negative reciprical of the slope. This will
-    give us the slope the line that includes our height line. We can then create the line for this perdendicular line and find the point
-    where the tangent and perpendicular intersect. Finally, we take the distance between this point and our centroid
-
-    So this would work, but is a bit uneccessary because we can just use the midpoint of the first two to find our point as an approximation
-    */
-    m_triangleHeights.resize(m_numVerticies);
-    for (int i = 0; i < m_triangles.size(); i++) {
-        // We skip one since that will be our centroid
-        Vector2f v1 = m_triangles[i].getVertex2();
-        Vector2f v2 = m_triangles[i].getVertex3();
-        float d1 = sqrt(pow(v1.x - m_centroid.x, 2) + pow(v1.y - m_centroid.y, 2));
-        float d2 = sqrt(pow(v2.x - m_centroid.x, 2) + pow(v2.y - m_centroid.y, 2));
-
-        if (d1 >= d2)
-            m_triangleHeights[i] = d1;
-        else
-            m_triangleHeights[i] = d2;
-    }
+    m_lines[m_numVerticies - 1] = Line(m_points[m_numVerticies - 1], m_points[0]);
 
 }
 
@@ -920,17 +897,14 @@ void Polygon::getArea(vector<Vector2f> points, float& value) {
     cout << value << endl;
 }
 
-vector<Triangle> Polygon::getTriangles() {
-    return m_triangles;
+vector<Line> Polygon::getLines() {
+    return m_lines;
 }
 
 float Polygon::getFarthestVertex() {
     return m_farthestVertex;
 }
 
-vector<float> Polygon::getTriangleHeights() {
-    return m_triangleHeights;
-}
 
 Vector2f Polygon::getCentroid() {
     return m_centroid;

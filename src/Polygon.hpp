@@ -25,7 +25,7 @@ SOFTWARE.
 
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "Triangle.hpp"
+#include "Line.hpp"
 #include <iostream>
 #include <tgmath.h>
 
@@ -68,13 +68,13 @@ private:
     To detect collision, we will also want to divide our shape into triangles, so we can do that once on creation as to
     not have to repeat it ever again
     */
-    vector<Triangle> m_triangles;
+    vector<Line> m_lines;
     vector<float> m_triangleHeights;
     
 	void getPixels();
 	bool contains(vector<Color> vec, Color c);
 	bool hitboxContainsPoint(vector<Vector2f>& hitboxVerticies, Vector2f point);
-    void createTriangles();
+    void createLines();
     void findCentroid();
     int sign(float value);
 public:
@@ -108,9 +108,8 @@ public:
 
     vector<Vector2f> getPoints();
 
-    vector<Triangle> getTriangles();
+    vector<Line> getLines();
     float getFarthestVertex();
-    vector<float> getTriangleHeights();
     Vector2f getCentroid();
     /*
     The big boys

@@ -67,6 +67,8 @@ private:
     Vector2f m_start;
     Vector2f m_end;
 
+    Vector2f m_offset;
+
     float calculateSlope(Vector2f p1, Vector2f p2);
     float calculateIntercept();
     float calculateAngle();
@@ -83,7 +85,7 @@ public:
     be conveinient
     */
     Line(Vector2f p1, Vector2f p2);
-
+    Line();
     /*
     For finding the y value at any given x value
     */
@@ -99,4 +101,5 @@ public:
     Vector2f getStart();
     Vector2f getEnd();
 
+    void offset(Vector2f offset);
 };

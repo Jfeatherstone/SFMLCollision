@@ -18,6 +18,10 @@ Line::Line(Vector2f p1, Vector2f p2) {
     calculateAngle();
 }
 
+Line::Line() {
+    
+}
+
 /*
     SLOPE
     
@@ -71,6 +75,10 @@ float Line::y(float x) {
     INTERSECTS
 */
 bool Line::intersects(Line line, Vector2f& intersectionPoint) {
+    // Make sure the intersection is actually capable of happening based on the bounds of each line
+    if (line.getStart().x > getEnd().x || line.getEnd().x < getStart().x)
+        return false;
+
     // Parallel lines never intersect
     if (line.getSlope() == getSlope())
         return false;
@@ -92,6 +100,24 @@ bool Line::intersects(Line line, Vector2f& intersectionPoint) {
 bool Line::intersects(Line line) {
     Vector2f v;
     return intersects(line, v);
+}
+
+/*
+    OFFSET
+*/
+void Line::offset(Vector2f offset) {
+    // First we remove the previous offset
+    m_start -= m_offset;
+    m_end -= m_offset;
+
+    // Now we store the new offset and add it to the points
+    m_offset = offset;
+
+    m_start += m_offset;
+    m_end += m_offset;
+
+    // And recalculate the intercept
+    calculateIntercept();
 }
 
 /*

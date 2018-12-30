@@ -86,39 +86,25 @@ bool Polygon::intersects(Polygon shape) {
     The next order of business here is that we need to adjust our triangles to be relative to the window they are
     drawn on
      */
-    vector<Triangle> t1 = getTriangles();
-    vector<Triangle> t2 = shape.getTriangles();
+    vector<Line> l1 = getLines();
+    vector<Line> l2 = shape.getLines();
 
     FloatRect r = getGlobalBounds();
-    for (int i = 0; i < t1.size(); i++) {
-        t1[i].offset(Vector2f(r.left, r.top));
+    for (int i = 0; i < l1.size(); i++) {
+        l1[i].offset(Vector2f(r.left, r.top));
     }
 
     r = shape.getGlobalBounds();
-    for (int i = 0; i < t2.size(); i++) {
-        t2[i].offset(Vector2f(r.left, r.top));
+    for (int i = 0; i < l2.size(); i++) {
+        l2[i].offset(Vector2f(r.left, r.top));
     }
 
-    for (int i = 0; i < t2.size(); i++) {
-        for (int j = 0; j < getPointCount(); j++) {
-            Vector3f bc;
-            t2[i].computeBarycentric(getPoints()[j], bc);
-            //cout << bc.x << " " << bc.y << " " << bc.z << endl;
-            if ((bc.x >= 0 && bc.x <= 1) && (bc.y >= 0 && bc.y <= 1) && (bc.z >= 0 && bc.z <= 1))
+    for (int i = 0; i < l1.size(); i++) {
+        for (int j = 0; j < l2.size(); j++) {
+            if (l1[i].intersects(l2[j]))
                 return true;
         }
     }
-
-    for (int i = 0; i < t1.size(); i++) {
-        for (int j = 0; j < shape.getPointCount(); j++) {
-            Vector3f bc;
-            t1[i].computeBarycentric(shape.getPoints()[j], bc);
-            //cout << bc.x << " " << bc.y << " " << bc.z << endl;
-            if ((bc.x >= 0 && bc.x <= 1) && (bc.y >= 0 && bc.y <= 1) && (bc.z >= 0 && bc.z <= 1))
-                return true;
-        }
-    }
-
     
     return false;
 }
