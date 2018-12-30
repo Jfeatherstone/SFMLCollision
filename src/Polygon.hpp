@@ -111,6 +111,7 @@ public:
     vector<Triangle> getTriangles();
     float getFarthestVertex();
     vector<float> getTriangleHeights();
+    Vector2f getCentroid();
     /*
     The big boys
     The latter three will actually just convert each respective shape into a polygon type and call the first

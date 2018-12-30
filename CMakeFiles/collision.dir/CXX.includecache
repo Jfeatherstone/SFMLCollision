@@ -6,27 +6,15 @@
 
 #IncludeRegexTransform: 
 
-/home/jack/cpp-workspace/SFMLCollision/src/Polygon.hpp
+/home/jack/cpp-workspace/SFMLCollision/src/Line.cpp
+Line.hpp
+/home/jack/cpp-workspace/SFMLCollision/src/Line.hpp
+
+/home/jack/cpp-workspace/SFMLCollision/src/Line.hpp
 SFML/Graphics.hpp
 -
-Triangle.hpp
-/home/jack/cpp-workspace/SFMLCollision/src/Triangle.hpp
 iostream
 -
 tgmath.h
 -
-
-/home/jack/cpp-workspace/SFMLCollision/src/Triangle.hpp
-SFML/Graphics.hpp
--
-VectorMath.hpp
-/home/jack/cpp-workspace/SFMLCollision/src/VectorMath.hpp
-
-/home/jack/cpp-workspace/SFMLCollision/src/VectorMath.hpp
-SFML/Graphics.hpp
--
-
-/home/jack/cpp-workspace/SFMLCollision/src/main.cpp
-Polygon.hpp
-/home/jack/cpp-workspace/SFMLCollision/src/Polygon.hpp
 

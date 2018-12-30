@@ -4,10 +4,6 @@ int main() {
 
     Clock clock;
 
-    RectangleShape r;
-    r.setSize(Vector2f(100, 50));
-    r.setPosition(250, 0);
-
     Texture* t = new Texture();
     t->loadFromFile("Images/test.png");
     
@@ -30,15 +26,6 @@ int main() {
     clock.restart();
     cout << endl << poly.intersects(poly2) << endl;
     cout << "Collision detection performed in " << clock.restart().asMilliseconds() << " milliseconds!" << endl;
-
-    /*
-    This is for overlaying the actual image and seeing how it looks
-    */
-    Sprite s;
-    s.setTexture(*t);
-    s.setPosition(2*(poly.getGlobalBounds().width + 30) + 10, 0);
-    s.setScale(8, 8);
-    s.setColor(Color(0, 0, 0, 150));
 
     /*
     cout << endl << "Points (" << poly3.getPointCount() << "):" << endl;
@@ -81,9 +68,6 @@ int main() {
             poly.rotate(-5);
         }
 
-
-
-
         ///////////////////////////////////////
         //          DRAWING
         ///////////////////////////////////////
@@ -92,7 +76,6 @@ int main() {
         window.draw(poly);
         window.draw(poly2); 
         window.draw(poly3);
-        //window.draw(s);
         
         window.setTitle(poly.intersects(poly2) ? "Colliding" : "Not colliding!");
 

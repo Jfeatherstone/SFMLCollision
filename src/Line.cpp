@@ -5,18 +5,17 @@
 */
 
 Line::Line(Vector2f p1, Vector2f p2) {
-    // This automatically assigns our member variable so we don't need to set it here
+    // This automatically assigns our slope member variable so we don't need to set it here
     calculateSlope(p1, p2);
-    addPoint(p1);
-    addPoint(p2);
+    if (p1.x < p2.x) {
+        m_start = p1;
+        m_end = p2;
+    } else {
+        m_start = p2;
+        m_end = p1;
+    }
     calculateIntercept();
     calculateAngle();
-}
-
-Line::Line(Vector2f p, float slope) {
-    m_slope = slope;
-    addPoint(p);
-    calculateIntercept();
 }
 
 /*
@@ -37,13 +36,7 @@ This will use y = mx + b to find the intercept
 */
 
 float Line::calculateIntercept() {
-    // We have to make sure we actually have a point first
-    if (m_points.size() > 0) {
-        Vector2f p = m_points[0];
-        m_intercept = p.y - m_slope*p.x;
-    } else
-        m_intercept = 0;
-
+    m_intercept = m_start.y - m_slope*m_start.x;
     return m_intercept;
 }
 
@@ -71,21 +64,34 @@ This will give the y value at any given x on the line
 */
 
 float Line::y(float x) {
-    float y = m_slope*x + m_intercept;
-    // Add the point to our vector
-    addPoint(Vector2f(x, y));
-    return y;
+    return m_slope*x + m_intercept;
 }
 
 /*
-    ADDING POINTS
-
-This will just add a given point that is presumably on our line to the vector of points
+    INTERSECTS
 */
+bool Line::intersects(Line line, Vector2f& intersectionPoint) {
+    // Parallel lines never intersect
+    if (line.getSlope() == getSlope())
+        return false;
+    // Otherwise, we set the two y equations equal to each other and solve for x
+    intersectionPoint.x = (getIntercept() - line.getIntercept()) / (line.getSlope() - getSlope());
+    intersectionPoint.y = y(intersectionPoint.x);
 
-void Line::addPoint(Vector2f p) {
-    m_points.resize(m_points.size() + 1);
-    m_points.push_back(p);
+    // Make sure the point is between the end and start of both lines
+    if ((intersectionPoint.x >= m_start.x && intersectionPoint.x <= m_end.x)
+    && (intersectionPoint.x >= line.getStart().x && intersectionPoint.x <= line.getEnd().x)
+    && ((intersectionPoint.y >= m_start.y && intersectionPoint.y <= m_end.y)
+    || (intersectionPoint.y <= m_start.y && intersectionPoint.y >= m_end.y))
+    && ((intersectionPoint.y >= line.getStart().y && intersectionPoint.y <= line.getEnd().y)
+    || (intersectionPoint.y <= line.getStart().y && intersectionPoint.y >= line.getEnd().y)))
+        return true;
+    return false;
+}
+
+bool Line::intersects(Line line) {
+    Vector2f v;
+    return intersects(line, v);
 }
 
 /*
@@ -102,4 +108,12 @@ float Line::getIntercept() {
 
 float Line::getSlope() {
     return m_slope;
+}
+
+Vector2f Line::getStart() {
+    return m_start;
+}
+
+Vector2f Line::getEnd() {
+    return m_end;
 }

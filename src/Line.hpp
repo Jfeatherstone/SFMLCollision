@@ -64,11 +64,11 @@ private:
     /*
     Since we will need points on our line at some point or another, we can add them to a vector
     */
-    vector<Vector2f> m_points;
+    Vector2f m_start;
+    Vector2f m_end;
 
     float calculateSlope(Vector2f p1, Vector2f p2);
     float calculateIntercept();
-    void addPoint(Vector2f p);
     float calculateAngle();
     
 public:
@@ -83,18 +83,20 @@ public:
     be conveinient
     */
     Line(Vector2f p1, Vector2f p2);
-    Line(Vector2f p, float slope);
 
     /*
     For finding the y value at any given x value
     */
     float y(float x);
-
+    bool intersects(Line line);
+    bool intersects(Line line, Vector2f& intersectionPoint);
     /*
     Some getters
     */
     float getAngle();
     float getIntercept();
     float getSlope();
+    Vector2f getStart();
+    Vector2f getEnd();
 
 };

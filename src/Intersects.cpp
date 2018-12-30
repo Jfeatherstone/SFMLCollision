@@ -73,10 +73,15 @@ the polygons' location with the setPosition() properly
 bool Polygon::intersects(Polygon shape) {
     /*
     We first check to make sure the two polygons are actually capable of intersecting
-    */
-    float distance = sqrt(pow(getPosition().x - shape.getPosition().x, 2) + pow(getPosition().y - shape.getPosition().y, 2));
+    
+    float distance = sqrt(pow(getPosition().x + m_centroid.x - (shape.getPosition().x + shape.getCentroid().x), 2) + pow(getPosition().y + m_centroid.y - (shape.getPosition().y + shape.getCentroid().y), 2));
     if (distance > getFarthestVertex() + shape.getFarthestVertex())
         return false;
+    */
+    if (!getGlobalBounds().intersects(shape.getGlobalBounds()))
+        return false;
+
+    float distance;
     /*
     The next order of business here is that we need to adjust our triangles to be relative to the window they are
     drawn on
@@ -93,32 +98,6 @@ bool Polygon::intersects(Polygon shape) {
     for (int i = 0; i < t2.size(); i++) {
         t2[i].offset(Vector2f(r.left, r.top));
     }
-
-    // Next up, we want to remove as many triangles as we can, so we find the centroid of our shapes distance from each triangle
-    vector<int> trianglesToRemove;
-    for (int i = 0; i < t1.size(); i++) {
-        if (m_triangleHeights[i] < distance - shape.getFarthestVertex()) {
-            trianglesToRemove.push_back(i);
-        }
-    }
-
-    for (int i = 0; i < trianglesToRemove.size(); i++) {
-        t1.erase(t1.begin() + trianglesToRemove[i]);
-        //i--;
-    }
-
-    trianglesToRemove.clear();
-    for (int i = 0; i < t2.size(); i++) {
-        if (shape.getTriangleHeights()[i] < distance - getFarthestVertex()) {
-            trianglesToRemove.push_back(i);
-        }
-    }
-
-    for (int i = 0; i < trianglesToRemove.size(); i++) {
-        t2.erase(t2.begin() + trianglesToRemove[i]);
-        //i--;
-    }
-
 
     for (int i = 0; i < t2.size(); i++) {
         for (int j = 0; j < getPointCount(); j++) {

@@ -931,3 +931,7 @@ float Polygon::getFarthestVertex() {
 vector<float> Polygon::getTriangleHeights() {
     return m_triangleHeights;
 }
+
+Vector2f Polygon::getCentroid() {
+    return m_centroid;
+}
