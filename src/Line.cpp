@@ -19,7 +19,7 @@ Line::Line(Vector2f p1, Vector2f p2) {
 }
 
 Line::Line() {
-    
+
 }
 
 /*
@@ -76,12 +76,25 @@ float Line::y(float x) {
 */
 bool Line::intersects(Line line, Vector2f& intersectionPoint) {
     // Make sure the intersection is actually capable of happening based on the bounds of each line
-    if (line.getStart().x > getEnd().x || line.getEnd().x < getStart().x)
-        return false;
+    intersectionPoint.x = -1;
+    intersectionPoint.y = -1;
 
-    // Parallel lines never intersect
-    if (line.getSlope() == getSlope())
-        return false;
+    //if (line.getStart().x > getEnd().x || line.getEnd().x < getStart().x) {
+        //return false;
+    //}
+
+
+    // Parallel lines
+    if (line.getSlope() == getSlope()) {
+        if (line.getIntercept() == getIntercept()
+        && (line.getStart().x <= getEnd().x || line.getEnd().x >= getStart().x)) {
+        intersectionPoint.x = line.getStart().x;
+        intersectionPoint.y = line.getStart().y;      
+            return true;
+        } else
+            return false;
+    }
+
     // Otherwise, we set the two y equations equal to each other and solve for x
     intersectionPoint.x = (getIntercept() - line.getIntercept()) / (line.getSlope() - getSlope());
     intersectionPoint.y = y(intersectionPoint.x);
@@ -94,6 +107,9 @@ bool Line::intersects(Line line, Vector2f& intersectionPoint) {
     && ((intersectionPoint.y >= line.getStart().y && intersectionPoint.y <= line.getEnd().y)
     || (intersectionPoint.y <= line.getStart().y && intersectionPoint.y >= line.getEnd().y)))
         return true;
+
+    intersectionPoint.x = -1;
+    intersectionPoint.y = -1;
     return false;
 }
 

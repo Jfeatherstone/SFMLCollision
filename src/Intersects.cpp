@@ -71,33 +71,39 @@ the polygons' location with the setPosition() properly
 */
 
 bool Polygon::intersects(Polygon shape) {
-    /*
-    We first check to make sure the two polygons are actually capable of intersecting
     
-    float distance = sqrt(pow(getPosition().x + m_centroid.x - (shape.getPosition().x + shape.getCentroid().x), 2) + pow(getPosition().y + m_centroid.y - (shape.getPosition().y + shape.getCentroid().y), 2));
-    if (distance > getFarthestVertex() + shape.getFarthestVertex())
-        return false;
-    */
-    if (!getGlobalBounds().intersects(shape.getGlobalBounds()))
-        return false;
-
-    float distance;
     /*
-    The next order of business here is that we need to adjust our triangles to be relative to the window they are
+    We first check to make sure the two polygons are actually capable of intersecting by checking their rectangular boundary
+    */
+    if (!getGlobalBounds().intersects(shape.getGlobalBounds())) {
+        //cout << "Rect bounds" << endl;
+        return false;
+    }
+    /*
+    The next order of business here is that we need to adjust our lines to be relative to the window they are
     drawn on
      */
     vector<Line> l1 = getLines();
     vector<Line> l2 = shape.getLines();
 
+    //cout << l1.size() << " " << l2.size() << endl;
+
     FloatRect r = getGlobalBounds();
     for (int i = 0; i < l1.size(); i++) {
+        //cout << l1[i].getStart().x << " " << l1[i].getStart().y << endl;
         l1[i].offset(Vector2f(r.left, r.top));
+        //cout << l1[i].getStart().x << " " << l1[i].getStart().y << endl;
     }
 
     r = shape.getGlobalBounds();
+    //cout << r.left << " " << r.top << endl;
     for (int i = 0; i < l2.size(); i++) {
         l2[i].offset(Vector2f(r.left, r.top));
     }
+    
+    /*
+    And now we actually check the intersection between our lines
+    */
 
     for (int i = 0; i < l1.size(); i++) {
         for (int j = 0; j < l2.size(); j++) {
@@ -106,5 +112,6 @@ bool Polygon::intersects(Polygon shape) {
         }
     }
     
+    //cout << "No collision" << endl;
     return false;
 }

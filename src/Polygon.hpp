@@ -77,6 +77,7 @@ private:
     void createLines();
     void findCentroid();
     int sign(float value);
+    void adjustLines();
 public:
 
     /*
@@ -111,12 +112,15 @@ public:
     vector<Line> getLines();
     float getFarthestVertex();
     Vector2f getCentroid();
+
+    void setScale(const Vector2f& scale);
+
     /*
     The big boys
     The latter three will actually just convert each respective shape into a polygon type and call the first
     intersection function
 
-    It is also important to note that these (due to their complexity) are not defined within Polygon.cpp but rather
+    It is also important to note that these (due to their scope) are not defined within Polygon.cpp but rather
     Intersects.cpp
     */
     bool intersects(Polygon shape);
@@ -125,7 +129,7 @@ public:
     bool intersects(ConvexShape shape);
 
     /*
-    For finding the area of our polygons both given either a set of points or an actual polygon
+    For finding the area of our polygons given either a set of points or an actual polygon
     */
     static void getArea(vector<Vector2f> points, float& value);
     void getArea(float& value);

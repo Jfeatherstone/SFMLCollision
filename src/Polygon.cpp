@@ -88,7 +88,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             hitboxInclude[i] = 0;
         i++;
     }
-
+    /*
     // Print out our current verticies to help debug
     cout << endl;
     for (int i = 0; i < hitboxInclude.size(); i++) {
@@ -98,7 +98,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
     }
     cout << "\n\n";
-
+    */
     /*****************************************
      *      Fill in the inside
      * ******************************************/
@@ -195,7 +195,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         }
     } 
 
-    
+    /*
     // Print out our current verticies to help debug
     cout << endl;
     for (int i = 0; i < hitboxInclude.size(); i++) {
@@ -205,7 +205,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
     }
     cout << "\n\n";
-
+    */
 
     /*****************************************
      *      Removing the inside
@@ -244,7 +244,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         }
     }
     hitboxInclude = newHitbox;
-
+    /*
     // Print out our current verticies to help debug
     cout << endl;
     for (int i = 0; i < hitboxInclude.size(); i++) {
@@ -254,7 +254,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
     }
     cout << "\n\n";
-
+    */
     /*****************************************
      *      Remove excess verticies
      * ******************************************/
@@ -309,7 +309,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         }
     }
     hitboxInclude = newHitbox;
-
+    /*
     // Print out our current verticies to help debug
     cout << endl;
     for (int i = 0; i < hitboxInclude.size(); i++) {
@@ -319,7 +319,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
     }
     cout << "\n\n";
-
+    */
     /*
     Remove diagonal verticies
 
@@ -381,6 +381,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         }
     }
 
+    /*
     // Print out our current verticies to help debug
     cout << endl;
     for (int i = 0; i < hitboxInclude.size(); i++) {
@@ -390,6 +391,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
     }
     cout << "\n\n";
+    */
 
     /*
     Remove diagonal verticies part 2 - Lines
@@ -457,6 +459,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         }
     } */
 
+    /*
     // Print out our current verticies to help debug
     cout << endl;
     for (int i = 0; i < hitboxInclude.size(); i++) {
@@ -466,7 +469,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
     }
     cout << "\n\n";
-
+    */
     /*****************************************
      *      Add verticies in order
      * ******************************************
@@ -492,13 +495,13 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     // Setup our polygon
 
     m_numVerticies = 0;
-    int count = 0;
+    //int count = 0;
     for (int i: hitboxInclude) {
         if (i == 1) {
             //cout << (int)(count / (int)textureSize.x) << " " << count % (int)textureSize.x << "   " << m_numVerticies << endl;
             m_numVerticies++;
         }
-        count++;
+        //count++;
     }
     m_points.resize(m_numVerticies);
 
@@ -506,14 +509,14 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         if (hitboxInclude[currPixel.y*textureSize.x + currPixel.x] == 1 || hitboxInclude[currPixel.y*textureSize.x + currPixel.x] == 3) {
             // Even if it isn't an actual vertex, we record it in our other vector
             hitboxVerticies.push_back(currPixel);
-            cout << currPixel.x << " " << currPixel.y;
+            //cout << currPixel.x << " " << currPixel.y;
 
             if (hitboxInclude[currPixel.y*textureSize.x + currPixel.x] == 1) {
                 // We record the vertex in our polygon
-                cout << " - Added " << vertexIndex << endl;
+                //cout << " - Added " << vertexIndex << endl;
                 m_points[vertexIndex++] = currPixel;
             } else {
-                cout << endl;
+                //cout << endl;
             }
             // We now look for the next pixel that is marked either as a 3 or a 1
             /*
@@ -619,7 +622,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
     // 0, 0 has been causing some trouble, so we remove it if it isn't actually there
     if (hitboxInclude[0] != 1) {
-        cout << "Excess zero present" << endl;
+        //cout << "Excess zero present" << endl;
         for (int i = 0; i < m_points.size(); i++) {
             if (m_points[i] == Vector2f(0, 0)) {
                 m_points.erase(m_points.begin() + i);
@@ -816,15 +819,26 @@ We always take our centroid as one of the verticies, and then te other two will 
 consectutive points on the polygon
 */
 void Polygon::createLines() {
+    vector<Vector2f> oldPoints = m_points;
+
+    for (int i = 0; i < m_numVerticies; i++) {
+        m_points[i].x *= Transformable::getScale().x;
+        m_points[i].y *= Transformable::getScale().y;
+    } 
+    //cout << m_points[0].x << " " << oldPoints[0].x << endl;
+    //createLines();
 
     m_lines.resize(m_numVerticies);
+
+    
 
     for (int i = 0; i < m_points.size() - 1; i++) {
         m_lines[i] = Line(m_points[i], m_points[i+1]);
     }
 
     m_lines[m_numVerticies - 1] = Line(m_points[m_numVerticies - 1], m_points[0]);
-
+    m_points = oldPoints;
+    
 }
 
 /*
@@ -894,7 +908,7 @@ void Polygon::getArea(vector<Vector2f> points, float& value) {
     }
     value += ((points[points.size()-1].y + points[0].x) / 2) * (points[0].x - points[points.size()-1].y);
     value *= -1;
-    cout << value << endl;
+    //cout << value << endl;
 }
 
 vector<Line> Polygon::getLines() {
@@ -908,4 +922,24 @@ float Polygon::getFarthestVertex() {
 
 Vector2f Polygon::getCentroid() {
     return m_centroid;
+}
+
+void Polygon::setScale(const Vector2f& scale) {
+
+    Transformable::setScale(scale.x, scale.y);
+
+    cout << "Custom scale" << endl;
+
+    /*
+    Now we update our points/lines
+    
+    vector<Vector2f> oldPoints = m_points;
+
+    for (int i = 0; i < m_numVerticies; i++) {
+        m_points[i].x *= scale.x;
+        m_points[i].y *= scale.y;
+    } */
+    //cout << m_points[0].x << " " << oldPoints[0].x << endl;
+    createLines();
+    //m_points = oldPoints;
 }
