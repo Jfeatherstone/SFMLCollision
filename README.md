@@ -14,22 +14,6 @@ The user will be able to use the Polygon shape in two different ways:
 There are several aspects to how this library will work, many of which are complicated and so will be overviewed below.
 
 
-### Barycentric Coordinates
-
-The intersection algorithm will be based around the idea of barycentric coordinates, which center around a triangle. Every triangle has three verticies, and thus three sides. This coordinate system consists of three values that represent the point's relationship to each individual vertex. If all three of the barycentric are positive, it means that the point is located inside of the triangle. The figure below shows an example of what values you would get for different point locations relative to a given triangle.
-
-![diagram1](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/diagram1.png)
-
-
-This will be implemented in our Polygon class, along with several other algorithms to reduce the amount of computations per collision detection.
-
-### Triangle Splitting
-
-To properly implement barycentric coordinates in our polygon, we need to divide it into a grouping of triangles, which may seem rather easy given that we have a list of verticies, but there is one small issue. To properly optimize our triangles,
-we need to find the centroid of our polygon to act as the central vertex for every triangle. Since we want to be able to model all types of shapes -- convex, concave, regular, irregular, etc. -- we need a consistent way to determine the "center" of the our shape.
-
-The way we are going to do this is by finding the leftmost, rightmost, highest, and lowest, coordinate components and creating a rectangle. We can then take the center of this rectangle as the approximate centroid of our polygon.
-
 ### Texture to Vertex Conversion
 
 This isn't so much mathematical as it is programmatic. This section of code can be found in the polygon constructor that takes in a texture, a level of detail, and an optional list of colors.
@@ -41,8 +25,8 @@ Note: the notation for images below is as follows
 - 3 denotes a vertex that was included, but no longer will be
 
 The following images are generated from this source image:
-![source](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/test.png)
 
+![source](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/test.png)
 
 The first operation that is performed isolates the important colors in the image. We divide the image into a vertex of colors and then decide whether or not we would like to include a given pixel in the polygon. By default, any color that isn't (0, 0, 0, 0) will be included, but if a list of ignored colors is provided, anything on that list will be excluded as well.
 ![step1](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step1.jpg)
@@ -77,6 +61,12 @@ Depending on whether or not we find a 3 or a 1 changes the next step slightly. I
 One of the options that is presented to the user is the level of detail in which to model the texture. There are currently three different levels: Less, More, Optimal. Each of these values represents a percent difference the final polygon is allowed to be from the initial one. No matter the level of detail, the previous conversion is always the same, and this trimming is only done afterwards.
 
 Essentially, we iterate through every points on the shape and find the difference in area if we were to remove it. If we find that the difference is below a certain value, which is based on the level of detail (Less - 15%, More, 7.5%, Optimal - 1%), we actually remove that point and continue. This allows for us to remove insignificant points systematically.
+
+## Intersection Method
+
+### First level detection
+
+The first value that will be check is the least computationally intensive, and is the most broad detection system for our polygons. All we do, is compare the rectangular frames of the polygons and see if these intersect, because if they don't, it is not possible for their contained shapes to. This process does use SFML's stock intersection method between two FloatRects, and so the benchmark comparison between our method and that method should be taken with a grain of salt.
 
 ## References / More Information
 
