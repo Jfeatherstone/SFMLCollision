@@ -820,10 +820,11 @@ consectutive points on the polygon
 */
 void Polygon::createLines() {
     vector<Vector2f> oldPoints = m_points;
-
+    Vector2f offset(getGlobalBounds().left, getGlobalBounds().top);
+    
     for (int i = 0; i < m_numVerticies; i++) {
-        m_points[i].x *= Transformable::getScale().x;
-        m_points[i].y *= Transformable::getScale().y;
+        (m_points[i].x *= Transformable::getScale().x) += offset.x;
+        (m_points[i].y *= Transformable::getScale().y) += offset.y;
     } 
     //cout << m_points[0].x << " " << oldPoints[0].x << endl;
     //createLines();
@@ -912,6 +913,7 @@ void Polygon::getArea(vector<Vector2f> points, float& value) {
 }
 
 vector<Line> Polygon::getLines() {
+    createLines();
     return m_lines;
 }
 

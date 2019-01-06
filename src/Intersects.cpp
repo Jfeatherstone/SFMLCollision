@@ -107,8 +107,10 @@ bool Polygon::intersects(Polygon shape) {
 
     for (int i = 0; i < l1.size(); i++) {
         for (int j = 0; j < l2.size(); j++) {
-            if (l1[i].intersects(l2[j]))
+            if (l1[i].intersects(l2[j])) {
+                cout << i << " " << j << endl;
                 return true;
+            }
         }
     }
     

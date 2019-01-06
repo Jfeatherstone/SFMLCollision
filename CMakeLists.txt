@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 project(collision)
 
-file(GLOB SRC src/Line.cpp src/main.cpp src/Polygon.cpp src/Triangle.cpp src/VectorMath.cpp src/Intersects.cpp)
+file(GLOB SRC src/*.cpp)
 
 # Set our include directories
 include_directories(src/)
@@ -13,7 +13,7 @@ include_directories(src/)
 # This imports the sfml libraries
 find_package(SFML 2.5 COMPONENTS system window graphics audio REQUIRED)
 
-#-set(SOURCES ${SRC})
+#set(SOURCES ${SRC})
 
 # Sets our main file
 add_executable(${PROJECT_NAME} ${SRC})

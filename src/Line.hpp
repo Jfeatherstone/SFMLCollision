@@ -61,6 +61,18 @@ private:
     */
     float m_angle;
     
+
+
+    /*
+    Special cases for our lines
+    */
+    bool m_vertical = false;
+    bool m_horizontal = false;
+    static float VERTICAL_SLOPE;
+
+    // This is the quadrant the second point would be if the first is at 0,0
+    int m_quadrant;
+
     /*
     Since we will need points on our line at some point or another, we can add them to a vector
     */
@@ -72,6 +84,7 @@ private:
     float calculateSlope(Vector2f p1, Vector2f p2);
     float calculateIntercept();
     float calculateAngle();
+    int calculateQuadrant();
     
 public:
 
@@ -102,4 +115,6 @@ public:
     Vector2f getEnd();
 
     void offset(Vector2f offset);
+
+    RectangleShape* getDrawable();
 };

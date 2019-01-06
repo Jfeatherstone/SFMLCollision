@@ -11,7 +11,9 @@ The user will be able to use the Polygon shape in two different ways:
 
 ## Theory
 
-There are several aspects to how this library will work, many of which are complicated and so will be overviewed below.
+There are several aspects to how this library will work, many of which are complicated and so will be overviewed below. This information is not necessary to use the tool, but can be helpful to understand what is going on (especially if you want to contribute to the code).
+
+For information on practical usage of the tool, see the documentation page, which has yet to be created.
 
 
 ### Texture to Vertex Conversion
@@ -22,7 +24,7 @@ Note: the notation for images below is as follows
 - 0 denotes empty space (will not be included)
 - 1 denotes a vertex that will be included
 - 2 denotes the inside of a shape that will not be included
-- 3 denotes a vertex that was included, but no longer will be
+- 3 denotes a vertex that was included, but no longer will be as it is not necessary
 
 The following images are generated from this source image:
 
