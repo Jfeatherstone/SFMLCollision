@@ -115,15 +115,14 @@ float Line::calculateAngle() {
         else
             m_angle = 0;
 
-
         return m_angle;
     }
 
     if (m_vertical) {
         if (m_start.y > m_end.y)
-            m_angle = 270;
-        else
             m_angle = 90;
+        else
+            m_angle = 270;
         
         return m_angle;
     }
@@ -140,16 +139,16 @@ float Line::calculateAngle() {
 
     switch (m_quadrant) {
         case 0:
-            m_angle = 90 - atan(abs(v.y/v.x)) * 180 /M_PI;
+            m_angle = atan(abs(v.y/v.x)) * 180 /M_PI;
             break;
         case 1:
-            m_angle = 270 + atan(abs(v.y/v.x)) * 180 /M_PI;
+            m_angle = 180 - atan(abs(v.y/v.x)) * 180 /M_PI;
             break;
         case 2:
-            m_angle = 270 - atan(abs(v.y/v.x)) * 180 /M_PI;
+            m_angle = 180 + atan(abs(v.y/v.x)) * 180 /M_PI;
             break;
         case 3:
-            m_angle = 90 + atan(abs(v.y/v.x)) * 180 /M_PI;
+            m_angle = 360 - atan(abs(v.y/v.x)) * 180 /M_PI;
             break;
     }
 
@@ -278,13 +277,13 @@ This method was created for the sole purpose of dubugging line intersections, an
 It is for this reason that we don't hold the rectangle shape as a member variable, because once this issue has been solved,
 we should never need this again.
 */
-RectangleShape* Line::getDrawable() {
+RectangleShape* Line::getDrawable(Color color) {
     RectangleShape* r = new RectangleShape();
 
     r->setSize(Vector2f(sqrt(pow(m_start.x - m_end.x, 2) + pow(m_start.y - m_end.y, 2)), 2));
     r->setOrigin(r->getGlobalBounds().width / 2, r->getGlobalBounds().height / 2 );
     r->setRotation(m_angle);
-    r->setFillColor(Color::Magenta);
+    r->setFillColor(color);
     r->setPosition((m_start + m_end) / 2.0f);
 
     return r;

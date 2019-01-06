@@ -116,5 +116,5 @@ public:
 
     void offset(Vector2f offset);
 
-    RectangleShape* getDrawable();
+    RectangleShape* getDrawable(Color color = Color::Cyan);
 };

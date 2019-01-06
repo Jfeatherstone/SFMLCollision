@@ -1,5 +1,7 @@
 #include "Polygon.hpp"
 
+Color colors[] = {Color::Red, Color::Yellow, Color::Green, Color::Blue, Color::Magenta};
+
 int main() {
 
     Clock clock;
@@ -107,16 +109,34 @@ int main() {
         // INTERSECTION TESTING
         window.draw(poly);
         window.draw(poly2); 
-        window.setTitle(poly.intersects(poly2) ? "Colliding" : "Not colliding!");
         */
+        window.setTitle(poly.intersects(poly2) ? "Colliding" : "Not colliding!");
+        
 
         // LINE ALIGNMENT TESTING;
-        window.draw(poly3);
+        //window.draw(poly);
+        //window.draw(poly2);
+        //window.draw(poly3);
+        int i = 0;
         for (Line l: poly3.getLines()) {
-            window.draw(*l.getDrawable());
+            window.draw(*l.getDrawable(colors[i]));
+            i++;
+            if (i > 4)
+                i = 0;
         }
+        i = 0;
         for (Line l: poly2.getLines()) {
-            window.draw(*l.getDrawable());
+            window.draw(*l.getDrawable(colors[i]));
+            i++;
+            if (i > 4)
+                i = 0;
+        }
+        i = 0;
+        for (Line l: poly.getLines()) {
+            window.draw(*l.getDrawable(colors[i]));
+            i++;
+            if (i > 4)
+                i = 0;
         }
 
 
