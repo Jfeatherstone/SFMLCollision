@@ -3,9 +3,10 @@
 /*
     This value is to denote a vertical line, which would otherwise have a slope of nan, or infinity
 
-The only importance in the value is that no other line should every organically have this slope
+The only importance in the value is that no other line should every organically have this slope, and that
+this is an arbitrarily high number, to simulate a vertical line without actually being one
 */
-float Line::VERTICAL_SLOPE = 1.12312354134;
+float Line::VERTICAL_SLOPE = 100000;
 
 
 /*
@@ -21,13 +22,10 @@ Line::Line(Vector2f p1, Vector2f p2) {
         m_horizontal = true;
 
     calculateSlope(p1, p2);
-    //if (p1.x <= p2.x) {
-        m_start = p1;
-        m_end = p2;
-    //} else {
-    //    m_start = p2;
-    //    m_end = p1;
-    //}
+
+    m_start = p1;
+    m_end = p2;
+
     calculateQuadrant();
     calculateIntercept();
     calculateAngle();
@@ -184,6 +182,7 @@ bool Line::intersects(Line line, Vector2f& intersectionPoint) {
 
     // Parallel lines
     if (line.getSlope() == getSlope()) {
+        cout << "Parallel" << endl;
         if (line.getIntercept() == getIntercept()
         && (line.getStart().x <= getEnd().x || line.getEnd().x >= getStart().x)) {
         intersectionPoint.x = line.getStart().x;
@@ -197,13 +196,34 @@ bool Line::intersects(Line line, Vector2f& intersectionPoint) {
     intersectionPoint.x = (getIntercept() - line.getIntercept()) / (line.getSlope() - getSlope());
     intersectionPoint.y = y(intersectionPoint.x);
 
+    cout << intersectionPoint.x << " " << intersectionPoint.y << endl;
+
     // Make sure the point is between the end and start of both lines
-    if ((intersectionPoint.x >= m_start.x && intersectionPoint.x <= m_end.x)
-    && (intersectionPoint.x >= line.getStart().x && intersectionPoint.x <= line.getEnd().x)
-    && ((intersectionPoint.y >= m_start.y && intersectionPoint.y <= m_end.y)
-    || (intersectionPoint.y <= m_start.y && intersectionPoint.y >= m_end.y))
-    && ((intersectionPoint.y >= line.getStart().y && intersectionPoint.y <= line.getEnd().y)
-    || (intersectionPoint.y <= line.getStart().y && intersectionPoint.y >= line.getEnd().y)))
+    // We do this by finding the leftmost, rightmost, highest and lowest points
+    // These have to be set as arbitrarily high numbers for our detection to work
+
+    float rightmost = 0, leftmost = 10000, highest = 10000, lowest = 0;
+    float xArr[4] = {m_start.x, m_end.x, line.getStart().x, line.getEnd().x};
+    float yArr[4] = {m_start.y, m_end.y, line.getStart().y, line.getEnd().y};
+
+    for (float f: xArr) {
+        if (f < leftmost)
+            leftmost = f;
+        if (f > rightmost)
+            rightmost = f;
+    }
+
+    for (float f: yArr) {
+        if (f < highest)
+            highest = f;
+        if (f > lowest)
+            lowest = f;
+    }
+
+    //cout << rightmost << " " << leftmost << " " << highest << " " << lowest << endl;
+
+    if (intersectionPoint.x <= rightmost && intersectionPoint.x >= leftmost &&
+        intersectionPoint.y >= highest && intersectionPoint.y <= lowest)
         return true;
 
     intersectionPoint.x = -1;
