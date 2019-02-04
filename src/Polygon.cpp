@@ -709,7 +709,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
     findCentroid();
     createLines();
-    setOutlineThickness(1);
+    //setOutlineThickness(.1);
     update(); // This makes the shape actually drawable
 }   
 
@@ -819,19 +819,30 @@ We always take our centroid as one of the verticies, and then te other two will 
 consectutive points on the polygon
 */
 void Polygon::createLines() {
+    // This first part accounts for our scale and offset as well
     vector<Vector2f> oldPoints = m_points;
     Vector2f offset(getGlobalBounds().left, getGlobalBounds().top);
+    //cout << getGlobalBounds().left << " " << getGlobalBounds().top << endl;
     
+    // We first rotate our points, then translate them
     for (int i = 0; i < m_numVerticies; i++) {
-        (m_points[i].x *= Transformable::getScale().x) += offset.x;
-        (m_points[i].y *= Transformable::getScale().y) += offset.y;
+        //cout << getOrigin().x << " " << getOrigin().y << endl;
+
+        VectorMath::rotate(m_points[i], getOrigin(), getRotation());
+    }
+
+    for (int i = 0; i < m_numVerticies; i++) {
+        m_points[i].x *= getScale().x;
+        m_points[i].x += offset.x;
+        m_points[i].y *= getScale().y;
+        m_points[i].y += offset.y;
     } 
     //cout << m_points[0].x << " " << oldPoints[0].x << endl;
-    //createLines();
 
+    m_lines.clear();
     m_lines.resize(m_numVerticies);
-
     
+    //cout << getOrigin().x << endl;
 
     for (int i = 0; i < m_points.size() - 1; i++) {
         m_lines[i] = Line(m_points[i], m_points[i+1]);
@@ -912,6 +923,11 @@ void Polygon::getArea(vector<Vector2f> points, float& value) {
     //cout << value << endl;
 }
 
+/*
+    Since we use this method to detect collisions, we also want to update the lines before we do calculations
+    with them. This is done through the createLines() method, which accounts for rotation and scale.
+*/
+
 vector<Line> Polygon::getLines() {
     createLines();
     return m_lines;
@@ -926,22 +942,26 @@ Vector2f Polygon::getCentroid() {
     return m_centroid;
 }
 
-void Polygon::setScale(const Vector2f& scale) {
+/*
+The following methods are "overridden" versions of there super class methods, but since it will change
+the points we have on our polygon, we need to recreate (or hopefully only update) our lines that
+bound the outside
+*/
 
+void Polygon::setScale(const Vector2f& scale) {
     Transformable::setScale(scale.x, scale.y);
 
-    cout << "Custom scale" << endl;
-
-    /*
-    Now we update our points/lines
-    
-    vector<Vector2f> oldPoints = m_points;
-
-    for (int i = 0; i < m_numVerticies; i++) {
-        m_points[i].x *= scale.x;
-        m_points[i].y *= scale.y;
-    } */
-    //cout << m_points[0].x << " " << oldPoints[0].x << endl;
     createLines();
-    //m_points = oldPoints;
+}
+
+void Polygon::setRotation(const float angle) {
+    Transformable::setRotation(angle);
+
+    createLines();
+}
+
+void Polygon::rotate(const float angle) {
+    Transformable::rotate(angle);
+
+    createLines();
 }

@@ -75,9 +75,17 @@ bool Polygon::intersects(Polygon shape) {
     /*
     We first check to make sure the two polygons are actually capable of intersecting by checking their rectangular boundary
     */
-    if (!getGlobalBounds().intersects(shape.getGlobalBounds())) {
+   FloatRect overlap;
+    if (!getGlobalBounds().intersects(shape.getGlobalBounds(), overlap)) {
         //cout << "Rect bounds" << endl;
         return false;
+    } else {
+        /*
+        If the entire overlap area is equal to one of the shapes, then one must be entirely contained within the other,
+        and therefore the shape are colliding
+        */
+        if (overlap == getGlobalBounds() || overlap == shape.getGlobalBounds())
+            return false;
     }
     /*
     The next order of business here is that we need to adjust our lines to be relative to the window they are

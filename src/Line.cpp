@@ -288,3 +288,15 @@ RectangleShape* Line::getDrawable(Color color) {
 
     return r;
 }
+
+/*
+    ROTATE
+*/
+
+void Line::rotate(Vector2f center, float angle) {
+    // First we update our points to be accounted for the center
+    Vector2f p1 = m_start - center;
+    Vector2f p2 = m_end - center;
+
+    
+}

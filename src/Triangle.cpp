@@ -28,9 +28,9 @@ void Triangle::precomputeBarycentric() {
     /*
     Do some dot products
     */
-    m_dot11 = VectorMath::dot(m_v1, m_v1);
-    m_dot12 = VectorMath::dot(m_v1, m_v2);
-    m_dot22 = VectorMath::dot(m_v2, m_v2);
+    VectorMath::dot(m_v1, m_v1, m_dot11);
+    VectorMath::dot(m_v1, m_v2, m_dot12);
+    VectorMath::dot(m_v2, m_v2, m_dot22);
 
     /*
     Find the inverse of our denominator so we can easily multiply later on 
@@ -42,8 +42,10 @@ void Triangle::precomputeBarycentric() {
 void Triangle::computeBarycentric(Vector2f p, Vector3f& result) {
     Vector2f v3 = p - m_verticies[0];
 
-    float dot13 = VectorMath::dot(m_v1, v3);
-    float dot23 = VectorMath::dot(m_v2, v3);
+    float dot13;
+    VectorMath::dot(m_v1, v3, dot13);
+    float dot23;
+    VectorMath::dot(m_v2, v3, dot23);
 
     result.x = (m_dot22 * dot13 - m_dot12 * dot23) * m_invDenom;
     result.y = (m_dot11 * dot23 - m_dot12 * dot13) * m_invDenom;

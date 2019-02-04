@@ -117,4 +117,6 @@ public:
     void offset(Vector2f offset);
 
     RectangleShape* getDrawable(Color color = Color::Cyan);
+    
+    void rotate(Vector2f center, float angle);
 };

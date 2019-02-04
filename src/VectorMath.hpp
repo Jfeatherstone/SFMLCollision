@@ -25,6 +25,7 @@ SOFTWARE.
 
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <tgmath.h>
 
 using namespace sf;
 
@@ -36,9 +37,13 @@ class VectorMath {
 
 public:
 
-    static float dot(Vector2f v1, Vector2f v2);
-    static float dot(Vector3f v1, Vector3f v2);
+    static void dot(Vector2f v1, Vector2f v2, float& value);
+    static void dot(Vector3f v1, Vector3f v2, float& value);
 
     static Vector2f cross(Vector2f, Vector2f);
     static Vector3f cross(Vector3f, Vector3f);
+
+    static void angleBetween(Vector2f v1, Vector2f v2, float& angle);
+
+    static void rotate(Vector2f& p, Vector2f origin, float angle);
 };

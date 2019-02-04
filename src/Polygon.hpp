@@ -24,10 +24,13 @@ SOFTWARE.
 */
 
 #pragma once
+
 #include <SFML/Graphics.hpp>
-#include "Line.hpp"
 #include <iostream>
 #include <tgmath.h>
+
+#include "Line.hpp"
+#include "VectorMath.hpp"
 
 using namespace sf;
 using namespace std;
@@ -114,7 +117,9 @@ public:
     Vector2f getCentroid();
 
     void setScale(const Vector2f& scale);
-
+    void setRotation(const float angle);
+    void rotate(const float angle);
+    
     /*
     The big boys
     The latter three will actually just convert each respective shape into a polygon type and call the first
