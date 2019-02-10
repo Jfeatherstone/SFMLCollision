@@ -15,10 +15,10 @@ int main() {
     r.setSize(Vector2f(200, 50));
 
     clock.restart();
-    Polygon poly(t, Detail::Less);
+    Polygon poly(t, Detail::Optimal);
     //poly.setScale(Vector2f(3, 3));
     poly.setFillColor(Color::Green);
-    poly.setOrigin(poly.getLocalBounds().width / 2, poly.getLocalBounds().height / 2);
+    poly.setOrigin(poly.getCentroid());
     //cout << poly.getOrigin().x << " " << poly.getOrigin().y << endl;
     poly.setPosition(10, 30);
     
@@ -94,7 +94,7 @@ int main() {
     cout << "(" << l2.getStart().x << ", " << l2.getStart().y << ") to (" << l2.getEnd().x << ", " << l2.getEnd().y << ")" << endl;
     */ 
 
-    ///*
+    /*
     // ROTATION TESTING
     Vector2f p(0, .5);
     float angle = 90;
@@ -103,7 +103,7 @@ int main() {
     cout << "The point (" << p.x << ", " << p.y << ") rotated " << angle << " degrees about (" << origin.x << ", " << origin.y << ") is ";
     VectorMath::rotate(p, origin, angle);
     cout << "(" << p.x << ", " << p.y << ")" << endl;
-    //*/
+    */
 
     // SETUP THE WINDOW
     RenderWindow window;

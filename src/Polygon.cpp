@@ -819,8 +819,9 @@ We always take our centroid as one of the verticies, and then te other two will 
 consectutive points on the polygon
 
 This method is a shitshow of half understood linear algebra, so my explanations of why we are doing certain
-operations may be pretty terrible, but most of it is from the following sources:
+operations may be pretty terrible, but most of it is better explained from the following sources:
 https://en.wikipedia.org/wiki/Scaling_(geometry)
+http://graphics.idav.ucdavis.edu/education/GraphicsNotes/Scaling.pdf
 
 Buckle up
 */
@@ -842,32 +843,27 @@ void Polygon::createLines() {
     back.
     */ 
     for (int i = 0; i < m_numVerticies; i++) {
-        //cout << getOrigin().x << " " << getOrigin().y << endl;
         VectorMath::rotate(m_points[i], getOrigin(), getRotation());
         
+        // Align our point such that the origin becomes (0, 0)
         m_points[i].x -= getOrigin().x;
         m_points[i].y -= getOrigin().y;
 
+        // Scale it
         m_points[i].x *= getScale().x;
         m_points[i].y *= getScale().y;
 
+        // Translate our scaled point relative to its original origin
         m_points[i].x += getOrigin().x;
         m_points[i].y += getOrigin().y;
     }
-
-    
-    //cout << (getGlobalBounds().width / 2 - getCentroid().x) / getScale().x << " " << (getGlobalBounds().height / 2 - getCentroid().y) / getScale().x << endl;
-    //cout << getGlobalBounds().left << " " << getGlobalBounds().top << endl;
     
     /*
     Now that our first two transformations are out of the way, we have to translate the points to their actual position
     on the screen. This offset is calculated using the origin and position.
-    */ 
-
-    Vector2f offset(getPosition().x - (getOrigin().x) / getScale().x, getPosition().y - (getOrigin().y) / getScale().y);
-
+    */
+    Vector2f offset(getPosition().x - getOrigin().x, getPosition().y - getOrigin().y);
     for (int i = 0; i < m_numVerticies; i++) {
-
         m_points[i].x += offset.x;
         m_points[i].y += offset.y; 
     }
