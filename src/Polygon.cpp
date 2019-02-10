@@ -819,26 +819,27 @@ We always take our centroid as one of the verticies, and then te other two will 
 consectutive points on the polygon
 */
 void Polygon::createLines() {
+    vector<Vector2f> pointsCopy = m_points;
+
     // This first part accounts for our scale and offset as well
-    vector<Vector2f> oldPoints = m_points;
-    Vector2f offset(getGlobalBounds().left, getGlobalBounds().top);
     //cout << getGlobalBounds().left << " " << getGlobalBounds().top << endl;
     
     // We first rotate our points, then translate them
     for (int i = 0; i < m_numVerticies; i++) {
         //cout << getOrigin().x << " " << getOrigin().y << endl;
-
         VectorMath::rotate(m_points[i], getOrigin(), getRotation());
     }
 
+    //update();
     for (int i = 0; i < m_numVerticies; i++) {
+        Vector2f offset(getGlobalBounds().left, getGlobalBounds().top);
+    
         m_points[i].x *= getScale().x;
-        m_points[i].x += offset.x;
+        //m_points[i].x += offset.x;
         m_points[i].y *= getScale().y;
-        m_points[i].y += offset.y;
-    } 
-    //cout << m_points[0].x << " " << oldPoints[0].x << endl;
-
+        //m_points[i].y += offset.y;
+    }
+    
     m_lines.clear();
     m_lines.resize(m_numVerticies);
     
@@ -849,8 +850,7 @@ void Polygon::createLines() {
     }
 
     m_lines[m_numVerticies - 1] = Line(m_points[m_numVerticies - 1], m_points[0]);
-    m_points = oldPoints;
-    
+    m_points = pointsCopy;
 }
 
 /*

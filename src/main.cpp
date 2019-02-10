@@ -7,7 +7,7 @@ int main() {
     Clock clock;
 
     Texture* t = new Texture();
-    t->loadFromFile("Images/test2.png");
+    t->loadFromFile("Images/test.png");
     
     CircleShape c;
     c.setRadius(40);
@@ -24,7 +24,7 @@ int main() {
     
     Polygon poly2(t, Detail::More);
     poly2.setPosition(poly.getGlobalBounds().width + 40, 100);
-    poly2.setScale(Vector2f(3, 3));
+    poly2.setScale(Vector2f(5, 5));
     poly2.setFillColor(Color::Magenta);
     poly2.setOrigin(poly2.getLocalBounds().width / 2, poly2.getLocalBounds().height / 2);
     
@@ -37,7 +37,7 @@ int main() {
     // Benchmarking
     cout << clock.restart().asMilliseconds() << " milliseconds to create 3 polygons from a texture" << endl;
     
-    poly = Polygon(c);
+    //poly = Polygon(c);
     poly.setOrigin(poly.getLocalBounds().width / 2, poly.getLocalBounds().height / 2);
     cout << poly.getOrigin().x << " " << poly.getOrigin().y << endl;
 
@@ -73,7 +73,7 @@ int main() {
     cout << "Perfect: " << poly3.getPointCount() << endl;
     */
     
-    ///*
+    /*
     // LINE DEBUGGING
 
     // Testing line intersection
@@ -92,7 +92,7 @@ int main() {
         s << "Don't intersect";
     cout << endl << s.str() << endl << "(" << l1.getStart().x << ", " << l1.getStart().y << ") to (" << l1.getEnd().x << ", " << l1.getEnd().y << ")" << endl;
     cout << "(" << l2.getStart().x << ", " << l2.getStart().y << ") to (" << l2.getEnd().x << ", " << l2.getEnd().y << ")" << endl;
-    //*/ 
+    */ 
 
     /*
     // ROTATION TESTING
@@ -129,10 +129,10 @@ int main() {
             poly.setPosition(poly.getPosition() + Vector2f(0, 1));
         }
         if (Keyboard::isKeyPressed(Keyboard::Q)) {
-            poly.rotate(5);
+            poly.rotate(1);
         }
         if (Keyboard::isKeyPressed(Keyboard::E)) {
-            poly.rotate(-5);
+            poly.rotate(-1);
         }
         if (Keyboard::isKeyPressed(Keyboard::W)) {
             poly.setScale(poly.getScale() + Vector2f(.03, .03));
@@ -140,7 +140,8 @@ int main() {
         if (Keyboard::isKeyPressed(Keyboard::S)) {
             poly.setScale(poly.getScale() - Vector2f(.03, .03));
         }
-
+        
+        //cout << poly.getRotation() << endl;
         //poly.rotate(1000);
         //poly2.setScale(poly2.getScale() + Vector2f(.1, .1));
         //cout << poly.getOrigin().x << " " << poly.getOrigin().y << endl;
@@ -157,21 +158,22 @@ int main() {
         window.draw(poly);
         window.draw(poly2); 
         */
-        window.setTitle(l1.intersects(l2) ? "Colliding" : "Not colliding!");
+        window.setTitle(poly.intersects(poly2) ? "Colliding" : "Not colliding!");
         
 
-        // LINE ALIGNMENT TESTING;getOrigin
-        //window.draw(poly);
+        // LINE ALIGNMENT TESTING
+        window.draw(poly);
         //window.draw(poly2);
         //window.draw(poly3);
-        /*
+        ///*
         int i = 0;
-        for (Line l: poly3.getLines()) {
+        for (Line l: poly.getLines()) {
             window.draw(*l.getDrawable(colors[i]));
             i++;
             if (i > 4)
                 i = 0;
         }
+        /*
         i = 0;
         for (Line l: poly2.getLines()) {
             window.draw(*l.getDrawable(colors[i]));
@@ -180,15 +182,15 @@ int main() {
                 i = 0;
         }
         i = 0;
-        for (Line l: poly.getLines()) {
+        for (Line l: poly3.getLines()) {
             window.draw(*l.getDrawable(colors[i]));
             i++;
             if (i > 4)
                 i = 0;
         } 
-        */
-        window.draw(*l1.getDrawable());
-        window.draw(*l2.getDrawable());
+        //*/
+        //window.draw(*poly.getLines()[0].getDrawable());
+        //window.draw(*poly2.getLines()[0].getDrawable());
 
 
         // SHOW

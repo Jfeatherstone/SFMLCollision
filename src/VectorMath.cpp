@@ -29,3 +29,9 @@ void VectorMath::rotate(Vector2f& p, Vector2f origin, float angleInDegrees) {
 
     p = pp + origin;
 }
+
+void VectorMath::normalize(Vector2f& v) {
+    float denom = 1 / sqrt(v.x*v.x + v.y*v.y);
+    v.x *= denom;
+    v.y *= denom;
+}

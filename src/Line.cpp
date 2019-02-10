@@ -196,34 +196,15 @@ bool Line::intersects(Line line, Vector2f& intersectionPoint) {
     intersectionPoint.x = (getIntercept() - line.getIntercept()) / (line.getSlope() - getSlope());
     intersectionPoint.y = y(intersectionPoint.x);
 
-    cout << intersectionPoint.x << " " << intersectionPoint.y << endl;
+    //cout << intersectionPoint.x << " " << intersectionPoint.y << endl;
 
     // Make sure the point is between the end and start of both lines
-    // We do this by finding the leftmost, rightmost, highest and lowest points
-    // These have to be set as arbitrarily high numbers for our detection to work
-
-    float rightmost = 0, leftmost = 10000, highest = 10000, lowest = 0;
-    float xArr[4] = {m_start.x, m_end.x, line.getStart().x, line.getEnd().x};
-    float yArr[4] = {m_start.y, m_end.y, line.getStart().y, line.getEnd().y};
-
-    for (float f: xArr) {
-        if (f < leftmost)
-            leftmost = f;
-        if (f > rightmost)
-            rightmost = f;
-    }
-
-    for (float f: yArr) {
-        if (f < highest)
-            highest = f;
-        if (f > lowest)
-            lowest = f;
-    }
-
-    //cout << rightmost << " " << leftmost << " " << highest << " " << lowest << endl;
-
-    if (intersectionPoint.x <= rightmost && intersectionPoint.x >= leftmost &&
-        intersectionPoint.y >= highest && intersectionPoint.y <= lowest)
+    // We use the max and min function here, since the start point isn't required to 
+    // be "first" in the line, they are stored in whatever order the user enters them
+    if ((intersectionPoint.x <= std::max(m_start.x, m_end.x) && intersectionPoint.x >= std::min(m_start.x, m_end.x) &&
+        intersectionPoint.y >= std::min(m_start.y, m_end.y) && intersectionPoint.y <= std::max(m_start.y, m_end.y)) &&
+        intersectionPoint.x <= std::max(line.getStart().x, line.getEnd().x) && intersectionPoint.x >= std::min(line.getStart().x, line.getEnd().x) &&
+        intersectionPoint.x >= std::min(line.getStart().y, line.getEnd().y) && intersectionPoint.y <= std::max(line.getStart().y, line.getEnd().y))
         return true;
 
     intersectionPoint.x = -1;

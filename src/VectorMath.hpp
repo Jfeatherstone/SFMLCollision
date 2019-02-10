@@ -46,4 +46,6 @@ public:
     static void angleBetween(Vector2f v1, Vector2f v2, float& angle);
 
     static void rotate(Vector2f& p, Vector2f origin, float angle);
+
+    static void normalize(Vector2f& v);
 };
