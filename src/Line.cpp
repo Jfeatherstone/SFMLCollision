@@ -182,7 +182,7 @@ bool Line::intersects(Line line, Vector2f& intersectionPoint) {
 
     // Parallel lines
     if (line.getSlope() == getSlope()) {
-        cout << "Parallel" << endl;
+        //cout << "Parallel" << endl;
         if (line.getIntercept() == getIntercept()
         && (line.getStart().x <= getEnd().x || line.getEnd().x >= getStart().x)) {
         intersectionPoint.x = line.getStart().x;

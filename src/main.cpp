@@ -38,7 +38,7 @@ int main() {
     cout << clock.restart().asMilliseconds() << " milliseconds to create 3 polygons from a texture" << endl;
     
     //poly = Polygon(c);
-    poly.setOrigin(poly.getLocalBounds().width / 2, poly.getLocalBounds().height / 2);
+    //poly.setOrigin(poly.getLocalBounds().width / 2, poly.getLocalBounds().height / 2);
     cout << poly.getOrigin().x << " " << poly.getOrigin().y << endl;
 
     cout << "Left: " << poly.getGlobalBounds().left << " | " << c.getGlobalBounds().left << endl;
@@ -94,16 +94,16 @@ int main() {
     cout << "(" << l2.getStart().x << ", " << l2.getStart().y << ") to (" << l2.getEnd().x << ", " << l2.getEnd().y << ")" << endl;
     */ 
 
-    /*
+    ///*
     // ROTATION TESTING
-    Vector2f p(4, 0);
-    float angle = -45;
+    Vector2f p(0, .5);
+    float angle = 90;
     Vector2f origin(0, 0);
     cout << endl << "Rotation  Testing:" << endl;
     cout << "The point (" << p.x << ", " << p.y << ") rotated " << angle << " degrees about (" << origin.x << ", " << origin.y << ") is ";
     VectorMath::rotate(p, origin, angle);
     cout << "(" << p.x << ", " << p.y << ")" << endl;
-    */
+    //*/
 
     // SETUP THE WINDOW
     RenderWindow window;
@@ -158,7 +158,7 @@ int main() {
         window.draw(poly);
         window.draw(poly2); 
         */
-        window.setTitle(poly.intersects(poly2) ? "Colliding" : "Not colliding!");
+        //window.setTitle(poly.intersects(poly2) ? "Colliding" : "Not colliding!");
         
 
         // LINE ALIGNMENT TESTING

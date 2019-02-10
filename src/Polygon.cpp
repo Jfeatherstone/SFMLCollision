@@ -817,34 +817,67 @@ Polygon::Polygon(ConvexShape shape) {
 
 We always take our centroid as one of the verticies, and then te other two will just be two
 consectutive points on the polygon
+
+This method is a shitshow of half understood linear algebra, so my explanations of why we are doing certain
+operations may be pretty terrible, but most of it is from the following sources:
+https://en.wikipedia.org/wiki/Scaling_(geometry)
+
+Buckle up
 */
 void Polygon::createLines() {
+    /*
+    We don't want any of the transformations we do to be permanant, so we calculate the new points, and then
+    revert to the old so when we then rotate, translate, or scale, we don't have to do some weird math to
+    account for the previous transformations of the points.
+    */
     vector<Vector2f> pointsCopy = m_points;
 
-    // This first part accounts for our scale and offset as well
-    //cout << getGlobalBounds().left << " " << getGlobalBounds().top << endl;
-    
-    // We first rotate our points, then translate them
+    /*
+    The first transformation we do on our object is a rotation of the points. This is followed by the scale transform,
+    for no particular reason as both transformations should be commuatative (a rotated then scaled object is the same 
+    as a scaled then rotated object)
+    The rotation is pretty straight forward and defined in the VectorMath class, but the scale has a bit of a caveat.
+    Since we have to scale the object about its origin (since SFML does this) we need to account for the change by
+    first translating such that the origin is at (0, 0), multiplying by the scale factors, and then translating
+    back.
+    */ 
     for (int i = 0; i < m_numVerticies; i++) {
         //cout << getOrigin().x << " " << getOrigin().y << endl;
         VectorMath::rotate(m_points[i], getOrigin(), getRotation());
+        
+        m_points[i].x -= getOrigin().x;
+        m_points[i].y -= getOrigin().y;
+
+        m_points[i].x *= getScale().x;
+        m_points[i].y *= getScale().y;
+
+        m_points[i].x += getOrigin().x;
+        m_points[i].y += getOrigin().y;
     }
 
-    //update();
+    
+    //cout << (getGlobalBounds().width / 2 - getCentroid().x) / getScale().x << " " << (getGlobalBounds().height / 2 - getCentroid().y) / getScale().x << endl;
+    //cout << getGlobalBounds().left << " " << getGlobalBounds().top << endl;
+    
+    /*
+    Now that our first two transformations are out of the way, we have to translate the points to their actual position
+    on the screen. This offset is calculated using the origin and position.
+    */ 
+
+    Vector2f offset(getPosition().x - (getOrigin().x) / getScale().x, getPosition().y - (getOrigin().y) / getScale().y);
+
     for (int i = 0; i < m_numVerticies; i++) {
-        Vector2f offset(getGlobalBounds().left, getGlobalBounds().top);
-    
-        m_points[i].x *= getScale().x;
-        //m_points[i].x += offset.x;
-        m_points[i].y *= getScale().y;
-        //m_points[i].y += offset.y;
+
+        m_points[i].x += offset.x;
+        m_points[i].y += offset.y; 
     }
-    
+
+    /*
+    Now that our points properly represent the shape we want, we can create lines between them to check for collisions
+    */
     m_lines.clear();
     m_lines.resize(m_numVerticies);
     
-    //cout << getOrigin().x << endl;
-
     for (int i = 0; i < m_points.size() - 1; i++) {
         m_lines[i] = Line(m_points[i], m_points[i+1]);
     }
