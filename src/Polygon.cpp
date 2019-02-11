@@ -605,7 +605,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
                 currPixel.y += -1;
                 continue;
             } else {
-                cout << "Done" << endl;
+                //cout << "Done" << endl;
                 break;
             }
         } else {
@@ -638,7 +638,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         }
     }
 
-    cout << endl << endl;
+    //cout << endl << endl;
     m_numVerticies = m_points.size();
     //cout << vertexIndex << " " << m_numVerticies << endl;
     /*****************************************

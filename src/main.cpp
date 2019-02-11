@@ -37,37 +37,10 @@ int main() {
     // Benchmarking
     cout << clock.restart().asMilliseconds() << " milliseconds to create 3 polygons from a texture" << endl;
     
-    //poly = Polygon(c);
-    //poly.setOrigin(poly.getLocalBounds().width / 2, poly.getLocalBounds().height / 2);
-    cout << poly.getOrigin().x << " " << poly.getOrigin().y << endl;
-
-    cout << "Left: " << poly.getGlobalBounds().left << " | " << c.getGlobalBounds().left << endl;
-    cout << "Top: " << poly.getGlobalBounds().top << " | " << c.getGlobalBounds().top << endl;
-    cout << "Width: " << poly.getGlobalBounds().width << " | " << c.getGlobalBounds().width << endl;
-    cout << "Height: " << poly.getGlobalBounds().height << " | " << c.getGlobalBounds().height << endl;
-
-    //poly.setOrigin(poly.getCentroid() - Vector2f(0, poly.getCentroid().x));
-
     poly2.setOrigin(poly2.getCentroid());
 
     /*
-    // INTERSECTION BENCHMARKING
-    
-    clock.restart();
-    cout << endl << poly.intersects(poly2) << endl;
-    cout << "Collision detection performed in " << clock.restart().asMilliseconds() << " milliseconds!" << endl;
-    */
-
-    /*
     // VERTEX DEBUGGING
-
-    cout << endl << "Points (" << poly3.getPointCount() << "):" << endl;
-    int i = 0;
-    for (Vector2f p: poly3.getPoints()) {
-        cout << i++ << " " << p.x << " " << p.y << endl;
-    }
-    cout << endl;
-    
     cout << "Less: " << poly.getPointCount() << endl;
     cout << "More: " << poly2.getPointCount() << endl;
     cout << "Perfect: " << poly3.getPointCount() << endl;
@@ -161,7 +134,6 @@ int main() {
         //window.setTitle(poly.intersects(poly2) ? "Colliding" : "Not colliding!");
         window.setTitle(poly.getLines()[0].intersects(poly2.getLines()[0]) ? "Colliding" : "Not colliding!");
 
-
         // LINE ALIGNMENT TESTING
         //window.draw(poly);
         //window.draw(poly2);
@@ -190,13 +162,12 @@ int main() {
             i++;
             if (i > 4)
                 i = 0;
-        } 
+        }
         */
         window.draw(*poly.getLines()[0].getDrawable());
         window.draw(*poly2.getLines()[0].getDrawable());
 
-
-        // SHOW
+        // SHOW 
         window.display();
     }
     
