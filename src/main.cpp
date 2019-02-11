@@ -16,7 +16,7 @@ int main() {
 
     clock.restart();
     Polygon poly(t, Detail::Optimal);
-    //poly.setScale(Vector2f(3, 3));
+    poly.setScale(Vector2f(3, 3));
     poly.setFillColor(Color::Green);
     poly.setOrigin(poly.getCentroid());
     //cout << poly.getOrigin().x << " " << poly.getOrigin().y << endl;
@@ -159,13 +159,15 @@ int main() {
         window.draw(poly2); 
         */
         //window.setTitle(poly.intersects(poly2) ? "Colliding" : "Not colliding!");
-        
+        window.setTitle(poly.getLines()[0].intersects(poly2.getLines()[0]) ? "Colliding" : "Not colliding!");
+
 
         // LINE ALIGNMENT TESTING
-        window.draw(poly);
+        //window.draw(poly);
         //window.draw(poly2);
         //window.draw(poly3);
         ///*
+        /*
         int i = 0;
         for (Line l: poly.getLines()) {
             window.draw(*l.getDrawable(colors[i]));
@@ -173,7 +175,7 @@ int main() {
             if (i > 4)
                 i = 0;
         }
-        /*
+        
         i = 0;
         for (Line l: poly2.getLines()) {
             window.draw(*l.getDrawable(colors[i]));
@@ -181,6 +183,7 @@ int main() {
             if (i > 4)
                 i = 0;
         }
+        /*
         i = 0;
         for (Line l: poly3.getLines()) {
             window.draw(*l.getDrawable(colors[i]));
@@ -188,9 +191,9 @@ int main() {
             if (i > 4)
                 i = 0;
         } 
-        //*/
-        //window.draw(*poly.getLines()[0].getDrawable());
-        //window.draw(*poly2.getLines()[0].getDrawable());
+        */
+        window.draw(*poly.getLines()[0].getDrawable());
+        window.draw(*poly2.getLines()[0].getDrawable());
 
 
         // SHOW

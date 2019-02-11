@@ -940,6 +940,14 @@ void Polygon::getArea(float& value) {
      Polygon::getArea(getPoints(), value);
 }
 
+void Polygon::setSolid(bool state) {
+    m_isSolid = state;
+}
+
+bool Polygon::isSolid() {
+    return m_isSolid;
+}
+
 void Polygon::getArea(vector<Vector2f> points, float& value) {
     value = 0;
     for (int i = 0; i < points.size() - 1; i++) {

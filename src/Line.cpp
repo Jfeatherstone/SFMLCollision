@@ -179,7 +179,6 @@ bool Line::intersects(Line line, Vector2f& intersectionPoint) {
         //return false;
     //}
 
-
     // Parallel lines
     if (line.getSlope() == getSlope()) {
         //cout << "Parallel" << endl;

@@ -75,6 +75,49 @@ bool Polygon::intersects(Polygon shape) {
     /*
     We first check to make sure the two polygons are actually capable of intersecting by checking their rectangular boundary
     */
+    
+    FloatRect overlap;
+    if (!getGlobalBounds().intersects(shape.getGlobalBounds(), overlap)) {
+        cout << "Rect bounds" << endl;
+        return false;
+    } else {
+        /*
+        If the entire overlap area is equal to one of the shapes, then one must be entirely contained within the other,
+        If the outer shape is solid, we count this as colliding.
+        */
+        //if ((overlap == getGlobalBounds() && shape.isSolid()) || (overlap == shape.getGlobalBounds() && isSolid()))
+            //return true;
+    }
+    
+    /*
+    The next order of business here is that we need to adjust our lines to be relative to the window they are
+    drawn on
+     */
+    vector<Line> l1 = getLines();
+    vector<Line> l2 = shape.getLines();
+
+    /*
+    And now we actually check the intersection between our lines
+    */
+    for (int i = 0; i < l1.size(); i++) {
+        for (int j = 0; j < l2.size(); j++) {
+            if (l1[i].intersects(l2[j])) {
+                cout << i << " " << j << endl;
+                // We only care about the fact that something intersects here, so we end right after
+                return true;
+            }
+        }
+    }
+    
+    //cout << "No collision" << endl;
+    return false;
+}
+
+bool Polygon::intersects(Polygon shape, Vector2f& resultant) {
+    
+    /*
+    We first check to make sure the two polygons are actually capable of intersecting by checking their rectangular boundary
+    */
     /*
     FloatRect overlap;
     if (!getGlobalBounds().intersects(shape.getGlobalBounds(), overlap)) {
@@ -96,29 +139,21 @@ bool Polygon::intersects(Polygon shape) {
     vector<Line> l1 = getLines();
     vector<Line> l2 = shape.getLines();
 
-    //cout << l1.size() << " " << l2.size() << endl;
-
-    FloatRect r = getGlobalBounds();
-    for (int i = 0; i < l1.size(); i++) {
-        //cout << l1[i].getStart().x << " " << l1[i].getStart().y << endl;
-        l1[i].offset(Vector2f(r.left, r.top));
-        //cout << l1[i].getStart().x << " " << l1[i].getStart().y << endl;
-    }
-
-    r = shape.getGlobalBounds();
-    //cout << r.left << " " << r.top << endl;
-    for (int i = 0; i < l2.size(); i++) {
-        l2[i].offset(Vector2f(r.left, r.top));
-    }
-    
+    //cout << l1.size() << " " << l2.size() << endl;    
     /*
     And now we actually check the intersection between our lines
+    Since we want to be able to respond to a collision properly (in what direction)
+    should we move the objects), we want to know which lines were actually intersecting
+
+    These are stored in a two dimensional vector such that we can keep track of which lines
+    are intersecting which ones
     */
+    vector<vector<Line>> intersectingLines;
 
     for (int i = 0; i < l1.size(); i++) {
         for (int j = 0; j < l2.size(); j++) {
             if (l1[i].intersects(l2[j])) {
-                cout << i << " " << j << endl;
+                //cout << i << " " << j << endl;
                 return true;
             }
         }

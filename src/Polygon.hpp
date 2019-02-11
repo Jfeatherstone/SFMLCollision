@@ -74,6 +74,9 @@ private:
     vector<Line> m_lines;
     vector<float> m_triangleHeights;
     
+    // Whether our shape is solid or not
+    bool m_isSolid = true; // True by default
+
 	void getPixels();
 	bool contains(vector<Color> vec, Color c);
 	bool hitboxContainsPoint(vector<Vector2f>& hitboxVerticies, Vector2f point);
@@ -116,6 +119,9 @@ public:
     float getFarthestVertex();
     Vector2f getCentroid();
 
+    void setSolid(bool state);
+    bool isSolid();
+
     void setScale(const Vector2f& scale);
     void setRotation(const float angle);
     void rotate(const float angle);
@@ -132,6 +138,15 @@ public:
     bool intersects(RectangleShape shape);
     bool intersects(CircleShape shape);
     bool intersects(ConvexShape shape);
+
+    /*
+    We also may want to know which direction to move the objects after they have collided, so we can do that
+    by passing in a reference to a vector2f
+    */
+    bool intersects(Polygon shape, Vector2f& resultant);
+    bool intersects(RectangleShape shape, Vector2f& resultant);
+    bool intersects(CircleShape shape, Vector2f& resultant);
+    bool intersects(ConvexShape shape, Vector2f& resultant);
 
     /*
     For finding the area of our polygons given either a set of points or an actual polygon
