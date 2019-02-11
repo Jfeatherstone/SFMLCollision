@@ -131,12 +131,12 @@ int main() {
         window.draw(poly);
         window.draw(poly2); 
         */
-        //window.setTitle(poly.intersects(poly2) ? "Colliding" : "Not colliding!");
-        window.setTitle(poly.getLines()[0].intersects(poly2.getLines()[0]) ? "Colliding" : "Not colliding!");
+        window.setTitle(poly.intersects(poly2) ? "Colliding" : "Not colliding!");
+        //window.setTitle(poly.getLines()[0].intersects(poly2.getLines()[0]) ? "Colliding" : "Not colliding!");
 
         // LINE ALIGNMENT TESTING
-        //window.draw(poly);
-        //window.draw(poly2);
+        window.draw(poly2);
+        window.draw(poly);
         //window.draw(poly3);
         ///*
         /*
@@ -164,8 +164,8 @@ int main() {
                 i = 0;
         }
         */
-        window.draw(*poly.getLines()[0].getDrawable());
-        window.draw(*poly2.getLines()[0].getDrawable());
+        //window.draw(*poly.getLines()[0].getDrawable());
+        //window.draw(*poly2.getLines()[0].getDrawable());
 
         // SHOW 
         window.display();

@@ -170,7 +170,7 @@ float Line::y(float x) {
 /*
     INTERSECTS
 */
-bool Line::intersects(Line line, Vector2f& intersectionPoint) {
+bool Line::intersects(Line line, Vector2f& intersectionPoint, bool extendLine) {
     // Make sure the intersection is actually capable of happening based on the bounds of each line
     intersectionPoint.x = -1;
     intersectionPoint.y = -1;
@@ -194,6 +194,11 @@ bool Line::intersects(Line line, Vector2f& intersectionPoint) {
     // Otherwise, we set the two y equations equal to each other and solve for x
     intersectionPoint.x = (getIntercept() - line.getIntercept()) / (line.getSlope() - getSlope());
     intersectionPoint.y = y(intersectionPoint.x);
+
+    // If we are extending the line, we want to only check the bounds for the second line
+    if (extendLine && intersectionPoint.x <= std::max(line.getStart().x, line.getEnd().x) && intersectionPoint.x >= std::min(line.getStart().x, line.getEnd().x) &&
+        intersectionPoint.x >= std::min(line.getStart().y, line.getEnd().y) && intersectionPoint.y <= std::max(line.getStart().y, line.getEnd().y))
+        return true;
 
     //cout << intersectionPoint.x << " " << intersectionPoint.y << endl;
 

@@ -80,22 +80,125 @@ bool Polygon::intersects(Polygon shape) {
     if (!getGlobalBounds().intersects(shape.getGlobalBounds(), overlap)) {
         cout << "Rect bounds" << endl;
         return false;
-    } else {
-        /*
-        If the entire overlap area is equal to one of the shapes, then one must be entirely contained within the other,
-        If the outer shape is solid, we count this as colliding.
-        */
-        //if ((overlap == getGlobalBounds() && shape.isSolid()) || (overlap == shape.getGlobalBounds() && isSolid()))
-            //return true;
     }
-    
+
     /*
-    The next order of business here is that we need to adjust our lines to be relative to the window they are
-    drawn on
+    The next order of business here is that we need to grab the lines of each shape
      */
     vector<Line> l1 = getLines();
     vector<Line> l2 = shape.getLines();
 
+    /*
+    Since we know that our shapes have likely some overlap, we should check to see if one shape is inside of the other
+
+    If we take any given line of the object we suspect to be insde of the other, we can extend that segment to be a full
+    line and find how many times it intersects with the outer shape. If this amount is an integer multiple of 4N + 2, then
+    the shape must be inside of the other. We also have to make sure that at least one intersection point is on either side
+    of the shape.
+    */
+
+    /*
+    To decide which shape could be inside the other (as only one could be) we check the width and height of each shape against
+    each other. If one has a larger height and the other a larger width, one cannot be inside the other, and so both conditions
+    must be true for either shape
+    */ 
+
+    //cout << getGlobalBounds().width << " " << getGlobalBounds().height << endl;
+    //cout << shape.getGlobalBounds().width << " " << shape.getGlobalBounds().height << endl;
+
+    if (getGlobalBounds().width < shape.getGlobalBounds().width && getGlobalBounds().height < shape.getGlobalBounds().height
+        && isSolid()) {
+        cout << "This inside" << endl;
+        // The case where this is the outer shape
+        
+        // We can just grab the first line as our test (l1)
+        Line l = l1[0];
+
+        // Now we get a list of intersections with the lines ffrom the other polygon (shape)
+        vector<Line> intersections;
+        vector<Vector2f> intersectionPoints;
+
+        for (Line line: l2) {
+            Vector2f point;
+            if (l.intersects(line, point, true)) {
+                intersections.push_back(line);
+                intersectionPoints.push_back(point);
+            }
+        }
+
+        if ((intersections.size() - 2) % 4 == 0) {
+            cout << "Size OK (" << intersections.size() << ")" << endl;
+            /*
+            Now we want to make sure that there is at least one point on either side of the shape.
+
+            Since we have a 2 dimensional space, this isn't as easy as just comparing x values, since "either side"
+            could mean one above and one below.
+
+            What we can say, is that any intersection have to be along our line, which means they are 180 degrees from each
+            other. Because of this, we can calculate which quadrant (with respect to the shapes centroid) each point is in
+            and if there are at least two in opposing quadrants (1 and 3, or 2 and 4), then it has one on "either side".
+            */
+            bool foundQuadrants[4];
+            for (int i = 0; i < intersections.size(); i++) {
+                foundQuadrants[VectorMath::quadrant(intersectionPoints[i], getCentroid()) - 1] = true;
+            }
+            int numQuads = 0;
+            for (bool b: foundQuadrants) {
+                if (b)
+                    numQuads++;
+            }
+            cout << "Found points in " << numQuads << " quadrants [" << foundQuadrants[0] << ", " << foundQuadrants[1] << ", " 
+                << foundQuadrants[2] << ", " << foundQuadrants[3] << "]" << endl;
+            if (numQuads > 1) {
+                cout << "This inside of shape" << endl;
+                return true;
+            }
+        }
+    } else if ((getGlobalBounds().width > shape.getGlobalBounds().width && getGlobalBounds().height > shape.getGlobalBounds().height)
+       && shape.isSolid()) {
+        cout << "Shape inside" << endl;
+        // The case where shape is the outer shape
+        
+        // We can just grab the first line as our test (l1)
+        Line l = l2[0];
+
+        // Now we get a list of intersections with the lines from the other polygon (this)
+        vector<Line> intersections;
+        vector<Vector2f> intersectionPoints;
+
+        for (Line line: l1) {
+            Vector2f point;
+            if (l.intersects(line, point)) {
+                intersections.push_back(line);
+                intersectionPoints.push_back(point);
+            }
+        }
+    
+        cout << intersections.size() << endl;
+        /*
+        Now we want to make sure that there is at least one point on either side of the shape.
+
+        Since we have a 2 dimensional space, this isn't as easy as just comparing x values, since "either side"
+        could mean one above and one below.
+
+        What we can say, is that any intersection have to be along our line, which means they are 180 degrees from each
+        other. Because of this, we can calculate which quadrant (with respect to the shapes centroid) each point is in
+        and if there are at least two in opposing quadrants (1 and 3, or 2 and 4), then it has one on "either side".
+        */
+        bool foundQuadrants[4];
+        for (int i = 0; i < intersections.size(); i++) {
+            foundQuadrants[VectorMath::quadrant(intersectionPoints[i], getCentroid())];
+        }
+
+        if ((foundQuadrants[0] && foundQuadrants[2]) || (foundQuadrants[1] && foundQuadrants[3])) {
+            // We now use our multiple of 4N + 2 that we showed earlier
+            if (((intersections.size() - 2) / 4) % 4 == 0)
+                return true;
+        }
+
+    }
+        
+    
     /*
     And now we actually check the intersection between our lines
     */

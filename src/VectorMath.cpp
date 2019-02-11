@@ -35,3 +35,22 @@ void VectorMath::normalize(Vector2f& v) {
     v.x *= denom;
     v.y *= denom;
 }
+
+int VectorMath::quadrant(Vector2f point, Vector2f origin) {
+    // First we want to account for the origin
+    point -= origin;
+
+    /*
+    A note about the equals below:
+    We assume that if a point is on any of the axes, it will be counted as a part of the upper quadrant.
+    This means that a point on the x axis with a positive x will be in quadrant 1 and if it has a negative x
+    it will be in the 2nd quadrant
+    */
+    if (point.x >= 0 && point.y >= 0)
+        return 1;
+    if (point .x <= 0 && point.y >= 0)
+        return 2;
+    if (point.x < 0 && point.y < 0)
+        return 3;
+    return 4;
+}
