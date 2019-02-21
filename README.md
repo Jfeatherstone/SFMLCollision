@@ -7,7 +7,7 @@ The user will be able to use the Polygon shape in two different ways:
 
 1. By providing a texture to the constructor which will identify important pixels to be included as verticies and create the shape based on these. This will also allow for the user to define the level of accuracy as either pixel perfect or approximate.
 2. By proving a vector of pre assembled verticies, possibly from some other SFML class by using the getPoints() method.
-
+3. By directly passing in any of the SFML shape objects (CircleShape, RectangleShape, ConvexShape)
 
 ## Theory
 
@@ -31,19 +31,19 @@ The following images are generated from this source image:
 ![source](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/test.png)
 
 The first operation that is performed isolates the important colors in the image. We divide the image into a vertex of colors and then decide whether or not we would like to include a given pixel in the polygon. By default, any color that isn't (0, 0, 0, 0) will be included, but if a list of ignored colors is provided, anything on that list will be excluded as well.
-![step1](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step1.jpg)
+![step1](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step1.jpg) ![step2](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step2.jpg) ![step3](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step3.jpg) ![step4](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step4.jpg) ![step5](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step5.jpg)
+
+
+
+
 
 Now that we have a vertex of 1s representing parts to be included and 0s that represent empty space, we begin removing excess points. The most obvious part to remove here is the inside of the shape. To properly represent our image, we really only need to identify the outline, so we remove anything that isn't accessible to an outside shape. In this stage, we also fill in any inside details such that they are removed. This is done by drawing eight lines in all of the cardinal directions and diagonals, and seeing if they encounter a point that is included. If all eight do, the point must be inside the outline of the object. This can be seen in Images/test6.png and Images/test7.png which will produce the exact same polygon.
-![step2](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step2.jpg)
 
 The next group of verticies to be removed are those that are in a straight line, of which we really only need to two endpoints of said line. This is really just checking above and below and left and right of a point and removing the intermediate verticies.
-![step3](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step3.jpg)
 
 The next step of identify verticies is very similar to the previous one, but instead works with diagonal lines.
-![step4](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step4.jpg)
 
 Finally, we remove any intermediate points along the horizontals, similar to what we did earlier with verticle and horizontal lines.
-![step5](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step5.jpg)
 
 
 These steps remove just about all of the excess verticies we have, and provide a rather good, just-about pixel-perfect representation of our texture.
