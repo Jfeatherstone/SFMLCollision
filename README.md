@@ -64,9 +64,9 @@ Essentially, we iterate through every points on the shape and find the differenc
 
 ## Intersection Method
 
-### First level detection
+### Line intersection detection
 
-The first value that will be check is the least computationally intensive, and is the most broad detection system for our polygons. All we do, is compare the rectangular frames of the polygons and see if these intersect, because if they don't, it is not possible for their contained shapes to. This process does use SFML's stock intersection method between two FloatRects, and so the benchmark comparison between our method and that method should be taken with a grain of salt.
+Since our polygon intersection method is based on the lines that surround each shape, one of the most important parts of intersection is to properly be able to address line intersections. The method we use can be seen in (4), but can be summarized as follows: we take ratios of the start and end coordinates of each of the two lines to calculate the percent along each line where they intersect. If these two percents are between 0 and 1, it means that they properly intersect within the domain of both lines, and actually do intersect. This allows to to not only find whether two line segments intersect on their given domain, but also allows us to find the intersection point quite easily. Another benefit of using this method is that if we want to extend a line segment to a full line (which will be useful in finding whether one shape is inside another), we can easily do this by only checking one of the percent values, and ignoring the other.
 
 ## References / More Information
 

@@ -105,8 +105,6 @@ bool Polygon::intersects(Polygon shape) {
     //cout << "No collision" << endl;
 
     /*
-    Since we know that our shapes have likely some overlap, we should check to see if one shape is inside of the other
-
     If we take any given line of the object we suspect to be insde of the other, we can extend that segment to be a full
     line and find how many times it intersects with the outer shape. If this amount is an integer multiple of 4N + 2, then
     the shape must be inside of the other. We also have to make sure that at least one intersection point is on either side
@@ -121,10 +119,10 @@ bool Polygon::intersects(Polygon shape) {
 
     //cout << getGlobalBounds().width << " " << getGlobalBounds().height << endl;
     //cout << shape.getGlobalBounds().width << " " << shape.getGlobalBounds().height << endl;
-    /*
+    ///*
     if (getGlobalBounds().width < shape.getGlobalBounds().width && getGlobalBounds().height < shape.getGlobalBounds().height
         && isSolid()) {
-        cout << "This inside" << endl;
+        cout << "This outside" << endl;
         // The case where this is the outer shape
         
         // We can just grab the first line as our test (l1)
@@ -142,7 +140,7 @@ bool Polygon::intersects(Polygon shape) {
             }
         }
 
-        if ((intersections.size() - 2) % 4 == 0) {
+        if ((intersections.size()) % 2 == 0) {
             cout << "Size OK (" << intersections.size() << ")" << endl;
             /*
             Now we want to make sure that there is at least one point on either side of the shape.
@@ -151,7 +149,7 @@ bool Polygon::intersects(Polygon shape) {
             What we can say, is that any intersection have to be along our line, which means they are 180 degrees from each
             other. Because of this, we can calculate which quadrant (with respect to the shapes centroid) each point is in
             and if there are at least two in opposing quadrants (1 and 3, or 2 and 4), then it has one on "either side".
-            
+            */
             bool foundQuadrants[4];
             for (int i = 0; i < intersections.size(); i++) {
                 foundQuadrants[VectorMath::quadrant(intersectionPoints[i], getCentroid()) - 1] = true;
@@ -170,7 +168,7 @@ bool Polygon::intersects(Polygon shape) {
         }
     } else if ((getGlobalBounds().width > shape.getGlobalBounds().width && getGlobalBounds().height > shape.getGlobalBounds().height)
        && shape.isSolid()) {
-        cout << "Shape inside" << endl;
+        cout << "This inside" << endl;
         // The case where shape is the outer shape
         
         // We can just grab the first line as our test (l1)
@@ -196,7 +194,7 @@ bool Polygon::intersects(Polygon shape) {
         What we can say, is that any intersection have to be along our line, which means they are 180 degrees from each
         other. Because of this, we can calculate which quadrant (with respect to the shapes centroid) each point is in
         and if there are at least two in opposing quadrants (1 and 3, or 2 and 4), then it has one on "either side".
-        
+        */
         bool foundQuadrants[4];
         for (int i = 0; i < intersections.size(); i++) {
             foundQuadrants[VectorMath::quadrant(intersectionPoints[i], getCentroid())];
@@ -209,7 +207,8 @@ bool Polygon::intersects(Polygon shape) {
         }
     
     }        
-*/
+    //*/
+
     return false;
 }
 

@@ -22,6 +22,7 @@ int main() {
     poly.setOrigin(poly.getCentroid());
     //cout << poly.getOrigin().x << " " << poly.getOrigin().y << endl;
     poly.setPosition(10, 30);
+    poly.setSolid(true);
     
     Polygon poly2(t, Detail::More);
     poly2.setPosition(poly.getGlobalBounds().width + 40, 100);
