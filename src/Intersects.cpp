@@ -95,7 +95,7 @@ bool Polygon::intersects(Polygon shape) {
     for (int i = 0; i < l1.size(); i++) {
         for (int j = 0; j < l2.size(); j++) {
             if (l1[i].intersects(l2[j])) {
-                cout << i << " " << j << endl;
+                //cout << i << " " << j << endl;
                 // We only care about the fact that something intersects here, so we end right after
                 return true;
             }
@@ -121,7 +121,7 @@ bool Polygon::intersects(Polygon shape) {
 
     //cout << getGlobalBounds().width << " " << getGlobalBounds().height << endl;
     //cout << shape.getGlobalBounds().width << " " << shape.getGlobalBounds().height << endl;
-
+    /*
     if (getGlobalBounds().width < shape.getGlobalBounds().width && getGlobalBounds().height < shape.getGlobalBounds().height
         && isSolid()) {
         cout << "This inside" << endl;
@@ -151,7 +151,7 @@ bool Polygon::intersects(Polygon shape) {
             What we can say, is that any intersection have to be along our line, which means they are 180 degrees from each
             other. Because of this, we can calculate which quadrant (with respect to the shapes centroid) each point is in
             and if there are at least two in opposing quadrants (1 and 3, or 2 and 4), then it has one on "either side".
-            */
+            
             bool foundQuadrants[4];
             for (int i = 0; i < intersections.size(); i++) {
                 foundQuadrants[VectorMath::quadrant(intersectionPoints[i], getCentroid()) - 1] = true;
@@ -196,7 +196,7 @@ bool Polygon::intersects(Polygon shape) {
         What we can say, is that any intersection have to be along our line, which means they are 180 degrees from each
         other. Because of this, we can calculate which quadrant (with respect to the shapes centroid) each point is in
         and if there are at least two in opposing quadrants (1 and 3, or 2 and 4), then it has one on "either side".
-        */
+        
         bool foundQuadrants[4];
         for (int i = 0; i < intersections.size(); i++) {
             foundQuadrants[VectorMath::quadrant(intersectionPoints[i], getCentroid())];
@@ -207,9 +207,9 @@ bool Polygon::intersects(Polygon shape) {
             if (((intersections.size() - 2) / 4) % 4 == 0)
                 return true;
         }
-
-}        
-
+    
+    }        
+*/
     return false;
 }
 

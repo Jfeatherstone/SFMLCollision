@@ -133,17 +133,17 @@ int main() {
         window.draw(poly);
         window.draw(poly2); 
         */
-        //window.setTitle(poly.intersects(poly2) ? "Colliding" : "Not colliding!");
-        Vector2f point;
-        window.setTitle(poly.getLines()[4].intersects(poly2.getLines()[4], point) ? "Colliding" : "Not colliding!");
-        c.setPosition(point);
+        window.setTitle(poly.intersects(poly2) ? "Colliding" : "Not colliding!");
+        //Vector2f point;
+        //window.setTitle(poly.getLines()[1].intersects(poly2.getLines()[1], point) ? "Colliding" : "Not colliding!");
+        //c.setPosition(point);
 
         // LINE ALIGNMENT TESTING
         
         //window.draw(poly2);
         //window.draw(poly);
         //window.draw(poly3);
-        /*
+        ///*
         int i = 0;
         for (Line l: poly.getLines()) {
             window.draw(*l.getDrawable(colors[i]));
@@ -168,9 +168,9 @@ int main() {
                 i = 0;
         }
         */
-        window.draw(*poly.getLines()[4].getDrawable());
-        window.draw(*poly2.getLines()[4].getDrawable());
-        window.draw(c);
+        //window.draw(*poly.getLines()[1].getDrawable());
+        //window.draw(*poly2.getLines()[1].getDrawable());
+        //window.draw(c);
 
         // SHOW 
         window.display();

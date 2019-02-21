@@ -105,6 +105,7 @@ public:
     float y(float x);
     bool intersects(Line line);
     bool intersects(Line line, Vector2f& intersectionPoint, bool extendLine = false);
+
     /*
     Some getters
     */

@@ -75,3 +75,4 @@ The first value that will be check is the least computationally intensive, and i
 1. [Juan José Jiménez, Rafael J. Segura, Francisco R. Feito, Efficient Collision Detection between 2D Polygons, 2004](http://wscg.zcu.cz/wscg2004/Papers_2004_Full/B83.pdf)
 2. [Barycentric coordinate calculation](https://gamedev.stackexchange.com/questions/23743/whats-the-most-efficient-way-to-find-barycentric-coordinates)
 3. [General barycentric coordinate info](https://en.wikipedia.org/wiki/Barycentric_coordinate_system)
+4. [Parametric line intersection method](http://ahinson.com/algorithms_general/Sections/Geometry/ParametricLineIntersection.pdf)

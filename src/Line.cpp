@@ -169,6 +169,12 @@ float Line::y(float x) {
 
 /*
     INTERSECTS
+
+We use the following method for line intersection:
+http://ahinson.com/algorithms_general/Sections/Geometry/ParametricLineIntersection.pdf
+
+In summary, we calculate the percent distance from the endpoints on each line (s, t) and if
+both values are between 0 and 1, the intersection must occur within both domains
 */
 bool Line::intersects(Line line, Vector2f& intersectionPoint, bool extendLine) {
     /*
@@ -247,6 +253,7 @@ bool Line::intersects(Line line, Vector2f& intersectionPoint, bool extendLine) {
 
     // Check for parallel lines
     if (denominator == 0) {
+        // The only way parallel lines intersect is if they are the same line
         if (line.getIntercept() == getIntercept())
             return true;
         else
@@ -258,14 +265,13 @@ bool Line::intersects(Line line, Vector2f& intersectionPoint, bool extendLine) {
     float t = ((x[2]-x[1])*(y[3]-y[1]) - (x[3]-x[1])*(y[2] - y[1])) / denominator;
 
     // This denotes whether or not the lines intersect within their domain
-
     // Even if they don't, we check if we are extending the line
     // In this case we only need to check the other line's domain
     if ((s >= 0 && s <= 1 && t >= 0 && t <= 1) || (extendLine && t >= 0 && t <= 1)) {
         // We now calculate the intersection point
         intersectionPoint.x = x[1] + (x[2] - x[1])*s;
         intersectionPoint.y = y[1] + (y[2] - y[1])*s;
-        
+
         return true;
     }
     
