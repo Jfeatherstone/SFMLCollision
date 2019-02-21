@@ -10,7 +10,8 @@ int main() {
     t->loadFromFile("Images/test.png");
     
     CircleShape c;
-    c.setRadius(40);
+    c.setRadius(3);
+    c.setOrigin(c.getGlobalBounds().width / 2, c.getGlobalBounds().height / 2);
     RectangleShape r;
     r.setSize(Vector2f(200, 50));
 
@@ -46,7 +47,7 @@ int main() {
     cout << "Perfect: " << poly3.getPointCount() << endl;
     */
     
-    /*
+    ///*
     // LINE DEBUGGING
 
     // Testing line intersection
@@ -65,7 +66,7 @@ int main() {
         s << "Don't intersect";
     cout << endl << s.str() << endl << "(" << l1.getStart().x << ", " << l1.getStart().y << ") to (" << l1.getEnd().x << ", " << l1.getEnd().y << ")" << endl;
     cout << "(" << l2.getStart().x << ", " << l2.getStart().y << ") to (" << l2.getEnd().x << ", " << l2.getEnd().y << ")" << endl;
-    */ 
+    //*/
 
     /*
     // ROTATION TESTING
@@ -113,7 +114,8 @@ int main() {
         if (Keyboard::isKeyPressed(Keyboard::S)) {
             poly.setScale(poly.getScale() - Vector2f(.03, .03));
         }
-        
+
+
         //cout << poly.getRotation() << endl;
         //poly.rotate(1000);
         //poly2.setScale(poly2.getScale() + Vector2f(.1, .1));
@@ -131,14 +133,16 @@ int main() {
         window.draw(poly);
         window.draw(poly2); 
         */
-        window.setTitle(poly.intersects(poly2) ? "Colliding" : "Not colliding!");
-        //window.setTitle(poly.getLines()[0].intersects(poly2.getLines()[0]) ? "Colliding" : "Not colliding!");
+        //window.setTitle(poly.intersects(poly2) ? "Colliding" : "Not colliding!");
+        Vector2f point;
+        window.setTitle(poly.getLines()[4].intersects(poly2.getLines()[4], point) ? "Colliding" : "Not colliding!");
+        c.setPosition(point);
 
         // LINE ALIGNMENT TESTING
-        window.draw(poly2);
-        window.draw(poly);
+        
+        //window.draw(poly2);
+        //window.draw(poly);
         //window.draw(poly3);
-        ///*
         /*
         int i = 0;
         for (Line l: poly.getLines()) {
@@ -164,8 +168,9 @@ int main() {
                 i = 0;
         }
         */
-        //window.draw(*poly.getLines()[0].getDrawable());
-        //window.draw(*poly2.getLines()[0].getDrawable());
+        window.draw(*poly.getLines()[4].getDrawable());
+        window.draw(*poly2.getLines()[4].getDrawable());
+        window.draw(c);
 
         // SHOW 
         window.display();

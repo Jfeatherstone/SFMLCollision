@@ -171,7 +171,7 @@ float Line::y(float x) {
     INTERSECTS
 */
 bool Line::intersects(Line line, Vector2f& intersectionPoint, bool extendLine) {
-    // Make sure the intersection is actually capable of happening based on the bounds of each line
+    /*
     intersectionPoint.x = -1;
     intersectionPoint.y = -1;
 
@@ -191,16 +191,37 @@ bool Line::intersects(Line line, Vector2f& intersectionPoint, bool extendLine) {
             return false;
     }
 
-    // Otherwise, we set the two y equations equal to each other and solve for x
-    intersectionPoint.x = (getIntercept() - line.getIntercept()) / (line.getSlope() - getSlope());
-    intersectionPoint.y = y(intersectionPoint.x);
+    
+    // We need some special cases for vertical lines
+    if (getSlope() == VERTICAL_SLOPE) {
+        //if (m_start.x <= std::max(line.getStart().x, line.getEnd().x)
+        //&& m_start.x >= std::min(line.getStart().x, line.getStart().x)) {
+            intersectionPoint.x = m_start.x;
+            intersectionPoint.y = line.y(m_start.x);
+            //return true;
+        //} else   
+            //return false;
+    } else if (line.getSlope() == VERTICAL_SLOPE) {
+        //if (line.getStart().x <= std::max(getStart().x, getEnd().x)
+        //&& line.getStart().x >= std::min(getStart().x, getStart().x)) {
+            intersectionPoint.x = line.getStart().x;
+            intersectionPoint.y = y(line.getStart().x);
+            //return true;
+        //} else   
+            //return false;
+    } else {
+
+        // Otherwise, we set the two y equations equal to each other and solve for x
+        intersectionPoint.x = (getIntercept() - line.getIntercept()) / (line.getSlope() - getSlope());
+        intersectionPoint.y = y(intersectionPoint.x);
+    }
+    cout << intersectionPoint.x << " " << intersectionPoint.y << endl;
 
     // If we are extending the line, we want to only check the bounds for the second line
     if (extendLine && intersectionPoint.x <= std::max(line.getStart().x, line.getEnd().x) && intersectionPoint.x >= std::min(line.getStart().x, line.getEnd().x) &&
         intersectionPoint.x >= std::min(line.getStart().y, line.getEnd().y) && intersectionPoint.y <= std::max(line.getStart().y, line.getEnd().y))
         return true;
 
-    //cout << intersectionPoint.x << " " << intersectionPoint.y << endl;
 
     // Make sure the point is between the end and start of both lines
     // We use the max and min function here, since the start point isn't required to 
@@ -211,8 +232,44 @@ bool Line::intersects(Line line, Vector2f& intersectionPoint, bool extendLine) {
         intersectionPoint.x >= std::min(line.getStart().y, line.getEnd().y) && intersectionPoint.y <= std::max(line.getStart().y, line.getEnd().y))
         return true;
 
-    intersectionPoint.x = -1;
-    intersectionPoint.y = -1;
+    //intersectionPoint.x = -1;
+    //intersectionPoint.y = -1;
+    return false;
+    */
+
+    // We do this to help with naming and keeping our variables organized
+    // from the reference linked above (ik, 1 indexing is gross)
+    float x[5] = {0, getStart().x, getEnd().x, line.getStart().x, line.getEnd().x};
+    float y[5] = {0, getStart().y, getEnd().y, line.getStart().y, line.getEnd().y};
+
+    // We precompute the denominator to detect parallel lines and to save on resources
+    float denominator = ((x[4] - x[3])*(y[2] - y[1]) - (x[2] - x[1])*(y[4] - y[3]));
+
+    // Check for parallel lines
+    if (denominator == 0) {
+        if (line.getIntercept() == getIntercept())
+            return true;
+        else
+            return false;
+    }
+
+    float s = ((x[4]-x[3])*(y[3]-y[1]) - (x[3]-x[1])*(y[4] - y[3])) / denominator;
+
+    float t = ((x[2]-x[1])*(y[3]-y[1]) - (x[3]-x[1])*(y[2] - y[1])) / denominator;
+
+    // This denotes whether or not the lines intersect within their domain
+
+    // Even if they don't, we check if we are extending the line
+    // In this case we only need to check the other line's domain
+    if ((s >= 0 && s <= 1 && t >= 0 && t <= 1) || (extendLine && t >= 0 && t <= 1)) {
+        // We now calculate the intersection point
+        intersectionPoint.x = x[1] + (x[2] - x[1])*s;
+        intersectionPoint.y = y[1] + (y[2] - y[1])*s;
+        
+        return true;
+    }
+    
+    // Otherwise, they aren't intersecting
     return false;
 }
 

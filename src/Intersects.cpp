@@ -88,6 +88,22 @@ bool Polygon::intersects(Polygon shape) {
     vector<Line> l1 = getLines();
     vector<Line> l2 = shape.getLines();
 
+    
+    /*
+    And now we actually check the intersection between our lines
+    */
+    for (int i = 0; i < l1.size(); i++) {
+        for (int j = 0; j < l2.size(); j++) {
+            if (l1[i].intersects(l2[j])) {
+                cout << i << " " << j << endl;
+                // We only care about the fact that something intersects here, so we end right after
+                return true;
+            }
+        }
+    }
+    
+    //cout << "No collision" << endl;
+
     /*
     Since we know that our shapes have likely some overlap, we should check to see if one shape is inside of the other
 
@@ -130,10 +146,8 @@ bool Polygon::intersects(Polygon shape) {
             cout << "Size OK (" << intersections.size() << ")" << endl;
             /*
             Now we want to make sure that there is at least one point on either side of the shape.
-
             Since we have a 2 dimensional space, this isn't as easy as just comparing x values, since "either side"
             could mean one above and one below.
-
             What we can say, is that any intersection have to be along our line, which means they are 180 degrees from each
             other. Because of this, we can calculate which quadrant (with respect to the shapes centroid) each point is in
             and if there are at least two in opposing quadrants (1 and 3, or 2 and 4), then it has one on "either side".
@@ -177,10 +191,8 @@ bool Polygon::intersects(Polygon shape) {
         cout << intersections.size() << endl;
         /*
         Now we want to make sure that there is at least one point on either side of the shape.
-
         Since we have a 2 dimensional space, this isn't as easy as just comparing x values, since "either side"
         could mean one above and one below.
-
         What we can say, is that any intersection have to be along our line, which means they are 180 degrees from each
         other. Because of this, we can calculate which quadrant (with respect to the shapes centroid) each point is in
         and if there are at least two in opposing quadrants (1 and 3, or 2 and 4), then it has one on "either side".
@@ -196,23 +208,8 @@ bool Polygon::intersects(Polygon shape) {
                 return true;
         }
 
-    }
-        
-    
-    /*
-    And now we actually check the intersection between our lines
-    */
-    for (int i = 0; i < l1.size(); i++) {
-        for (int j = 0; j < l2.size(); j++) {
-            if (l1[i].intersects(l2[j])) {
-                cout << i << " " << j << endl;
-                // We only care about the fact that something intersects here, so we end right after
-                return true;
-            }
-        }
-    }
-    
-    //cout << "No collision" << endl;
+}        
+
     return false;
 }
 
