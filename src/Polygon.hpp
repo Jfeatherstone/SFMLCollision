@@ -141,12 +141,22 @@ public:
 
     /*
     We also may want to know which direction to move the objects after they have collided, so we can do that
-    by passing in a reference to a vector2f
+    by passing in a reference to a vector
     */
     bool intersects(Polygon shape, Vector2f& resultant);
     bool intersects(RectangleShape shape, Vector2f& resultant);
     bool intersects(CircleShape shape, Vector2f& resultant);
     bool intersects(ConvexShape shape, Vector2f& resultant);
+
+    /*
+    Another intersection type utility we want is to check whether another shape is inside of this one.
+    We will again create severeal wrappers for the main method so we can use native SFML objects if
+    we need to.
+    */
+    bool contains(Polygon shape);
+    bool contains(RectangleShape shape);
+    bool contains(CircleShape shape);
+    bool contains(ConvexShape shape);
 
     /*
     For finding the area of our polygons given either a set of points or an actual polygon
