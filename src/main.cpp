@@ -7,7 +7,7 @@ int main() {
     Clock clock;
 
     Texture* t = new Texture();
-    t->loadFromFile("Images/test3.png");
+    t->loadFromFile("Images/test4.png");
     
     CircleShape c;
     c.setRadius(3);
@@ -16,10 +16,10 @@ int main() {
     r.setSize(Vector2f(200, 50));
 
     clock.restart();
-    Polygon poly(t, Detail::Exact);
+    Polygon poly(t, Detail::Less);
     poly.setScale(Vector2f(5, 5));
     poly.setFillColor(Color::Green);
-    //poly.setOrigin(poly.getCentroid());
+    poly.setOrigin(poly.getCentroid());
     poly.setPosition(10, 30);
     
     Polygon poly2(t, Detail::Optimal);
@@ -55,7 +55,7 @@ int main() {
 
     // SETUP THE WINDOW
     RenderWindow window;
-    window.create(VideoMode(poly.getGlobalBounds().width * 3 + 150, poly3.getGlobalBounds().height * 2 + 50), "Polygon Test", Style::Default);
+    window.create(VideoMode(poly.getGlobalBounds().width * 3 + 150, poly3.getGlobalBounds().height + 50), "Polygon Test", Style::Default);
     window.setFramerateLimit(60);
 
     while (window.isOpen()) {

@@ -9,6 +9,8 @@ The user will be able to use the Polygon shape in two different ways:
 2. By proving a vector of pre assembled verticies, possibly from some other SFML class by using the getPoints() method.
 3. By directly passing in any of the SFML shape objects (CircleShape, RectangleShape, ConvexShape)
 
+![Collision](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/collision_test.gif)
+
 ## Theory
 
 There are several aspects to how this library will work, many of which are complicated and so will be overviewed below. This information is not necessary to use the tool, but can be helpful to understand what is going on (especially if you want to contribute to the code).
