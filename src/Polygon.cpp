@@ -90,6 +90,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     }
 
     /*
+    ///////////////////////////////////////////////
     // Print out our current verticies to help debug
     cout << endl;
     for (int i = 0; i < hitboxInclude.size(); i++) {
@@ -99,7 +100,9 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
     }
     cout << "\n\n";
+    ///////////////////////////////////////////////
     */
+
 
     ///////////////////////////////////////////
     //     Fill in the inside
@@ -198,6 +201,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     } 
 
     /*
+    ///////////////////////////////////////////////
     // Print out our current verticies to help debug
     cout << endl;
     for (int i = 0; i < hitboxInclude.size(); i++) {
@@ -207,6 +211,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
     }
     cout << "\n\n";
+    ///////////////////////////////////////////////
     */
 
     ///////////////////////////////////////////
@@ -248,6 +253,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     hitboxInclude = newHitbox;
 
     /*
+    ///////////////////////////////////////////////
     // Print out our current verticies to help debug
     cout << endl;
     for (int i = 0; i < hitboxInclude.size(); i++) {
@@ -257,6 +263,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
     }
     cout << "\n\n";
+    ///////////////////////////////////////////////
     */
 
     /*****************************************
@@ -282,6 +289,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     hitboxInclude = newHitbox;
 
     /*
+    ///////////////////////////////////////////////
     // Print out our current verticies to help debug
     cout << endl;
     for (int i = 0; i < hitboxInclude.size(); i++) {
@@ -291,6 +299,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
     }
     cout << "\n\n";
+    ///////////////////////////////////////////////
     */
 
     /*
@@ -355,6 +364,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     }
 
     /*
+    ///////////////////////////////////////////////
     // Print out our current verticies to help debug
     cout << endl;
     for (int i = 0; i < hitboxInclude.size(); i++) {
@@ -364,6 +374,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
     }
     cout << "\n\n";
+    ///////////////////////////////////////////////
     */
 
     /*
@@ -400,6 +411,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     }
 
     /*
+    ///////////////////////////////////////////////
     // Print out our current verticies to help debug
     cout << endl;
     for (int i = 0; i < hitboxInclude.size(); i++) {
@@ -409,6 +421,8 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
     }
     cout << "\n\n";
+    ///////////////////////////////////////////////
+    */
 
     //////////////////////////////////////////
     //      Add verticies in order
@@ -565,12 +579,14 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         for (int i = 0; i < m_points.size(); i++) {
             if (m_points[i] == Vector2f(0, 0)) {
                 m_points.erase(m_points.begin() + i);
-                i--; // So we don't skip certain ones
+                i--; // So we don't skip the following one
             }
         }
     }
     
-    // Also remove neagtive points because it makes no sense
+    // Also remove neagtive points because it makes no sense (since our origin always starts
+    // at (0, 0)
+    // Later on it is fine to have negative points, but not rn
     for (int i = 0; i < m_points.size(); i++) {
         if (m_points[i].x < 0 || m_points[i].y < 0) {
             m_points.erase(m_points.begin() + i);
@@ -635,12 +651,12 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
     findCentroid();
     createLines();
-    update(); // This makes the shape actually drawable
+    update(); // This makes the shape actually drawable (and is inherited from sf::Shape)
 }
 
-/*
-    The following methods are used in the above constructor
-*/
+/////////////////////////////////////////////////////////////
+//    The following methods are used in the above constructor
+/////////////////////////////////////////////////////////////
 
 /*
 We use this method in determining whether a list of colors to be ignored was provided
@@ -739,12 +755,9 @@ Polygon::Polygon(ConvexShape shape) {
 We always take our centroid as one of the verticies, and then te other two will just be two
 consectutive points on the polygon
 
-This method is a shitshow of half understood linear algebra, so my explanations of why we are doing certain
-operations may be pretty terrible, but most of it is better explained from the following sources:
-https://en.wikipedia.org/wiki/Scaling_(geometry)
-http://graphics.idav.ucdavis.edu/education/GraphicsNotes/Scaling.pdf
-
-Buckle up
+This method is mostly linear algebra and (more or less) simple transformations on our vector of points.
+First, we rotate our points, around the origin of the shape, followed by scaling them up, and finally
+by adding the offset of the shape (its position).
 */
 void Polygon::createLines() {
     /*
@@ -869,6 +882,10 @@ bool Polygon::isSolid() {
     return m_isSolid;
 }
 
+/*
+Ngl, I don't remember where I found this method for finding the area of a polygon, but will post
+when I find it.
+*/
 void Polygon::getArea(vector<Vector2f> points, float& value) {
     value = 0;
     for (int i = 0; i < points.size() - 1; i++) {
