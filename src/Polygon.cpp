@@ -7,31 +7,32 @@ This will generate a list of verticies based on the pixels in an image (texture)
 */
 Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
-    /*****************************************
-     * 
-     * BEGINNING OF SHAPE GENERATION
-     * 
-     * Beware!
-     * The next bit of code is a complete clown fiesta and I recomend scrolling past as fast as you can
-     * 
-     * This code has been pasted from what used to be several methods but is now just here to avoid
-     * the creation of too many member variables.
-     * 
-     * Another consequence of this is that the old class was solely for hitboxes (which this still kinda
-     * is, but not explicitly) so a lot of variables are going to be called hitboxSomething, just a heads up :/
-     * 
-     * Consider yourself warned...
-     * 
-     * Although it may look terrible, it actually isn't *that* bad
-     * Most of the code that looks horrible is actually just if statements that are very similar to each other
-     * The reason we need so many is because we have to slightly change the indexing of what we are checking
-     * to check above, below, left, right, diagonals, etc.
-     * 
-     * ******************************************/
+    ////////////////////////////////////////
+    //      BEGINNING OF SHAPE GENERATION
+    ////////////////////////////////////////
 
-    /*****************************************
-     *      Parsing RGB values from the image
-     * ******************************************/
+    /* 
+    Beware!
+    The next bit of code is a complete clown fiesta and I recomend scrolling past as fast as you can
+    
+    This code has been pasted from what used to be several methods but is now just here to avoid
+    the creation of too many member variables.
+    
+    Another consequence of this is that the old class was solely for hitboxes (which this still kinda
+    is, but not explicitly) so a lot of variables are going to be called hitboxSomething, just a heads up :/
+    
+    Consider yourself warned...
+     
+    Although it may look terrible, it actually isn't *that* bad
+    Most of the code that looks horrible is actually just if statements that are very similar to each other
+    The reason we need so many is because we have to slightly change the indexing of what we are checking
+    to check above, below, left, right, diagonals, etc.
+    
+    */
+
+    ////////////////////////////////////////
+    //      Parsing RGB values from the image
+    ////////////////////////////////////////
     vector<Color> pixels;
 
     // Convert our texture to an image
@@ -40,9 +41,8 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     // This will be the number of pixels in the image
     int length = image.getSize().x * image.getSize().y;
 
-    //cout << length / 4 << endl;
+    // This will happen if our image is empty (the file doesn't exist)
     if (length == 0) {
-        // This will happen if our image is empty (the file doesn't exist)
         cout << "Attempt to pass in empty image to constructor!\n In Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors)" << endl;
         return;
     }
@@ -64,9 +64,9 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         pixels[i] = c;
     }
 
-    /*****************************************
-     *      Creating our first set of verticies
-     * ******************************************/
+    ///////////////////////////////////////////
+    //     Create our first set of verticies
+    ///////////////////////////////////////////
     vector<int> hitboxInclude;
     // Next, we want to go through every color and if it isn't empty or on the ignore list, we
     // add it to our include for the hitbox calculation
@@ -88,6 +88,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             hitboxInclude[i] = 0;
         i++;
     }
+
     /*
     // Print out our current verticies to help debug
     cout << endl;
@@ -99,9 +100,10 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     }
     cout << "\n\n";
     */
-    /*****************************************
-     *      Fill in the inside
-     * ******************************************/
+
+    ///////////////////////////////////////////
+    //     Fill in the inside
+    ///////////////////////////////////////////
     /*
     We want to check, for every point that has a value of 0, whether it is bounded on all four sides as well as on the diagonals
         */
@@ -207,9 +209,9 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     cout << "\n\n";
     */
 
-    /*****************************************
-     *      Removing the inside
-     * ******************************************/
+    ///////////////////////////////////////////
+    //     Removing the inside
+    ///////////////////////////////////////////
     // Now, we go through and remove everything except for the outline
     vector<int> newHitbox;
     newHitbox.resize(hitboxInclude.size());
@@ -220,7 +222,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             /*
             An explanation of this ungodly if statement:
             To determine whether a pixel is inside of the sprite -- and therefore not needed to determine the
-            hitbox -- we have to look at any of the pixels are it.
+            hitbox -- we have to look at any of the pixels around it.
             The first line of the statement makes sure that the value to the left is included in the hitbox, and
             that it isn't on the end of the previous line (since this isn't actually a 2d array, rather its 1d)
 
@@ -244,6 +246,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         }
     }
     hitboxInclude = newHitbox;
+
     /*
     // Print out our current verticies to help debug
     cout << endl;
@@ -255,6 +258,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     }
     cout << "\n\n";
     */
+
     /*****************************************
      *      Remove excess verticies
      * ******************************************/
@@ -262,46 +266,13 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     // uneccessary points on our hitbox
     for (int i = 0; i < textureSize.y; i++) {
         for (int j = 0; j < textureSize.x; j++) {
-            // First we check for vertical lines
-            /*
-            Another horrible if statement, I know...
             
-            The first line checks that the pixel itself is included. This is first such that we don't needlessly
-            evaluate the rest of the statements when it doesn't really matter either way because the pixel is
-            already not included.
-            The second line checks that the pixel to the left is either not included or in the previous line
-            The third line checks that the pixel to the right is either not included or in the next line
-            The fourth line looks at the two pixels to the up right and up left that they are not included
-            The fifth line looks at the two pixels to the down right and down left that they are not included
-                
-            
-            if ((hitboxInclude[(i-1)*textureSize.x + j] == 1 && (i-1)*textureSize.x + j >= 0)
-            && (hitboxInclude[(i+1)*textureSize.x + j] == 1 && (i+1)*textureSize.x + j + 1 < hitboxInclude.size())
-            && (hitboxInclude[i*textureSize.x + j + 1] != 1)
-            && (hitboxInclude[i*textureSize.x + j - 1] != 1))
-            m_newHitbox[i*textureSize.x + j] = 3;
-                
-            if (hitboxInclude[i*textureSize.x + j] == 1
-            && ((hitboxInclude[i*textureSize.x + j - 1] == 0 || hitboxInclude[i*textureSize.x + j - 1] == 2) || i*textureSize.x + j - 1 < i*textureSize.x)
-            && ((hitboxInclude[i*textureSize.x + j + 1] == 0 || hitboxInclude[i*textureSize.x + j + 1] == 2) || i*textureSize.x + j + 1 >= (i+1)*textureSize.x)
-            && (hitboxInclude[(i-1)*textureSize.x + j - 1] == 0 || hitboxInclude[(i-1)*textureSize.x + j - 1] == 2)
-            && (hitboxInclude[(i-1)*textureSize.x + j + 1] == 0 || hitboxInclude[(i-1)*textureSize.x + j + 1] == 2)
-            && (hitboxInclude[(i+1)*textureSize.x + j - 1] == 0 || hitboxInclude[(i+1)*textureSize.x + j - 1] == 2)
-            && (hitboxInclude[(i+1)*textureSize.x + j + 1] == 0 || hitboxInclude[(i+1)*textureSize.x + j + 1] == 2))
-                newHitbox[i*textureSize.x + j] = 3;
-                */
-            /*
-            This statement is much simpler, and the previous could probably be too, but I don't feel like doing that
-            right now. This just checks that both the left and right pixels are either on a different line or are
-            included.
-            */
+            // This just checks that both the left and right pixels are either on a different line or are included.
             if ((hitboxInclude[i*textureSize.x + j - 1] == 1 && i*textureSize.x + j - 1 >= i*textureSize.x)
             && (hitboxInclude[i*textureSize.x + j + 1] == 1 && i*textureSize.x + j + 1 < (i+1)*textureSize.x))
                 newHitbox[i*textureSize.x + j] = 3;
-
-            /*
-            Update, I got rid of the disgusting thing above and simplified it, like i said i might :)
-            */
+            
+            // Now we do the same, but vertically
             if ((hitboxInclude[(i-1)*textureSize.x + j] == 1 && (i-1) >= 0)
             && (hitboxInclude[(i+1)*textureSize.x + j] == 1 && (i+1) < textureSize.y))
                 newHitbox[i*textureSize.x + j] = 3;
@@ -309,6 +280,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         }
     }
     hitboxInclude = newHitbox;
+
     /*
     // Print out our current verticies to help debug
     cout << endl;
@@ -320,6 +292,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     }
     cout << "\n\n";
     */
+
     /*
     Remove diagonal verticies
 
@@ -427,39 +400,6 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     }
 
     /*
-    Lastly, we want to remove any spots that are connected to 3 or more other verticies
-    
-    for (int i = 0; i < textureSize.y; i++) {
-        for (int j = 0; j < textureSize.x; j++) {
-            int count = 0;
-            if ((i-1) > 0) {
-                if (hitboxInclude[(i-1)*textureSize.x + j - 1] == 1)
-                    count++;
-                if (hitboxInclude[(i-1)*textureSize.x + j] == 1)
-                    count++;
-                if (hitboxInclude[(i-1)*textureSize.x + j + 1] == 1)
-                    count++;
-            }
-            if (hitboxInclude[(i)*textureSize.x + j - 1] == 1)
-                count++;
-            if (hitboxInclude[(i)*textureSize.x + j + 1] == 1)
-                count++;
-            if (i+1 < textureSize.y) {
-                if (hitboxInclude[(i+1)*textureSize.x + j - 1] == 1)
-                    count++;
-                if (hitboxInclude[(i+1)*textureSize.x + j] == 1)
-                    count++;
-                if (hitboxInclude[(i+1)*textureSize.x + j + 1] == 1)
-                    count++;
-            }
-            cout << count << endl;
-            if (count >= 3)
-                hitboxInclude[i*textureSize.x + j] = 0;
-
-        }
-    } */
-
-    /*
     // Print out our current verticies to help debug
     cout << endl;
     for (int i = 0; i < hitboxInclude.size(); i++) {
@@ -469,11 +409,11 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
     }
     cout << "\n\n";
-    */
-    /*****************************************
-     *      Add verticies in order
-     * ******************************************
 
+    //////////////////////////////////////////
+    //      Add verticies in order
+    //////////////////////////////////////////
+    /*
     Crunch time!
     We now have every pixel that will represent a vertex in our hitbox polygon, the problem is
     now to put them in order so that it makes a corherent shape.
@@ -486,7 +426,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
     Since we have an outline of the sprite (where the lines should go) indicated by a 3 in our vector,
     we should be able to begin at a given pixel and move along in one direction
-     */
+    */
     Vector2f currPixel;
     int vertexIndex = 0;
     vector<Vector2f> hitboxVerticies;
@@ -494,14 +434,12 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
     // Setup our polygon
 
+    // We need to know how many verticies we have
     m_numVerticies = 0;
-    //int count = 0;
     for (int i: hitboxInclude) {
-        if (i == 1) {
-            //cout << (int)(count / (int)textureSize.x) << " " << count % (int)textureSize.x << "   " << m_numVerticies << endl;
+        if (i == 1)
             m_numVerticies++;
-        }
-        //count++;
+
     }
     m_points.resize(m_numVerticies);
 
@@ -620,6 +558,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         }
     }
 
+    
     // 0, 0 has been causing some trouble, so we remove it if it isn't actually there
     if (hitboxInclude[0] != 1) {
         //cout << "Excess zero present" << endl;
@@ -630,6 +569,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             }
         }
     }
+    
     // Also remove neagtive points because it makes no sense
     for (int i = 0; i < m_points.size(); i++) {
         if (m_points[i].x < 0 || m_points[i].y < 0) {
@@ -638,69 +578,55 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         }
     }
 
-    //cout << endl << endl;
+    // Update the size of our verticies
     m_numVerticies = m_points.size();
-    //cout << vertexIndex << " " << m_numVerticies << endl;
-    /*****************************************
-     * 
-     * END OF SHAPE GENERATION
-     * 
-     * It's over. It's done.
-     * 
-     * I sincerely apologize for that mess
-     * 
-     * ******************************************/
-    
-    
-    // Take out some verticies if we have less detail
-    /*
-    Turns out this is a terrible way to remove verticies
-    Who would've thought...
-    if (detail == Detail::Less || detail == Detail::More) {
-        int repeat = 1;
-        if (detail == Detail::Less) {
-            repeat = 2;
-        }
-        for (int j = 0; j < repeat; j++) {
-            vector<Vector2f> newVec;
-            /*
-            This is kinda just a mess down here.
-            There's no real equation or guideline here, I've just been messing around with it
-            until the shapes look good :/
-            
-            for (int i = 0; i < m_numVerticies; i++) {
-                if (i % 2 == 0 || ((m_points[i+1] - m_points[i]).x == 0 || (m_points[i+1] - m_points[i]).y == 0)) { 
-                    newVec.push_back(m_points[i]);
-                }
-            }
-            m_points = newVec;
-            m_numVerticies = newVec.size();
-        }
-    }  */
 
+    //////////////////////////////////////////
+    // 
+    // END OF SHAPE GENERATION
+    // 
+    // It's over. It's done.
+    //
+    // I sincerely apologize for that mess
+    //////////////////////////////////////////
+    
     /*
     Area optimization
+    TODO: Make this better
     */
-    float diff = .01f;
+    float diff = .05f;
     if (detail == Detail::Less)
         diff = .1f;
     if (detail == Detail::More)
-        diff = .05f;
+        diff = .01f;
+    if (detail == Detail::Exact)
+        diff = .0f;
 
     while (true) {
+        // We want to be able to keep track of whether or not we were actually able to reduce the shape
         bool reduced = false;
         for (int i = 0; i < m_points.size(); i++) {
+            // Store the old points to calculate the previous area
             vector<Vector2f> old = m_points;
+            
+            // Yeet that point out of here
             m_points.erase(m_points.begin() + i);
+
+            // Calculate our two areas
             float a1, a2;
             Polygon::getArea(m_points, a1);
             Polygon::getArea(old, a2);
+
+            // Now we check if they are within the tolerance governed by our level of detail
             float dA = abs(a2 - a1);
             if (dA / a2 >= diff)
+                // If the difference is too much, revert the change
                 m_points = old;
             else
+                // Otherwise we keep it
                 reduced = true;
         }
+        // If we weren't able to do anything, we stop trying to reduce
         if (!reduced)
             break;
     }
@@ -709,14 +635,18 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
     findCentroid();
     createLines();
-    //setOutlineThickness(.1);
     update(); // This makes the shape actually drawable
-}   
+}
 
 /*
     The following methods are used in the above constructor
 */
 
+/*
+We use this method in determining whether a list of colors to be ignored was provided
+As we read every pixel from an image, we check whether the ignoredColors vector
+contains the rgba value
+*/
 bool Polygon::contains(vector<Color> vec, Color c) {
     for (Color col: vec) {
         if (col == c)
@@ -736,15 +666,6 @@ bool Polygon::hitboxContainsPoint(vector<Vector2f>& hitboxVerticies, Vector2f po
     //cout << "False" << endl;
     return false;
 }
-
-int Polygon::sign(float value) {
-    if (value > 0)
-        return 1;
-    if (value < 0)
-        return -1;
-    return 0;
-}
-
 
 /*
     The more basic constructors

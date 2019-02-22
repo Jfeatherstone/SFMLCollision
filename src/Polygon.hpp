@@ -47,7 +47,7 @@ doesn't have a member variable to store the level of detail,  since it is only u
 constructor.
 */
 
-enum class Detail {Less, More, Optimal};
+enum class Detail {Less, More, Optimal, Exact};
 
 
 
@@ -82,7 +82,6 @@ private:
 	bool hitboxContainsPoint(vector<Vector2f>& hitboxVerticies, Vector2f point);
     void createLines();
     void findCentroid();
-    int sign(float value);
     void adjustLines();
 public:
 
@@ -97,10 +96,10 @@ public:
     vector<Color>: In case we want to ignore certain parts of a sprite, we can provide their rgb values
     and the parser will pass over them
     */
-    Polygon(Texture* texture, Detail detail = Detail::Less, vector<Color> ignoredColors = {});
+    Polygon(Texture* texture, Detail detail = Detail::Optimal, vector<Color> ignoredColors = {});
 
     /*
-    The following ones are going to be for converting other objects into a polygon
+    Converting other SFML objects into a Polygon type
     */
     Polygon(vector<Vector2f> points);
     Polygon(CircleShape shape);
@@ -152,6 +151,8 @@ public:
     Another intersection type utility we want is to check whether another shape is inside of this one.
     We will again create severeal wrappers for the main method so we can use native SFML objects if
     we need to.
+
+    These are also defined in Intersection.cpp
     */
     bool contains(Polygon shape);
     bool contains(RectangleShape shape);

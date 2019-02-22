@@ -6,10 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/jack/cpp-workspace/SFMLCollision/src/Intersects.cpp
-Polygon.hpp
-/home/jack/cpp-workspace/SFMLCollision/src/Polygon.hpp
-
 /home/jack/cpp-workspace/SFMLCollision/src/Line.hpp
 SFML/Graphics.hpp
 -

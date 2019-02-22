@@ -37,26 +37,18 @@ the polygons' location with the setPosition() properly
 
 bool Polygon::intersects(Polygon shape) {
     
-    /*
-    We first check to make sure the two polygons are actually capable of intersecting by checking their rectangular boundary
-    */
-    
+    //We first check to make sure the two polygons are actually capable of intersecting by checking their rectangular boundary
     FloatRect overlap;
     if (!getGlobalBounds().intersects(shape.getGlobalBounds(), overlap)) {
-        cout << "Rect bounds" << endl;
+        //cout << "Rect bounds" << endl;
         return false;
     }
-
-    /*
-    The next order of business here is that we need to grab the lines of each shape
-     */
+    
+    //The next order of business here is that we need to grab the lines of each shape 
     vector<Line> l1 = getLines();
     vector<Line> l2 = shape.getLines();
 
-    
-    /*
-    And now we actually check the intersection between our lines
-    */
+    //And now we actually check the intersection between our lines
     for (int i = 0; i < l1.size(); i++) {
         for (int j = 0; j < l2.size(); j++) {
             if (l1[i].intersects(l2[j])) {
@@ -67,7 +59,6 @@ bool Polygon::intersects(Polygon shape) {
         }
     }
     
-    //cout << "No collision" << endl;
     return false;
 }
 
@@ -83,22 +74,25 @@ bool Polygon::intersects(Polygon shape, Vector2f& resultant) {
     vector<Line> l1 = getLines();
     vector<Line> l2 = shape.getLines();
 
-    //cout << l1.size() << " " << l2.size() << endl;    
     /*
     And now we actually check the intersection between our lines
     Since we want to be able to respond to a collision properly (in what direction)
     should we move the objects), we want to know which lines were actually intersecting
 
-    These are stored in a two dimensional vector such that we can keep track of which lines
+    These are stored in a vector of line pairs such that we can keep track of which lines
     are intersecting which ones
+    We also record the points at which each pair of lines intersect
     */
-    vector<vector<Line>> intersectingLines;
+    vector<std::pair<Line, Line>> intersectingLines;
+    vector<Vector2f> intersectionPoints;
 
     for (int i = 0; i < l1.size(); i++) {
         for (int j = 0; j < l2.size(); j++) {
-            if (l1[i].intersects(l2[j])) {
+            Vector2f intersectionPoint;
+            if (l1[i].intersects(l2[j], intersectionPoint)) {
                 //cout << i << " " << j << endl;
-                return true;
+                intersectingLines.push_back(std::pair(l1[i], l2[j]));
+                intersectionPoints.push_back(intersectionPoint);
             }
         }
     }
