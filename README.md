@@ -3,13 +3,26 @@
 This project is an extension of a previous repo ([SFMLHitbox](https://github.com/Jfeatherstone/SFMLHitbox)) where the goal is to create an easily implemented object that allows for accurate hitbox detection on both convex and concave shapes. By default, SFML only has a ConvexShape, for which there is no intersects function.
 
 
-The user will be able to use the Polygon shape in two different ways:
+The user will be able to create a Polygon shape in two different ways:
 
 1. By providing a texture to the constructor which will identify important pixels to be included as verticies and create the shape based on these. This will also allow for the user to define the level of accuracy as either pixel perfect or approximate.
 2. By proving a vector of pre assembled verticies, possibly from some other SFML class by using the getPoints() method.
 3. By directly passing in any of the SFML shape objects (CircleShape, RectangleShape, ConvexShape)
 
 ![Collision](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/collision_test.gif)
+
+What it can do so far:
+
+1. Create a set of verticies from an image file with a varying level of detail to optimize the number of verticies (given by the user)
+2. Draw the object and use common SFML transformations (rotate, scale, move)
+3. Detect intersection between Polygon type and any other SFML shape regardless of concavity (without providing resultant vector)
+
+What it can't do (that I am working on):
+
+1. Detecting whether one shape is inside of another
+2. Finding the resultant vector when two polygons collide
+3. Optimize vertex reduction for objects even more
+4. Not have a 700 line constructor for image files (working on refactoring)
 
 ## Theory
 
@@ -68,11 +81,21 @@ Essentially, we iterate through every points on the shape and find the differenc
 
 ### Line intersection detection
 
-Since our polygon intersection method is based on the lines that surround each shape, one of the most important parts of intersection is to properly be able to address line intersections. The method we use can be seen in (4), but can be summarized as follows: we take ratios of the start and end coordinates of each of the two lines to calculate the percent along each line where they intersect. If these two percents are between 0 and 1, it means that they properly intersect within the domain of both lines, and actually do intersect. This allows to to not only find whether two line segments intersect on their given domain, but also allows us to find the intersection point quite easily. Another benefit of using this method is that if we want to extend a line segment to a full line (which will be useful in finding whether one shape is inside another), we can easily do this by only checking one of the percent values, and ignoring the other.
+Since our polygon intersection method is based on the lines that surround each shape, one of the most important parts of intersection is to properly be able to address line intersections. The method we use can be seen in (1), but can be summarized as follows: we take ratios of the start and end coordinates of each of the two lines to calculate the percent along each line where they intersect. If these two percents are between 0 and 1, it means that they properly intersect within the domain of both lines, and actually do intersect. This allows to to not only find whether two line segments intersect on their given domain, but also allows us to find the intersection point quite easily. Another benefit of using this method is that if we want to extend a line segment to a full line (which will be useful in finding whether one shape is inside another), we can easily do this by only checking one of the percent values, and ignoring the other.
+
+### Rectangle Bounds Collision
+
+Before we get to the main intersection method described below, we want to do a simpler test to determine if collision between the two objects is possible. We do this by using SFML's built in FloatRect intersection method, using the absolute bounds of the shape. This means that we use the getGlobalBounds() method for each shape to find whether any of the lines could possibly overlap. This should be taken into account when looking at benchmarks between our total collision method vs. the built in one in SFML, as ours uses the latter.
+
+### Iterating Each Line
+
+The main way we detect collisions between two polygons is by taking the vector of lines contained within each polygon class, and iterating through every line with every other line. This may seem to be a rather inefficient method, but since our line intersection method is so simple, the O(n^2) complexity doesn't spiral out of control. Since we also optimize the number of verticies, we rarely have a shape with more than 50 lines, normally we have between 10 and 20.
+In the future, I would like to optimize this somehow, but as of now, it works and there are more pressing issues to deal with
+
+### Finding the Resultant
+
+Not quite sure how to do this just yet, but so far my thoughts are as follows. If we can take the point of intersection for each line (which we can easily find) along with the vertex end of the segment that is inside of the shape (this is the harder part). We can take the vector between these two, as a resultant, and average it with any other resultant vectors, and place them at the average of the verticies found inside the other shape. This is a highly theoretical process and I and have no way to test it as of now, but hopefully a more concrete solution (either this or another one) will stick.
 
 ## References / More Information
 
-1. [Juan José Jiménez, Rafael J. Segura, Francisco R. Feito, Efficient Collision Detection between 2D Polygons, 2004](http://wscg.zcu.cz/wscg2004/Papers_2004_Full/B83.pdf)
-2. [Barycentric coordinate calculation](https://gamedev.stackexchange.com/questions/23743/whats-the-most-efficient-way-to-find-barycentric-coordinates)
-3. [General barycentric coordinate info](https://en.wikipedia.org/wiki/Barycentric_coordinate_system)
-4. [Parametric line intersection method](http://ahinson.com/algorithms_general/Sections/Geometry/ParametricLineIntersection.pdf)
+1. [Parametric line intersection method](http://ahinson.com/algorithms_general/Sections/Geometry/ParametricLineIntersection.pdf)
