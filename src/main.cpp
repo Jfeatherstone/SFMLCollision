@@ -21,7 +21,8 @@ int main() {
     poly.setFillColor(Color::Green);
     poly.setOrigin(poly.getCentroid());
     poly.setPosition(10, 30);
-    
+    poly.setVelocity(Vector2f(10, 0));
+
     Polygon poly2(t, Detail::Optimal);
     poly2.setPosition(poly.getGlobalBounds().width + 40, 30);
     poly2.setScale(Vector2f(5, 5));
@@ -58,7 +59,10 @@ int main() {
     window.create(VideoMode(poly.getGlobalBounds().width * 3 + 150, poly3.getGlobalBounds().height + 50), "Polygon Test", Style::Default);
     window.setFramerateLimit(60);
 
+    Clock time;
+
     while (window.isOpen()) {
+        Time dt = time.restart();
 
         ///////////////////////////////////////
         //          INPUT
@@ -88,6 +92,9 @@ int main() {
         if (Keyboard::isKeyPressed(Keyboard::S)) {
             poly.setScale(poly.getScale() - Vector2f(.03, .03));
         }
+
+        cout << time.getElapsedTime().asSeconds() << endl;
+        poly.update(time.restart().asSeconds());
 
         ///////////////////////////////////////
         //          DRAWING

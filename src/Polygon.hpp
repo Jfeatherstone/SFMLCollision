@@ -77,6 +77,10 @@ private:
     // Whether our shape is solid or not
     bool m_isSolid = true; // True by default
 
+    // Since this is more or a less a lite physics engine, we need to keep track of the object's
+    // velocity
+    Vector2f m_velocity;
+
 	void getPixels();
 	bool contains(vector<Color> vec, Color c);
 	bool hitboxContainsPoint(vector<Vector2f>& hitboxVerticies, Vector2f point);
@@ -121,6 +125,18 @@ public:
     void setSolid(bool state);
     bool isSolid();
 
+    /*
+    We need to be able to apply a velocity to our shape and iterate it through every frame
+    */
+    void setVelocity(Vector2f newVelocity);
+    Vector2f getVelocity();
+    void update(float elapsedTime);
+
+
+    /*
+    These methods a pseudo-overriden in that they reference their super class
+    counterpart, though with an extra step
+    */
     void setScale(const Vector2f& scale);
     void setRotation(const float angle);
     void rotate(const float angle);

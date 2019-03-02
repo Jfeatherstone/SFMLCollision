@@ -651,7 +651,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
     findCentroid();
     createLines();
-    update(); // This makes the shape actually drawable (and is inherited from sf::Shape)
+    Shape::update(); // This makes the shape actually drawable
 }
 
 /////////////////////////////////////////////////////////////
@@ -699,7 +699,7 @@ Polygon::Polygon(vector<Vector2f> points) {
 
     findCentroid();
     createLines();
-    update(); // This makes the shape actually drawable
+    Shape::update(); // This makes the shape actually drawable
 }
 
 Polygon::Polygon(CircleShape shape) {
@@ -715,7 +715,7 @@ Polygon::Polygon(CircleShape shape) {
 
     findCentroid();
     createLines();
-    update(); // This makes the shape actually drawable
+    Shape::update(); // This makes the shape actually drawable
 }
 
 Polygon::Polygon(RectangleShape shape) {
@@ -731,7 +731,7 @@ Polygon::Polygon(RectangleShape shape) {
 
     findCentroid();
     createLines();
-    update(); // This makes the shape actually drawable
+    Shape::update(); // This makes the shape actually drawable
 }
 
 Polygon::Polygon(ConvexShape shape) {
@@ -747,7 +747,7 @@ Polygon::Polygon(ConvexShape shape) {
 
     findCentroid();
     createLines();
-    update(); // This makes the shape actually drawable
+    Shape::update(); // This makes the shape actually drawable
 }
 /*
     Spitting our polygon into triangles
@@ -939,4 +939,17 @@ void Polygon::rotate(const float angle) {
     Transformable::rotate(angle);
 
     createLines();
+}
+
+void Polygon::update(float elapsedTime) {
+    // Update the position
+    setPosition(getPosition() + m_velocity * elapsedTime);
+}
+
+Vector2f Polygon::getVelocity() {
+    return m_velocity;
+}
+
+void Polygon::setVelocity(Vector2f newVelocity) {
+    m_velocity = newVelocity;
 }
