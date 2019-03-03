@@ -81,6 +81,10 @@ private:
     // velocity
     Vector2f m_velocity;
 
+    // The rigidity is how velocity is conserved when an object bounces off
+    // 1 means it loses no velocity, 0 means it sticks
+    float m_rigidity = 1;
+
 	void getPixels();
 	bool contains(vector<Color> vec, Color c);
 	bool hitboxContainsPoint(vector<Vector2f>& hitboxVerticies, Vector2f point);
@@ -124,6 +128,8 @@ public:
 
     void setSolid(bool state);
     bool isSolid();
+    void setRigidity(float value);
+    float getRigidity();
 
     /*
     We need to be able to apply a velocity to our shape and iterate it through every frame
@@ -131,7 +137,7 @@ public:
     void setVelocity(Vector2f newVelocity);
     Vector2f getVelocity();
     void update(float elapsedTime);
-
+    void adjustVelocityFromCollision(Vector2f resultant, float rigidity);
 
     /*
     These methods a pseudo-overriden in that they reference their super class

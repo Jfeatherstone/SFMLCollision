@@ -83,22 +83,40 @@ bool Polygon::intersects(Polygon shape, Vector2f& resultant) {
     are intersecting which ones
     We also record the points at which each pair of lines intersect
     */
-    vector<std::pair<Line, Line>> intersectingLines;
-    vector<Vector2f> intersectionPoints;
+    vector<Line> intersectingLines;
 
     for (int i = 0; i < l1.size(); i++) {
         for (int j = 0; j < l2.size(); j++) {
-            Vector2f intersectionPoint;
-            if (l1[i].intersects(l2[j], intersectionPoint)) {
+            if (l1[i].intersects(l2[j])) {
                 //cout << i << " " << j << endl;
-                intersectingLines.push_back(std::pair(l1[i], l2[j]));
-                intersectionPoints.push_back(intersectionPoint);
+                intersectingLines.push_back(l2[j]);
             }
         }
     }
     
-    //cout << "No collision" << endl;
-    return false;
+    if (intersectingLines.size() == 0)
+        return false;
+
+    // We now take the "average of all of our lines"
+    // This actually means we just take the average of their slopes
+    float averageSlope = 0;
+    for (Line l: intersectingLines) {
+        averageSlope += l.getSlope();
+    }
+    averageSlope /= intersectingLines.size();
+
+    // Take the negative reciprical of the slope
+    float pSlope = -1 / averageSlope;
+
+    // Now our slope is y/x, so our vector is (1, slope)
+    Vector2f perpendicular(1, pSlope);
+    
+    // And normalize it
+    VectorMath::normalize(perpendicular);
+
+    adjustVelocityFromCollision(perpendicular, shape.getRigidity());
+
+    return true;
 }
 
 //////////////////////////////////////////

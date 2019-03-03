@@ -7,24 +7,26 @@ int main() {
     Clock clock;
 
     Texture* t = new Texture();
-    t->loadFromFile("Images/test4.png");
+    t->loadFromFile("Images/test2.png");
     
     CircleShape c;
-    c.setRadius(3);
+    c.setRadius(10);
     c.setOrigin(c.getGlobalBounds().width / 2, c.getGlobalBounds().height / 2);
     RectangleShape r;
-    r.setSize(Vector2f(200, 50));
+    r.setSize(Vector2f(200, 0));
 
     clock.restart();
     Polygon poly(t, Detail::Less);
-    poly.setScale(Vector2f(5, 5));
+    //Polygon poly(c);
+    poly.setScale(Vector2f(1, 1));
     poly.setFillColor(Color::Green);
     poly.setOrigin(poly.getCentroid());
     poly.setPosition(10, 30);
-    poly.setVelocity(Vector2f(10, 0));
+    poly.setVelocity(Vector2f(5000, 0));
 
     Polygon poly2(t, Detail::Optimal);
-    poly2.setPosition(poly.getGlobalBounds().width + 40, 30);
+    //poly2.setPosition(poly.getGlobalBounds().width + 40, 30);
+    poly2.setPosition(350, -20);
     poly2.setScale(Vector2f(5, 5));
     poly2.setFillColor(Color::Magenta);
     
@@ -56,7 +58,7 @@ int main() {
 
     // SETUP THE WINDOW
     RenderWindow window;
-    window.create(VideoMode(poly.getGlobalBounds().width * 3 + 150, poly3.getGlobalBounds().height + 50), "Polygon Test", Style::Default);
+    window.create(VideoMode(poly2.getGlobalBounds().width * 3 + 150, poly3.getGlobalBounds().height + 50), "Polygon Test", Style::Default);
     window.setFramerateLimit(60);
 
     Clock time;
@@ -93,7 +95,7 @@ int main() {
             poly.setScale(poly.getScale() - Vector2f(.03, .03));
         }
 
-        cout << time.getElapsedTime().asSeconds() << endl;
+        //cout << time.getElapsedTime().asSeconds() << endl;
         poly.update(time.restart().asSeconds());
 
         ///////////////////////////////////////
@@ -105,8 +107,9 @@ int main() {
         // INTERSECTION TESTING
         window.draw(poly);
         window.draw(poly2); 
-        window.draw(poly3);
-        window.setTitle(poly.intersects(poly2) ? "Colliding" : "Not colliding!");
+        //window.draw(poly3);
+        Vector2f res;
+        window.setTitle(poly.intersects(poly2, res) ? "Colliding" : "Not colliding!");
         //*/
 
         /*

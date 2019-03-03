@@ -302,3 +302,16 @@ void Line::rotate(Vector2f center, float angle) {
 
     
 }
+
+Vector2f Line::getPerpendicular() {
+    // Take the negative reciprical of the slope
+    float pSlope = -1 / getSlope();
+
+    // Now our slope is y/x, so our vector is (1, slope)
+    Vector2f perpendicular(1, pSlope);
+    
+    // And normalize it
+    VectorMath::normalize(perpendicular);
+
+    return perpendicular;
+}

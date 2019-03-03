@@ -27,6 +27,7 @@ SOFTWARE.
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <tgmath.h>
+#include "VectorMath.hpp"
 
 using namespace std; // Standard ns
 using namespace sf; // SFML ns
@@ -114,6 +115,11 @@ public:
     float getSlope();
     Vector2f getStart();
     Vector2f getEnd();
+
+    /*
+    This will be used to find the resultant vector of a collision
+    */
+    Vector2f getPerpendicular();
 
     void offset(Vector2f offset);
 

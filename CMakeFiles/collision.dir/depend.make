@@ -8,6 +8,7 @@ CMakeFiles/collision.dir/src/Intersects.cpp.o: src/VectorMath.hpp
 
 CMakeFiles/collision.dir/src/Line.cpp.o: src/Line.cpp
 CMakeFiles/collision.dir/src/Line.cpp.o: src/Line.hpp
+CMakeFiles/collision.dir/src/Line.cpp.o: src/VectorMath.hpp
 
 CMakeFiles/collision.dir/src/Polygon.cpp.o: src/Line.hpp
 CMakeFiles/collision.dir/src/Polygon.cpp.o: src/Polygon.cpp

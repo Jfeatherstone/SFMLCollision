@@ -13,6 +13,8 @@ iostream
 -
 tgmath.h
 -
+VectorMath.hpp
+/home/jack/cpp-workspace/SFMLCollision/src/VectorMath.hpp
 
 /home/jack/cpp-workspace/SFMLCollision/src/Polygon.hpp
 SFML/Graphics.hpp

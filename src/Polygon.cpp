@@ -882,6 +882,14 @@ bool Polygon::isSolid() {
     return m_isSolid;
 }
 
+void Polygon::setRigidity(float value) {
+    m_rigidity = value;
+}
+
+float Polygon::getRigidity() {
+    return m_rigidity;
+}
+
 /*
 Ngl, I don't remember where I found this method for finding the area of a polygon, but will post
 when I find it.
@@ -952,4 +960,29 @@ Vector2f Polygon::getVelocity() {
 
 void Polygon::setVelocity(Vector2f newVelocity) {
     m_velocity = newVelocity;
+}
+
+void Polygon::adjustVelocityFromCollision(Vector2f resultant, float rigidity) {
+    // Our resultant will already be normalized, so we don't have to worry about that
+    Vector2f normalizedVelocity = m_velocity;
+
+    float originalMagnitude = sqrt(m_velocity.x*m_velocity.x + m_velocity.y*m_velocity.y);
+
+    VectorMath::normalize(normalizedVelocity);
+
+    // Now we add our vectors and normalize to the initial magnitude
+    Vector2f finalVelocity = normalizedVelocity + resultant;
+
+    /*
+    Since the perpendicular could be pointing in either direction, we have to make sure that
+    it is poiting away from the polygon. We check this by seeing if the magnitude of the two
+    normalized vectors is greater than 1. This shouldn't be possible, as hitting a wall 
+    (before accounting for rigidity) should never speed up our object.
+    */
+    if (sqrt(finalVelocity.x*finalVelocity.x + finalVelocity.y*finalVelocity.y) > 1)
+        finalVelocity = normalizedVelocity - resultant;
+
+    VectorMath::normalize(finalVelocity, originalMagnitude * rigidity);
+
+    setVelocity(finalVelocity);
 }

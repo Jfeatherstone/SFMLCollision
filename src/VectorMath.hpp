@@ -47,7 +47,7 @@ public:
 
     static void rotate(Vector2f& p, Vector2f origin, float angle);
 
-    static void normalize(Vector2f& v);
+    static void normalize(Vector2f& v, float magnitude = 1);
 
     static int quadrant(Vector2f point, Vector2f origin = Vector2f(0, 0));
 
