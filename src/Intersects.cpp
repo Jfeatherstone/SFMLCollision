@@ -114,9 +114,28 @@ bool Polygon::intersects(Polygon shape, Vector2f& resultant) {
     // And normalize it
     VectorMath::normalize(perpendicular);
 
-    adjustVelocityFromCollision(perpendicular, shape.getRigidity());
+    adjustVelocityFromCollision(perpendicular, shape);
 
     return true;
+}
+
+/*
+We use conservation of momentum and conservation of energy (sorta) to figure out how things move
+after they collide
+*/
+void Polygon::adjustVelocityFromCollision(Vector2f resultant, Polygon shape) {
+    // Whether our collision is elastic or not
+    float energyConserved = getRigidity() * shape.getRigidity();
+
+    Vector2f initialLinearMomentum = getVelocity() * getMass() + shape.getVelocity() * shape.getMass();
+
+    float poly1TransKE0 = (1/2) * getMass() * pow(VectorMath::mag(getVelocity()), 2);
+    float poly2TransKE0 = (1/2) * shape.getMass() * pow(VectorMath::mag(shape.getVelocity()), 2);
+
+    float poly1RotKE0 = (1/2) * getMomentOfInertia() * pow(getAngularVelocity(), 2);
+    float poly2RotKE0 = (1/2) * shape.getMomentOfInertia() * pow(shape.getAngularVelocity(), 2);
+
+    float initialKineticEnergy = poly1TransKE0 + poly1RotKE0 + poly2TransKE0 + poly2RotKE0;
 }
 
 //////////////////////////////////////////

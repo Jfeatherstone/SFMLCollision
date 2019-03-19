@@ -30,6 +30,10 @@ void VectorMath::rotate(Vector2f& p, Vector2f origin, float angleInDegrees) {
     p = pp + origin;
 }
 
+float VectorMath::mag(Vector2f v) {
+    return sqrt(v.x * v.x + v.y * v.y);
+}
+
 void VectorMath::normalize(Vector2f& v, float magnitude) {
     float denom = magnitude / sqrt(v.x*v.x + v.y*v.y);
     v.x *= denom;

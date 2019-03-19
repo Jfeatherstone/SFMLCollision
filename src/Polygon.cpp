@@ -7,6 +7,10 @@ This will generate a list of verticies based on the pixels in an image (texture)
 */
 Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
+
+    // First we store the texture such that the polygon looks like the image
+    setTexture(texture);
+
     ////////////////////////////////////////
     //      BEGINNING OF SHAPE GENERATION
     ////////////////////////////////////////
@@ -457,6 +461,8 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     }
     m_points.resize(m_numVerticies);
 
+    cout << m_numVerticies << endl;
+
     while (vertexIndex < m_numVerticies) {
         if (hitboxInclude[currPixel.y*textureSize.x + currPixel.x] == 1 || hitboxInclude[currPixel.y*textureSize.x + currPixel.x] == 3) {
             // Even if it isn't an actual vertex, we record it in our other vector
@@ -473,7 +479,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             // We now look for the next pixel that is marked either as a 3 or a 1
             /*
             We check starting at the top and move clockwise 
-             */
+            */
             //cout << currPixel.x << " " << currPixel.y << " " << vertexIndex << endl;
             //for (Vector2f v: m_hitboxVertices)
               //  cout << v.x << " " << v.y << " --- ";
@@ -572,7 +578,9 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         }
     }
 
-    
+    cout << vertexIndex << endl;
+
+    ///*
     // 0, 0 has been causing some trouble, so we remove it if it isn't actually there
     if (hitboxInclude[0] != 1) {
         //cout << "Excess zero present" << endl;
@@ -593,6 +601,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             i--;
         }
     }
+    //*/
 
     // Update the size of our verticies
     m_numVerticies = m_points.size();
@@ -610,47 +619,51 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     Area optimization
     TODO: Make this better
     */
-    float diff = .05f;
-    if (detail == Detail::Less)
-        diff = .1f;
-    if (detail == Detail::More)
-        diff = .01f;
-    if (detail == Detail::Exact)
-        diff = .0f;
+    // We only run this if we are trying to optimize verticies (i.e. not Exact detail)
+    if (detail != Detail::Exact) {
+        // Depending on our level of detail, we have a higher or lower tolerance
+        // for the change in the area when removing points
+        float diff = .05f;
+        if (detail == Detail::Less)
+            diff = .1f;
+        if (detail == Detail::More)
+            diff = .01f;
 
-    while (true) {
-        // We want to be able to keep track of whether or not we were actually able to reduce the shape
-        bool reduced = false;
-        for (int i = 0; i < m_points.size(); i++) {
-            // Store the old points to calculate the previous area
-            vector<Vector2f> old = m_points;
-            
-            // Yeet that point out of here
-            m_points.erase(m_points.begin() + i);
+        while (true) {
+            // We want to be able to keep track of whether or not we were actually able to reduce the shape
+            bool reduced = false;
+            for (int i = 0; i < m_points.size(); i++) {
+                // Store the old points to calculate the previous area
+                vector<Vector2f> old = m_points;
+                
+                // Yeet that point out of here
+                m_points.erase(m_points.begin() + i);
 
-            // Calculate our two areas
-            float a1, a2;
-            Polygon::getArea(m_points, a1);
-            Polygon::getArea(old, a2);
+                // Calculate our two areas
+                float a1, a2;
+                Polygon::getArea(m_points, a1);
+                Polygon::getArea(old, a2);
 
-            // Now we check if they are within the tolerance governed by our level of detail
-            float dA = abs(a2 - a1);
-            if (dA / a2 >= diff)
-                // If the difference is too much, revert the change
-                m_points = old;
-            else
-                // Otherwise we keep it
-                reduced = true;
+                // Now we check if they are within the tolerance governed by our level of detail
+                float dA = abs(a2 - a1);
+                if (dA / a2 >= diff)
+                    // If the difference is too much, revert the change
+                    m_points = old;
+                else
+                    // Otherwise we keep it
+                    reduced = true;
+            }
+            // If we weren't able to do anything, we stop trying to reduce
+            if (!reduced)
+                break;
         }
-        // If we weren't able to do anything, we stop trying to reduce
-        if (!reduced)
-            break;
     }
 
     m_numVerticies = m_points.size();
 
     findCentroid();
     createLines();
+    calculateMass();
     Shape::update(); // This makes the shape actually drawable
 }
 
@@ -699,6 +712,7 @@ Polygon::Polygon(vector<Vector2f> points) {
 
     findCentroid();
     createLines();
+    calculateMass();
     Shape::update(); // This makes the shape actually drawable
 }
 
@@ -715,6 +729,7 @@ Polygon::Polygon(CircleShape shape) {
 
     findCentroid();
     createLines();
+    calculateMass();
     Shape::update(); // This makes the shape actually drawable
 }
 
@@ -731,6 +746,7 @@ Polygon::Polygon(RectangleShape shape) {
 
     findCentroid();
     createLines();
+    calculateMass();
     Shape::update(); // This makes the shape actually drawable
 }
 
@@ -747,14 +763,11 @@ Polygon::Polygon(ConvexShape shape) {
 
     findCentroid();
     createLines();
+    calculateMass();
     Shape::update(); // This makes the shape actually drawable
 }
+
 /*
-    Spitting our polygon into triangles
-
-We always take our centroid as one of the verticies, and then te other two will just be two
-consectutive points on the polygon
-
 This method is mostly linear algebra and (more or less) simple transformations on our vector of points.
 First, we rotate our points, around the origin of the shape, followed by scaling them up, and finally
 by adding the offset of the shape (its position).
@@ -817,6 +830,11 @@ void Polygon::createLines() {
 }
 
 /*
+We also want to be able to just adjust our lines for a simple transformation, which should save resources when objects
+are constantly being modified.
+*/
+
+/*
     Finding the centroid of our shape
 
 The basic approach here is to create an imaginary box around our shape by finding the leftmost, rightmost
@@ -870,8 +888,34 @@ vector<Vector2f> Polygon::getPoints() {
     return m_points;
 }
 
-void Polygon::getArea(float& value) {
-     Polygon::getArea(getPoints(), value);
+float Polygon::getArea() {
+     return m_area;
+}
+
+void Polygon::calculateMass() {
+    Polygon::getArea(getPoints(), m_area);
+    m_mass = m_density * m_area;
+}
+
+void Polygon::calculateMomentOfInertia() {
+    // We assume a uniform distribution of density throughout the object
+    // given by m_density
+
+    /*
+    I = \int{r^2 dm}
+    Instead of using every point in the shape, we instead just use the verticies. This won't give us the exact moment of inertia
+    in a physical sense, but will give a value that is proportional to it, making all relative comparisons between shapes accurate
+
+    This makes the calculation super easy, as we just add up the distance from the origin to the points\
+    */
+    m_momentOfInertia = 0;
+
+    for (Vector2f p: m_points) {
+        m_momentOfInertia += pow(p.x - getCentroid().x, 2) + pow(p.y - getCentroid().y, 2);
+    }
+
+    m_momentOfInertia *= m_density;
+
 }
 
 void Polygon::setSolid(bool state) {
@@ -890,10 +934,43 @@ float Polygon::getRigidity() {
     return m_rigidity;
 }
 
+void Polygon::setMovableByCollision(bool value) {
+    m_moveableByCollision = value;
+}
+
+bool Polygon::isMovableByCollision() {
+    return m_moveableByCollision;
+}
+
+void Polygon::setDensity(float newDensity) {
+    m_density = newDensity;
+    // Now recalculate the mass
+    calculateMass();
+}
+
+float Polygon::getDensity() {
+    return m_density;
+}
+
+float Polygon::getMass() {
+    return m_mass;
+}
+
+float Polygon::getMomentOfInertia() {
+    return m_momentOfInertia;
+}
+
 /*
-Ngl, I don't remember where I found this method for finding the area of a polygon, but will post
-when I find it.
+
 */
+
+/**
+ * @brief Ngl, I don't remember where I found this method for finding the area of a polygon, but 
+ * will post when I find it. This is a static method that finds the area of any given shape (vector of points)
+ * 
+ * @param points A Vector of points the represent our shape. See Polygon::getPoints()
+ * @param value A referenced float that our area will be stored in
+ */
 void Polygon::getArea(vector<Vector2f> points, float& value) {
     value = 0;
     for (int i = 0; i < points.size() - 1; i++) {
@@ -911,6 +988,11 @@ void Polygon::getArea(vector<Vector2f> points, float& value) {
     with them. This is done through the createLines() method, which accounts for rotation and scale.
 */
 
+/**
+ * @brief Return the lines that represent the polygon's outline/border
+ * 
+ * @return vector<Line> A vector of lines
+ */
 vector<Line> Polygon::getLines() {
     createLines();
     return m_lines;
@@ -949,9 +1031,14 @@ void Polygon::rotate(const float angle) {
     createLines();
 }
 
+/**********************************
+ * VELOCITY AND MOVEMENT THINGS
+**********************************/
+
 void Polygon::update(float elapsedTime) {
     // Update the position
     setPosition(getPosition() + m_velocity * elapsedTime);
+    setRotation(getRotation() + m_angularVelocity * elapsedTime);
 }
 
 Vector2f Polygon::getVelocity() {
@@ -962,27 +1049,10 @@ void Polygon::setVelocity(Vector2f newVelocity) {
     m_velocity = newVelocity;
 }
 
-void Polygon::adjustVelocityFromCollision(Vector2f resultant, float rigidity) {
-    // Our resultant will already be normalized, so we don't have to worry about that
-    Vector2f normalizedVelocity = m_velocity;
+float Polygon::getAngularVelocity() {
+    return m_angularVelocity;
+}
 
-    float originalMagnitude = sqrt(m_velocity.x*m_velocity.x + m_velocity.y*m_velocity.y);
-
-    VectorMath::normalize(normalizedVelocity);
-
-    // Now we add our vectors and normalize to the initial magnitude
-    Vector2f finalVelocity = normalizedVelocity + resultant;
-
-    /*
-    Since the perpendicular could be pointing in either direction, we have to make sure that
-    it is poiting away from the polygon. We check this by seeing if the magnitude of the two
-    normalized vectors is greater than 1. This shouldn't be possible, as hitting a wall 
-    (before accounting for rigidity) should never speed up our object.
-    */
-    if (sqrt(finalVelocity.x*finalVelocity.x + finalVelocity.y*finalVelocity.y) > 1)
-        finalVelocity = normalizedVelocity - resultant;
-
-    VectorMath::normalize(finalVelocity, originalMagnitude * rigidity);
-
-    setVelocity(finalVelocity);
+void Polygon::setAngularVelocity(float newAngularVelocity) {
+    m_angularVelocity = newAngularVelocity;
 }

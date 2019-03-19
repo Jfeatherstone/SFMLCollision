@@ -55,6 +55,8 @@ class Polygon: public Shape {
 
 private:
 
+    const float DEFAULT_DENSITY = 1.f;
+
     /*
     An array of points that define our shape
     */
@@ -66,6 +68,7 @@ private:
     int m_numVerticies;
     Vector2f m_centroid;
     float m_farthestVertex;
+    float m_area;
 
     /*
     To detect collision, we will also want to divide our shape into triangles, so we can do that once on creation as to
@@ -76,21 +79,30 @@ private:
     
     // Whether our shape is solid or not
     bool m_isSolid = true; // True by default
+    bool m_moveableByCollision = false; // If our shape can be moved by another hitting it
+    float m_density = DEFAULT_DENSITY;
+    float m_mass; // Mass found from area times density
+    float m_momentOfInertia; // How our object rotates about its origin
 
     // Since this is more or a less a lite physics engine, we need to keep track of the object's
     // velocity
     Vector2f m_velocity;
+    float m_angularVelocity;
 
     // The rigidity is how velocity is conserved when an object bounces off
-    // 1 means it loses no velocity, 0 means it sticks
+    // 1 means it loses no velocity (elastic), 0 means it sticks (inelastic)
     float m_rigidity = 1;
 
 	void getPixels();
 	bool contains(vector<Color> vec, Color c);
 	bool hitboxContainsPoint(vector<Vector2f>& hitboxVerticies, Vector2f point);
-    void createLines();
     void findCentroid();
-    void adjustLines();
+
+    void createLines();
+
+    // When dealing with collision resultants, we need to know how to move the object
+    void calculateMass();
+    void calculateMomentOfInertia();
 public:
 
     /*
@@ -126,18 +138,32 @@ public:
     float getFarthestVertex();
     Vector2f getCentroid();
 
+    // Values that adjust how collisions affect the shape
     void setSolid(bool state);
     bool isSolid();
+
     void setRigidity(float value);
     float getRigidity();
 
+    void setMovableByCollision(bool value);
+    bool isMovableByCollision();
+
+    void setDensity(float newDensity);
+    float getDensity();
+
+    float getMass();
+    float getMomentOfInertia();
+    
     /*
     We need to be able to apply a velocity to our shape and iterate it through every frame
     */
     void setVelocity(Vector2f newVelocity);
     Vector2f getVelocity();
+    void setAngularVelocity(float newAngularVelocity);
+    float getAngularVelocity();
+
     void update(float elapsedTime);
-    void adjustVelocityFromCollision(Vector2f resultant, float rigidity);
+    void adjustVelocityFromCollision(Vector2f resultant, Polygon shape);
 
     /*
     These methods a pseudo-overriden in that they reference their super class
@@ -146,7 +172,10 @@ public:
     void setScale(const Vector2f& scale);
     void setRotation(const float angle);
     void rotate(const float angle);
-    
+    void setPosition(const Vector2f position);
+    void setPosition(const float x, const float y);
+    void move()
+
     /*
     The big boys
     The latter three will actually just convert each respective shape into a polygon type and call the first
@@ -185,5 +214,5 @@ public:
     For finding the area of our polygons given either a set of points or an actual polygon
     */
     static void getArea(vector<Vector2f> points, float& value);
-    void getArea(float& value);
+    float getArea();
 };
