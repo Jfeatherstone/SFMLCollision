@@ -1,0 +1,219 @@
+\hypertarget{class_polygon}{}\section{Polygon Class Reference}
+\label{class_polygon}\index{Polygon@{Polygon}}
+Inheritance diagram for Polygon\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_polygon}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_polygon_a55f28f7bcae8df65ea11b99ff192b7d7}{Polygon}} (Texture $\ast$texture, Detail detail=Detail\+::\+Optimal, vector$<$ Color $>$ ignored\+Colors=\{\})
+\item 
+\mbox{\Hypertarget{class_polygon_ac44cbd15f8a7a389d9f553e1bdeceea0}\label{class_polygon_ac44cbd15f8a7a389d9f553e1bdeceea0}} 
+{\bfseries Polygon} (vector$<$ Vector2f $>$ points)
+\item 
+\mbox{\Hypertarget{class_polygon_abb2febc822883a9bbc7fdfac64475539}\label{class_polygon_abb2febc822883a9bbc7fdfac64475539}} 
+{\bfseries Polygon} (Circle\+Shape shape)
+\item 
+\mbox{\Hypertarget{class_polygon_ac83748b0a87551cc4e190254303f9911}\label{class_polygon_ac83748b0a87551cc4e190254303f9911}} 
+{\bfseries Polygon} (Rectangle\+Shape shape)
+\item 
+\mbox{\Hypertarget{class_polygon_a37104a58675193c3598c19b41f4eadda}\label{class_polygon_a37104a58675193c3598c19b41f4eadda}} 
+{\bfseries Polygon} (Convex\+Shape shape)
+\item 
+\mbox{\Hypertarget{class_polygon_af16db77f60fa0f12b72cf0517aca0669}\label{class_polygon_af16db77f60fa0f12b72cf0517aca0669}} 
+virtual size\+\_\+t {\bfseries get\+Point\+Count} () const
+\item 
+\mbox{\Hypertarget{class_polygon_a336e2540d24e30a4be6be163e2137323}\label{class_polygon_a336e2540d24e30a4be6be163e2137323}} 
+virtual Vector2f {\bfseries get\+Point} (size\+\_\+t index) const
+\item 
+\mbox{\Hypertarget{class_polygon_a5013385231c9027d00cb57dffc030ae4}\label{class_polygon_a5013385231c9027d00cb57dffc030ae4}} 
+vector$<$ Vector2f $>$ {\bfseries get\+Points} ()
+\item 
+vector$<$ \mbox{\hyperlink{class_line}{Line}} $>$ \mbox{\hyperlink{class_polygon_acbeaa5a9990ee704fdfa766d4a34b86c}{get\+Lines}} ()
+\begin{DoxyCompactList}\small\item\em Return the lines that represent the polygon\textquotesingle{}s outline/border. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_polygon_aa4da77df0658cdcc0797443844c69a3f}\label{class_polygon_aa4da77df0658cdcc0797443844c69a3f}} 
+float {\bfseries get\+Farthest\+Vertex} ()
+\item 
+\mbox{\Hypertarget{class_polygon_a70345633fc22991a66923b2b9db197fc}\label{class_polygon_a70345633fc22991a66923b2b9db197fc}} 
+Vector2f {\bfseries get\+Centroid} ()
+\item 
+\mbox{\Hypertarget{class_polygon_a0fc684c823f560d066bc8fdfe10fd8f0}\label{class_polygon_a0fc684c823f560d066bc8fdfe10fd8f0}} 
+void {\bfseries set\+Solid} (bool state)
+\item 
+\mbox{\Hypertarget{class_polygon_a531b42b03e52789c8b9c6869933bf7d3}\label{class_polygon_a531b42b03e52789c8b9c6869933bf7d3}} 
+bool {\bfseries is\+Solid} ()
+\item 
+\mbox{\Hypertarget{class_polygon_a5325135466047ff1a8bb215905c54c83}\label{class_polygon_a5325135466047ff1a8bb215905c54c83}} 
+void {\bfseries set\+Rigidity} (float value)
+\item 
+\mbox{\Hypertarget{class_polygon_a435f03ba82088fbde142d21950cfa1f3}\label{class_polygon_a435f03ba82088fbde142d21950cfa1f3}} 
+float {\bfseries get\+Rigidity} ()
+\item 
+\mbox{\Hypertarget{class_polygon_ac379bd1b47a91b062cb1489f4be11b2e}\label{class_polygon_ac379bd1b47a91b062cb1489f4be11b2e}} 
+void {\bfseries set\+Movable\+By\+Collision} (bool value)
+\item 
+\mbox{\Hypertarget{class_polygon_a83af7b70f89b8b27f5dc78f27dcd60d7}\label{class_polygon_a83af7b70f89b8b27f5dc78f27dcd60d7}} 
+bool {\bfseries is\+Movable\+By\+Collision} ()
+\item 
+\mbox{\Hypertarget{class_polygon_a21749fb83e0fa8fd98cf646e0e4cbadc}\label{class_polygon_a21749fb83e0fa8fd98cf646e0e4cbadc}} 
+void {\bfseries set\+Density} (float new\+Density)
+\item 
+\mbox{\Hypertarget{class_polygon_a93f38d702fe7c95af0ac72910c00908e}\label{class_polygon_a93f38d702fe7c95af0ac72910c00908e}} 
+float {\bfseries get\+Density} ()
+\item 
+\mbox{\Hypertarget{class_polygon_a9c5d5b2df7caf0dc80b00fbcae0a74e2}\label{class_polygon_a9c5d5b2df7caf0dc80b00fbcae0a74e2}} 
+float {\bfseries get\+Mass} ()
+\item 
+\mbox{\Hypertarget{class_polygon_af029d3b7c0e523ab07b376a193b6c7a3}\label{class_polygon_af029d3b7c0e523ab07b376a193b6c7a3}} 
+float {\bfseries get\+Moment\+Of\+Inertia} ()
+\item 
+\mbox{\Hypertarget{class_polygon_ae404b76af51f552e3bc9dc57ea1d8985}\label{class_polygon_ae404b76af51f552e3bc9dc57ea1d8985}} 
+void {\bfseries set\+Velocity} (Vector2f new\+Velocity)
+\item 
+\mbox{\Hypertarget{class_polygon_a82909752be649f103b26657aae3ff0c9}\label{class_polygon_a82909752be649f103b26657aae3ff0c9}} 
+Vector2f {\bfseries get\+Velocity} ()
+\item 
+\mbox{\Hypertarget{class_polygon_a9444a506f5e33f11772854396e1aae0e}\label{class_polygon_a9444a506f5e33f11772854396e1aae0e}} 
+void {\bfseries set\+Angular\+Velocity} (float new\+Angular\+Velocity)
+\item 
+\mbox{\Hypertarget{class_polygon_a1c28d47f1c0f779cfd5ef31815046a6f}\label{class_polygon_a1c28d47f1c0f779cfd5ef31815046a6f}} 
+float {\bfseries get\+Angular\+Velocity} ()
+\item 
+\mbox{\Hypertarget{class_polygon_a556290c37a29ce71f8488a75509b56af}\label{class_polygon_a556290c37a29ce71f8488a75509b56af}} 
+void {\bfseries update} (float elapsed\+Time)
+\item 
+\mbox{\Hypertarget{class_polygon_aeb1576854a28a02afaa636aadf31b992}\label{class_polygon_aeb1576854a28a02afaa636aadf31b992}} 
+void {\bfseries adjust\+Velocity\+From\+Collision} (Vector2f resultant, \mbox{\hyperlink{class_polygon}{Polygon}} shape)
+\item 
+\mbox{\Hypertarget{class_polygon_aacc719afa9e8befd7ab7ba5ea3eb4d24}\label{class_polygon_aacc719afa9e8befd7ab7ba5ea3eb4d24}} 
+void {\bfseries set\+Scale} (const Vector2f \&scale)
+\item 
+\mbox{\Hypertarget{class_polygon_a1454b2d9f4ca39f627ea6c54a26a3287}\label{class_polygon_a1454b2d9f4ca39f627ea6c54a26a3287}} 
+void {\bfseries set\+Scale} (float x\+Scale, float y\+Scale)
+\item 
+\mbox{\Hypertarget{class_polygon_ab908fe54a3dfad70b489578b4d0f0e42}\label{class_polygon_ab908fe54a3dfad70b489578b4d0f0e42}} 
+void {\bfseries scale} (const Vector2f \&scale)
+\item 
+\mbox{\Hypertarget{class_polygon_ac2b18a3139994184f83967add25f72aa}\label{class_polygon_ac2b18a3139994184f83967add25f72aa}} 
+void {\bfseries scale} (float x\+Factor, float y\+Factor)
+\item 
+\mbox{\Hypertarget{class_polygon_a3eda0b68b585dcdb570be42005f05b66}\label{class_polygon_a3eda0b68b585dcdb570be42005f05b66}} 
+void {\bfseries set\+Rotation} (const float angle)
+\item 
+\mbox{\Hypertarget{class_polygon_aa31dcb66b6c3bffd9643590abf805c26}\label{class_polygon_aa31dcb66b6c3bffd9643590abf805c26}} 
+void {\bfseries rotate} (float angle)
+\item 
+\mbox{\Hypertarget{class_polygon_a7a5ab6dbbe25ae8c274c6a86e410288a}\label{class_polygon_a7a5ab6dbbe25ae8c274c6a86e410288a}} 
+void {\bfseries rotate} (const float angle)
+\item 
+\mbox{\Hypertarget{class_polygon_adfc4599e0ae29def502ac68c69ba38c0}\label{class_polygon_adfc4599e0ae29def502ac68c69ba38c0}} 
+void {\bfseries set\+Position} (const Vector2f position)
+\item 
+\mbox{\Hypertarget{class_polygon_a59fc0fa86f807dc3921bae20739fdbb1}\label{class_polygon_a59fc0fa86f807dc3921bae20739fdbb1}} 
+void {\bfseries set\+Position} (float x, float y)
+\item 
+\mbox{\Hypertarget{class_polygon_a21dc29d3c6dfa6d59a4f62dc0b135e50}\label{class_polygon_a21dc29d3c6dfa6d59a4f62dc0b135e50}} 
+void {\bfseries move} (const Vector2f \&offset)
+\item 
+\mbox{\Hypertarget{class_polygon_ab809ff31ab4a7ec2ebe6e5b3ef2217c5}\label{class_polygon_ab809ff31ab4a7ec2ebe6e5b3ef2217c5}} 
+void {\bfseries move} (float x\+Offset, float y\+Offset)
+\item 
+\mbox{\Hypertarget{class_polygon_a15574e83f243b648b0d70537b41118ae}\label{class_polygon_a15574e83f243b648b0d70537b41118ae}} 
+bool {\bfseries intersects} (\mbox{\hyperlink{class_polygon}{Polygon}} shape)
+\item 
+\mbox{\Hypertarget{class_polygon_ad4a0ce3f20094604b01dd96d06257ea1}\label{class_polygon_ad4a0ce3f20094604b01dd96d06257ea1}} 
+bool {\bfseries intersects} (Rectangle\+Shape shape)
+\item 
+\mbox{\Hypertarget{class_polygon_ad9ce9cb3c6871e75099a261a810bedcc}\label{class_polygon_ad9ce9cb3c6871e75099a261a810bedcc}} 
+bool {\bfseries intersects} (Circle\+Shape shape)
+\item 
+\mbox{\Hypertarget{class_polygon_a24df2b2ee889cdd07ea91ccaa4810a93}\label{class_polygon_a24df2b2ee889cdd07ea91ccaa4810a93}} 
+bool {\bfseries intersects} (Convex\+Shape shape)
+\item 
+\mbox{\Hypertarget{class_polygon_a713983b426b75523599e862924bca782}\label{class_polygon_a713983b426b75523599e862924bca782}} 
+bool {\bfseries intersects} (\mbox{\hyperlink{class_polygon}{Polygon}} shape, Vector2f \&resultant)
+\item 
+\mbox{\Hypertarget{class_polygon_aa1af5f5482999785aed533d16279c67b}\label{class_polygon_aa1af5f5482999785aed533d16279c67b}} 
+bool {\bfseries intersects} (Rectangle\+Shape shape, Vector2f \&resultant)
+\item 
+\mbox{\Hypertarget{class_polygon_a874be1c28a2a1477d1ea5d85ece74822}\label{class_polygon_a874be1c28a2a1477d1ea5d85ece74822}} 
+bool {\bfseries intersects} (Circle\+Shape shape, Vector2f \&resultant)
+\item 
+\mbox{\Hypertarget{class_polygon_ab7fb23f4dbf6277688c4fb11f0a5938f}\label{class_polygon_ab7fb23f4dbf6277688c4fb11f0a5938f}} 
+bool {\bfseries intersects} (Convex\+Shape shape, Vector2f \&resultant)
+\item 
+\mbox{\Hypertarget{class_polygon_a1501a824c6d97ce3ef8efc5443ab1f8e}\label{class_polygon_a1501a824c6d97ce3ef8efc5443ab1f8e}} 
+bool {\bfseries contains} (\mbox{\hyperlink{class_polygon}{Polygon}} shape)
+\item 
+\mbox{\Hypertarget{class_polygon_a1712cd82ff38472dd9ba87f0f8b37a9f}\label{class_polygon_a1712cd82ff38472dd9ba87f0f8b37a9f}} 
+bool {\bfseries contains} (Rectangle\+Shape shape)
+\item 
+\mbox{\Hypertarget{class_polygon_a60fe86ef61eeb9903a8eef32870ea1c4}\label{class_polygon_a60fe86ef61eeb9903a8eef32870ea1c4}} 
+bool {\bfseries contains} (Circle\+Shape shape)
+\item 
+\mbox{\Hypertarget{class_polygon_aea5d69a1006a0b6b08dbc3e236b302ea}\label{class_polygon_aea5d69a1006a0b6b08dbc3e236b302ea}} 
+bool {\bfseries contains} (Convex\+Shape shape)
+\item 
+\mbox{\Hypertarget{class_polygon_a00dc79655e7be6b73a83414a6733ec9a}\label{class_polygon_a00dc79655e7be6b73a83414a6733ec9a}} 
+float {\bfseries get\+Area} ()
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{class_polygon_a21a607cdb559f8e4a98fa54d0b9d63a9}{get\+Area}} (vector$<$ Vector2f $>$ points, float \&value)
+\begin{DoxyCompactList}\small\item\em Ngl, I don\textquotesingle{}t remember where I found this method for finding the area of a polygon, but will post when I find it. This is a static method that finds the area of any given shape (vector of points) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_polygon_a55f28f7bcae8df65ea11b99ff192b7d7}\label{class_polygon_a55f28f7bcae8df65ea11b99ff192b7d7}} 
+\index{Polygon@{Polygon}!Polygon@{Polygon}}
+\index{Polygon@{Polygon}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{Polygon()}{Polygon()}}
+{\footnotesize\ttfamily Polygon\+::\+Polygon (\begin{DoxyParamCaption}\item[{Texture $\ast$}]{texture,  }\item[{Detail}]{detail = {\ttfamily Detail\+:\+:Optimal},  }\item[{vector$<$ Color $>$}]{ignored\+Colors = {\ttfamily \{\}} }\end{DoxyParamCaption})}
+
+
+\begin{DoxyItemize}
+\item 
+\end{DoxyItemize}
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_polygon_a21a607cdb559f8e4a98fa54d0b9d63a9}\label{class_polygon_a21a607cdb559f8e4a98fa54d0b9d63a9}} 
+\index{Polygon@{Polygon}!getArea@{getArea}}
+\index{getArea@{getArea}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{getArea()}{getArea()}}
+{\footnotesize\ttfamily void Polygon\+::get\+Area (\begin{DoxyParamCaption}\item[{vector$<$ Vector2f $>$}]{points,  }\item[{float \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Ngl, I don\textquotesingle{}t remember where I found this method for finding the area of a polygon, but will post when I find it. This is a static method that finds the area of any given shape (vector of points) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em points} & A Vector of points the represent our shape. See Polygon\+::get\+Points() \\
+\hline
+{\em value} & A referenced float that our area will be stored in \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_polygon_acbeaa5a9990ee704fdfa766d4a34b86c}\label{class_polygon_acbeaa5a9990ee704fdfa766d4a34b86c}} 
+\index{Polygon@{Polygon}!getLines@{getLines}}
+\index{getLines@{getLines}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{getLines()}{getLines()}}
+{\footnotesize\ttfamily vector$<$ \mbox{\hyperlink{class_line}{Line}} $>$ Polygon\+::get\+Lines (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Return the lines that represent the polygon\textquotesingle{}s outline/border. 
+
+\begin{DoxyReturn}{Returns}
+vector$<$\+Line$>$ A vector of lines 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Polygon.\+hpp\item 
+src/Intersects.\+cpp\item 
+src/Polygon.\+cpp\end{DoxyCompactItemize}

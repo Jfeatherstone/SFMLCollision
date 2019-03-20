@@ -960,10 +960,6 @@ float Polygon::getMomentOfInertia() {
     return m_momentOfInertia;
 }
 
-/*
-
-*/
-
 /**
  * @brief Ngl, I don't remember where I found this method for finding the area of a polygon, but 
  * will post when I find it. This is a static method that finds the area of any given shape (vector of points)
@@ -1019,17 +1015,60 @@ void Polygon::setScale(const Vector2f& scale) {
     createLines();
 }
 
-void Polygon::setRotation(const float angle) {
+void Polygon::setScale(float xFactor, float yFactor) {
+    Transformable::setScale(xFactor, yFactor);
+
+    createLines();
+}
+
+void Polygon::scale(const Vector2f& scale) {
+    Transformable::scale(scale.x, scale.y);
+
+    createLines();
+}
+
+void Polygon::scale(float xFactor, float yFactor) {
+    Transformable::scale(xFactor, yFactor);
+
+    createLines();
+}
+
+void Polygon::setRotation(float angle) {
     Transformable::setRotation(angle);
 
     createLines();
 }
 
-void Polygon::rotate(const float angle) {
+void Polygon::rotate(float angle) {
     Transformable::rotate(angle);
 
     createLines();
 }
+
+void Polygon::setPosition(const Vector2f& position) {
+    Transformable::setPosition(position.x, position.y);
+
+    createLines();
+}
+
+void Polygon::setPosition(float x, float y) {
+    Transformable::setScale(x, y);
+
+    createLines();
+}
+
+void Polygon::move(const Vector2f& d) {
+    Transformable::setPosition(d.x, d.y);
+
+    createLines();
+}
+
+void Polygon::move(float dx, float dy) {
+    Transformable::setScale(dx, dy);
+
+    createLines();
+}
+
 
 /**********************************
  * VELOCITY AND MOVEMENT THINGS

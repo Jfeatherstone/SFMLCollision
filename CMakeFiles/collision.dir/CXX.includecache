@@ -6,6 +6,14 @@
 
 #IncludeRegexTransform: 
 
+/home/jack/cpp-workspace/SFMLCollision/src/Intersects.cpp
+Polygon.hpp
+/home/jack/cpp-workspace/SFMLCollision/src/Polygon.hpp
+
+/home/jack/cpp-workspace/SFMLCollision/src/Line.cpp
+Line.hpp
+/home/jack/cpp-workspace/SFMLCollision/src/Line.hpp
+
 /home/jack/cpp-workspace/SFMLCollision/src/Line.hpp
 SFML/Graphics.hpp
 -
@@ -16,6 +24,10 @@ tgmath.h
 VectorMath.hpp
 /home/jack/cpp-workspace/SFMLCollision/src/VectorMath.hpp
 
+/home/jack/cpp-workspace/SFMLCollision/src/Polygon.cpp
+Polygon.hpp
+/home/jack/cpp-workspace/SFMLCollision/src/Polygon.hpp
+
 /home/jack/cpp-workspace/SFMLCollision/src/Polygon.hpp
 SFML/Graphics.hpp
 -
@@ -25,6 +37,20 @@ tgmath.h
 -
 Line.hpp
 /home/jack/cpp-workspace/SFMLCollision/src/Line.hpp
+VectorMath.hpp
+/home/jack/cpp-workspace/SFMLCollision/src/VectorMath.hpp
+
+/home/jack/cpp-workspace/SFMLCollision/src/Triangle.cpp
+Triangle.hpp
+/home/jack/cpp-workspace/SFMLCollision/src/Triangle.hpp
+
+/home/jack/cpp-workspace/SFMLCollision/src/Triangle.hpp
+SFML/Graphics.hpp
+-
+VectorMath.hpp
+/home/jack/cpp-workspace/SFMLCollision/src/VectorMath.hpp
+
+/home/jack/cpp-workspace/SFMLCollision/src/VectorMath.cpp
 VectorMath.hpp
 /home/jack/cpp-workspace/SFMLCollision/src/VectorMath.hpp
 

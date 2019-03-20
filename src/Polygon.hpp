@@ -167,14 +167,23 @@ public:
 
     /*
     These methods a pseudo-overriden in that they reference their super class
-    counterpart, though with an extra step
+    counterpart, though with an extra step (creating our lines) afterwards
+
+    This makes it such that we don't need to recreate our lines every time we fetch them, only
+    when we change things using the mehtods below.
+
+    There is likely a better way to do this, but I'm not aware of it right now
     */
     void setScale(const Vector2f& scale);
-    void setRotation(const float angle);
-    void rotate(const float angle);
-    void setPosition(const Vector2f position);
-    void setPosition(const float x, const float y);
-    void move()
+    void setScale(float xScale, float yScale);
+    void scale(const Vector2f& scale);
+    void scale(float xFactor, float yFactor);
+    void setRotation(float angle);
+    void rotate(float angle);
+    void setPosition(const Vector2f& position);
+    void setPosition(float x, float y);
+    void move(const Vector2f& offset);
+    void move(float xOffset, float yOffset);
 
     /*
     The big boys
