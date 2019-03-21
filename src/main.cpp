@@ -49,7 +49,7 @@ int main() {
     window.setFramerateLimit(60);
     
     Clock time;
-
+    
     while (window.isOpen()) {
         Time dt = time.restart();
 

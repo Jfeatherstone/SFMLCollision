@@ -10,7 +10,7 @@ Inheritance diagram for Polygon\+:\begin{figure}[H]
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{class_polygon_a55f28f7bcae8df65ea11b99ff192b7d7}{Polygon}} (Texture $\ast$texture, Detail detail=Detail\+::\+Optimal, vector$<$ Color $>$ ignored\+Colors=\{\})
-\item 
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_polygon}{Polygon}} object from a given texture (image). \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{class_polygon_ac44cbd15f8a7a389d9f553e1bdeceea0}\label{class_polygon_ac44cbd15f8a7a389d9f553e1bdeceea0}} 
 {\bfseries Polygon} (vector$<$ Vector2f $>$ points)
 \item 
@@ -171,6 +171,19 @@ static void \mbox{\hyperlink{class_polygon_a21a607cdb559f8e4a98fa54d0b9d63a9}{ge
 \subsubsection{\texorpdfstring{Polygon()}{Polygon()}}
 {\footnotesize\ttfamily Polygon\+::\+Polygon (\begin{DoxyParamCaption}\item[{Texture $\ast$}]{texture,  }\item[{Detail}]{detail = {\ttfamily Detail\+:\+:Optimal},  }\item[{vector$<$ Color $>$}]{ignored\+Colors = {\ttfamily \{\}} }\end{DoxyParamCaption})}
 
+
+
+Construct a new \mbox{\hyperlink{class_polygon}{Polygon}} object from a given texture (image). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em texture} & The texture for the shape/sprite we want to model \\
+\hline
+{\em detail} & The level of detail to keep in the shape, from least to most\+: Less, More, Optimal, Exact \\
+\hline
+{\em ignored\+Colors} & By default, all pixels that arent (0, 0, 0, 0) will be included, any colors specified here will also be ignored \\
+\hline
+\end{DoxyParams}
 
 \begin{DoxyItemize}
 \item 

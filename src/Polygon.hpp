@@ -94,8 +94,8 @@ private:
     float m_rigidity = 1;
 
 	void getPixels();
-	bool contains(vector<Color> vec, Color c);
-	bool hitboxContainsPoint(vector<Vector2f>& hitboxVerticies, Vector2f point);
+	bool contains(vector<Color>& vec, Color c);
+	bool contains(vector<Vector2f>& hitboxVerticies, Vector2f point);
     void findCentroid();
 
     void createLines();
