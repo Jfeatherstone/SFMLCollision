@@ -63,9 +63,13 @@ bool Polygon::intersects(Polygon shape) {
 }
 
 bool Polygon::intersects(Polygon shape, Vector2f& resultant) {
-    //We first check to make sure the two polygons are actually capable of intersecting by checking their rectangular boundary
-    FloatRect overlap;
-    if (!getGlobalBounds().intersects(shape.getGlobalBounds(), overlap)) {
+    //We first check to make sure the two polygons are actually capable of intersecting by checking their circular boundary
+    // This uses the farthest distance of each shape as the radius of a circle,
+    
+    float centroidDistance = sqrt(pow(getCentroid().x - shape.getCentroid().x, 2)\
+     + pow(getCentroid().y - shape.getCentroid().y, 2));
+
+    if (centroidDistance > ) {
         //cout << "Rect bounds" << endl;
         return false;
     }

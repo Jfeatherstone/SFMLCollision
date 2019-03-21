@@ -715,7 +715,7 @@ bool Polygon::contains(vector<Vector2f>& vec, Vector2f point) {
 }
 
 /*
-    The more basic constructors
+The more basic constructors
 
 This constructor is rather basic, and I can only think of one real scenario where it would be useful:
 
@@ -723,6 +723,11 @@ Since most other SFML shapes have a getPoints() method, we could easily convert 
 shape to our class here
 */
 
+/**
+ * @brief Construct a new Polygon object from a vector of points
+ * 
+ * @param points The points that constitute our shape
+ */
 Polygon::Polygon(vector<Vector2f> points) {
     m_points = points;
 
@@ -734,6 +739,11 @@ Polygon::Polygon(vector<Vector2f> points) {
     Shape::update(); // This makes the shape actually drawable
 }
 
+/**
+ * @brief Construct a new Polygon object from a sf::CircleShape object
+ * 
+ * @param shape The CircleShape object whose points we will use
+ */
 Polygon::Polygon(CircleShape shape) {
     vector<Vector2f> points;
     points.resize(shape.getPointCount());
@@ -751,6 +761,11 @@ Polygon::Polygon(CircleShape shape) {
     Shape::update(); // This makes the shape actually drawable
 }
 
+/**
+ * @brief Construct a new Polygon object from a sf::RectangleShape object
+ * 
+ * @param shape The RectangleShape object whose points we will use
+ */
 Polygon::Polygon(RectangleShape shape) {
     vector<Vector2f> points;
     points.resize(shape.getPointCount());
@@ -768,6 +783,11 @@ Polygon::Polygon(RectangleShape shape) {
     Shape::update(); // This makes the shape actually drawable
 }
 
+/**
+ * @brief Construct a new Polygon object from a sf::ConvexShape object
+ * 
+ * @param shape The ConvexShape object who points we will use
+ */
 Polygon::Polygon(ConvexShape shape) {
     vector<Vector2f> points;
     points.resize(shape.getPointCount());
@@ -785,13 +805,19 @@ Polygon::Polygon(ConvexShape shape) {
     Shape::update(); // This makes the shape actually drawable
 }
 
-/*
-This method is mostly linear algebra and (more or less) simple transformations on our vector of points.
-First, we rotate our points, around the origin of the shape, followed by scaling them up, and finally
-by adding the offset of the shape (its position).
-*/
+/**
+ * @brief Using our current m_points, we recreate the lines that represent the boundary of our
+ * shape. This is called whenever our shape is transformed (moved, rotated, scaled)
+ * 
+ */
 void Polygon::createLines() {
     //cout << "Creating Lines" << endl;
+    /*
+    This method is mostly linear algebra and (more or less) simple transformations on our vector of points.
+    First, we rotate our points, around the origin of the shape, followed by scaling them up, and finally
+    by adding the offset of the shape (its position).
+    */
+
     /*
     We don't want any of the transformations we do to be permanant, so we calculate the new points, and then
     revert to the old so when we then rotate, translate, or scale, we don't have to do some weird math to
@@ -852,24 +878,27 @@ void Polygon::createLines() {
 /**
  * @brief Return the lines that represent the polygon's outline/border
  * 
- * @return vector<Line> A vector of lines
+ * @return vector<Line> A vector of lines that represent the outline
  */
 vector<Line> Polygon::getLines() {
     //createLines();
     return m_lines;
 }
 
-/*
-    Finding the centroid of our shape
 
-The basic approach here is to create an imaginary box around our shape by finding the leftmost, rightmost
-highest and lowest points, and then using the difference between these to define the dimensions. The center
-point of this rectangle will then be taken as the centroid of our polygon. This may not be the exact centroid,
-but it is a close enough approximation and should be fairly efficient with something like O(n) complexity,
-since we only have to go through each point once to check all four extreme conditions.
-*/
-
+/**
+ * @brief Calculate the centroid of our object by finding the rightmost, leftmost, topmost, etc. points
+ * and taking the average of them all. Should give about the same as taking half of each getGlobalBounds()
+ * width and height (for setting the origin). Also calculates the farthest vertex distance from the centroid
+ */
 void Polygon::findCentroid() {
+    /*
+    The basic approach here is to create an imaginary box around our shape by finding the leftmost, rightmost
+    highest and lowest points, and then using the difference between these to define the dimensions. The center
+    point of this rectangle will then be taken as the centroid of our polygon. This may not be the exact centroid,
+    but it is a close enough approximation and should be fairly efficient with something like O(n) complexity,
+    since we only have to go through each point once to check all four extreme conditions.
+    */ 
 
     // We are going to iterate through every vertex and find the farthest right, left, up, down points
     float left = 0.f;
@@ -887,6 +916,7 @@ void Polygon::findCentroid() {
             top = v.y;
         if (v.y > bottom)
             bottom = v.y;
+
     }
 
     // Now we just take the center of our rectangle
@@ -901,27 +931,59 @@ void Polygon::findCentroid() {
     }
 }
 
+/**
+ * @brief Get the number of verticies on our polygon
+ * 
+ * @return size_t The number of verticies
+ */
 size_t Polygon::getPointCount() const {
     return m_numVerticies;
 }
 
+/**
+ * @brief Get the vertex at index in the vector m_points
+ * 
+ * @param index The index of the point we are looking for
+ * @return Vector2f The point at index in m_points
+ */
 Vector2f Polygon::getPoint(size_t index) const {
     return m_points[index];
 }
 
+/**
+ * @brief Returns the entire vector of points that represent the shape, without any modifications from
+ * transformations (rotate, move, scale)
+ * 
+ * @return vector<Vector2f> Our shape's vector of verticies
+ */
 vector<Vector2f> Polygon::getPoints() {
     return m_points;
 }
 
+/**
+ * @brief Return the area of the polygon
+ * 
+ * @return float The area of the polygon
+ */
 float Polygon::getArea() {
      return m_area;
 }
 
+/**
+ * @brief Calculate the mass of the polygon using the area and density
+ * 
+ */
 void Polygon::calculateMass() {
     Polygon::getArea(getPoints(), m_area);
     m_mass = m_density * m_area;
 }
 
+/**
+ * @brief Calculate the (relative) moment of inertia of the object by using the distance from the
+ * centroid to every vertex on the boundary. Only has value when comparing moment of inertia's between
+ * shapes, doesn't give the actual moment of inertia of a real object.
+ * 
+ */
 void Polygon::calculateMomentOfInertia() {
     // We assume a uniform distribution of density throughout the object
     // given by m_density
@@ -943,51 +1005,108 @@ void Polygon::calculateMomentOfInertia() {
 
 }
 
+/**
+ * @brief Set whether the shape is solid (can collide with other shapes)
+ * 
+ * @param state Whether or not the shape is solid
+ */
 void Polygon::setSolid(bool state) {
     m_isSolid = state;
 }
 
+/**
+ * @brief Check whether or not the shape can collide with other shapes
+ * 
+ * @return true Can collide
+ * @return false Cannot collide
+ */
 bool Polygon::isSolid() {
     return m_isSolid;
 }
 
+/**
+ * @brief Set how much energy is conserved when this object collides with another. 0 for no energy conserved
+ * (completely inelastic collision) and 1 for completely elastic (all energy conserved)
+ * 
+ * @param value The new rigidity, 0 for complete inelastic, 1 for complete elastic
+ */
 void Polygon::setRigidity(float value) {
     m_rigidity = value;
 }
 
+/**
+ * @brief Get how much energy is conserved when this object collides with another. 0 for no energy conserved
+ * (completely inelastic collision) and 1 for completely elastic (all energy conserved)
+ * 
+ * @return float The rigidity, 0 for complete inelastic, 1 for complete elastic
+ */
 float Polygon::getRigidity() {
     return m_rigidity;
 }
 
+/**
+ * @brief Set whether the shape can be moved by being collided with by another object
+ * 
+ * @param value Whether or not the shape can be moved by another polygon
+ */
 void Polygon::setMovableByCollision(bool value) {
     m_moveableByCollision = value;
 }
 
+/**
+ * @brief Get whether the shape can be moved by being collided with by another object
+ * 
+ * @return true The shape can be moved
+ * @return false The shape cannot be moved
+ */
 bool Polygon::isMovableByCollision() {
     return m_moveableByCollision;
 }
 
+/**
+ * @brief Set the density of the object, used in calculate its mass and moment of inertia (default is 1)
+ * and recalculate both values
+ * 
+ * @param newDensity The density of the object (default is 1)
+ */
 void Polygon::setDensity(float newDensity) {
     m_density = newDensity;
     // Now recalculate the mass
     calculateMass();
+    calculateMomentOfInertia();
 }
 
+/**
+ * @brief Get the relative density of the polygon
+ * 
+ * @return float The density of the polygon
+ */
 float Polygon::getDensity() {
     return m_density;
 }
 
+/**
+ * @brief Return the mass of the polygon, using the density and area to calculate
+ * 
+ * @return float The mass of the shape
+ */
 float Polygon::getMass() {
     return m_mass;
 }
 
+/**
+ * @brief Return the moment of inertia of the polygon, using the density and vertex distribution
+ * 
+ * @return float The moment of inertia of the shape
+ */
 float Polygon::getMomentOfInertia() {
     return m_momentOfInertia;
 }
 
 /**
- * @brief Ngl, I don't remember where I found this method for finding the area of a polygon, but 
- * will post when I find it. This is a static method that finds the area of any given shape (vector of points)
+ * @brief This is a static method that finds the area of any given shape (vector of points)
+ * Ngl, I don't remember where I found this method for finding the area of a polygon, but 
+ * will post when I find it. 
  * 
  * @param points A Vector of points the represent our shape. See Polygon::getPoints()
  * @param value A referenced float that our area will be stored in
@@ -1004,12 +1123,16 @@ void Polygon::getArea(vector<Vector2f> points, float& value) {
     //cout << value << endl;
 }
 
-/*
+/**
+ * @brief Returns the distance of the farthest vertex from the centroid. Calculated in findCentroid()
+ * 
+ * @return float The farthest distance of the shape
+ */
+float Polygon::getFarthestVertex() {
+    /*
     Since we use this method to detect collisions, we also want to update the lines before we do calculations
     with them. This is done through the createLines() method, which accounts for rotation and scale.
-*/
-
-float Polygon::getFarthestVertex() {
+    */
     return m_farthestVertex;
 }
 
