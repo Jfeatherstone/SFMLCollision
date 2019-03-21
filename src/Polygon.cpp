@@ -9,7 +9,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
 
     // First we store the texture such that the polygon looks like the image
-    setTexture(texture);
+    //setTexture(texture);
 
     ////////////////////////////////////////
     //      BEGINNING OF SHAPE GENERATION
@@ -773,6 +773,7 @@ First, we rotate our points, around the origin of the shape, followed by scaling
 by adding the offset of the shape (its position).
 */
 void Polygon::createLines() {
+    //cout << "Creating Lines" << endl;
     /*
     We don't want any of the transformations we do to be permanant, so we calculate the new points, and then
     revert to the old so when we then rotate, translate, or scale, we don't have to do some weird math to
@@ -808,7 +809,7 @@ void Polygon::createLines() {
     /*
     Now that our first two transformations are out of the way, we have to translate the points to their actual position
     on the screen. This offset is calculated using the origin and position.
-    */
+    */ 
     Vector2f offset(getPosition().x - getOrigin().x, getPosition().y - getOrigin().y);
     for (int i = 0; i < m_numVerticies; i++) {
         m_points[i].x += offset.x;
@@ -826,13 +827,19 @@ void Polygon::createLines() {
     }
 
     m_lines[m_numVerticies - 1] = Line(m_points[m_numVerticies - 1], m_points[0]);
+
     m_points = pointsCopy;
 }
 
-/*
-We also want to be able to just adjust our lines for a simple transformation, which should save resources when objects
-are constantly being modified.
-*/
+/**
+ * @brief Return the lines that represent the polygon's outline/border
+ * 
+ * @return vector<Line> A vector of lines
+ */
+vector<Line> Polygon::getLines() {
+    //createLines();
+    return m_lines;
+}
 
 /*
     Finding the centroid of our shape
@@ -984,16 +991,6 @@ void Polygon::getArea(vector<Vector2f> points, float& value) {
     with them. This is done through the createLines() method, which accounts for rotation and scale.
 */
 
-/**
- * @brief Return the lines that represent the polygon's outline/border
- * 
- * @return vector<Line> A vector of lines
- */
-vector<Line> Polygon::getLines() {
-    createLines();
-    return m_lines;
-}
-
 float Polygon::getFarthestVertex() {
     return m_farthestVertex;
 }
@@ -1052,19 +1049,19 @@ void Polygon::setPosition(const Vector2f& position) {
 }
 
 void Polygon::setPosition(float x, float y) {
-    Transformable::setScale(x, y);
+    Transformable::setPosition(x, y);
 
     createLines();
 }
 
 void Polygon::move(const Vector2f& d) {
-    Transformable::setPosition(d.x, d.y);
+    Transformable::move(d.x, d.y);
 
     createLines();
 }
 
 void Polygon::move(float dx, float dy) {
-    Transformable::setScale(dx, dy);
+    Transformable::move(dx, dy);
 
     createLines();
 }

@@ -199,7 +199,7 @@ bool Line::intersects(Line line, Vector2f& intersectionPoint, bool extendLine) {
     float t = ((x[2]-x[1])*(y[3]-y[1]) - (x[3]-x[1])*(y[2] - y[1])) / denominator;
 
     // This denotes whether or not the lines intersect within their domain
-    // Even if they don't, we check if we are extending the line
+    // Even if they don't, we check if we are extending the line 
     // In this case we only need to check the other line's domain
     if ((s >= 0 && s <= 1 && t >= 0 && t <= 1) || (extendLine && t >= 0 && t <= 1)) {
         // We now calculate the intersection point
