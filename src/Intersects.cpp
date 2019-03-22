@@ -5,16 +5,42 @@ We have constructors to convert other SFML shapes into polygons, so these wrappe
 to be exactly the same. The constructors and defined in Polygon.cpp, but essentially just copy
 over the points and update a few values.
 */
+
+
+/**
+ * @brief A wrapper method to check the intersection between a Polygon shape and a RectangleShape
+ * See intersects(Polygon shape) for the full intersection method
+ * 
+ * @param shape The shape we are checking to be colliding with the current one
+ * @return true The two shapes are colliding
+ * @return false The two shapes aren't colliding
+ */
 bool Polygon::intersects(RectangleShape shape) {
     Polygon poly(shape);
     return intersects(poly);
 }
 
+/**
+ * @brief A wrapper method to check the intersection between a Polygon shape and a CircleShape
+ * See intersects(Polygon shape) for the full intersection method
+
+ * @param shape The shape we are checking to be colliding with the current one
+ * @return true The two shapes are colliding
+ * @return false The two shapes aren't colliding
+ */
 bool Polygon::intersects(CircleShape shape) {
     Polygon poly(shape);
     return intersects(poly);
 }
 
+/**
+ * @brief A wrapper method to check the intersection between a Polygon shape and a ConvexShape
+ * See intersects(Polygon shape) for the full intersection method
+ * 
+ * @param shape The shape we are checking to be colliding with the current one
+ * @return true The two shapes are colliding
+ * @return false The two shapes aren't colliding
+ */
 bool Polygon::intersects(ConvexShape shape) {
     Polygon poly(shape);
     return intersects(poly);
@@ -24,15 +50,6 @@ bool Polygon::intersects(ConvexShape shape) {
 The big one
 
 This is the actual intersection method, that is called in all of the above "wrappers" for it
-
-It uses barycentric coordinates as well as proximity detection to reduce the amount of calculations
-when applicable
-
-Also, up until this point we have been ignoring a pretty large issue about the nature of this class:
-we have only worried about the local coordinates of the verticies. That is, we now will need to add certain
-values to our vertex coordinates to find their position on the screen -- and in relation to another object on the
-screen -- by using the getPosition() function defined in Shape. We assume here that the user has been updating
-the polygons' location with the setPosition() properly
 */
 
 bool Polygon::intersects(Polygon shape) {

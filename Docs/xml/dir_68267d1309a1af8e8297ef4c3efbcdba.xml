@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="dir_68267d1309a1af8e8297ef4c3efbcdba" kind="dir">
+    <compoundname>src</compoundname>
+    <innerfile refid="_intersects_8cpp">Intersects.cpp</innerfile>
+    <innerfile refid="_line_8cpp">Line.cpp</innerfile>
+    <innerfile refid="_line_8hpp">Line.hpp</innerfile>
+    <innerfile refid="main_8cpp">main.cpp</innerfile>
+    <innerfile refid="_polygon_8cpp">Polygon.cpp</innerfile>
+    <innerfile refid="_polygon_8hpp">Polygon.hpp</innerfile>
+    <innerfile refid="_triangle_8cpp">Triangle.cpp</innerfile>
+    <innerfile refid="_triangle_8hpp">Triangle.hpp</innerfile>
+    <innerfile refid="_vector_math_8cpp">VectorMath.cpp</innerfile>
+    <innerfile refid="_vector_math_8hpp">VectorMath.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/"/>
+  </compounddef>
+</doxygen>

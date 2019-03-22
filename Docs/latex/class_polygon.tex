@@ -11,65 +11,47 @@ Inheritance diagram for Polygon\+:\begin{figure}[H]
 \item 
 \mbox{\hyperlink{class_polygon_a55f28f7bcae8df65ea11b99ff192b7d7}{Polygon}} (Texture $\ast$texture, Detail detail=Detail\+::\+Optimal, vector$<$ Color $>$ ignored\+Colors=\{\})
 \begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_polygon}{Polygon}} object from a given texture (image). \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{class_polygon_ac44cbd15f8a7a389d9f553e1bdeceea0}\label{class_polygon_ac44cbd15f8a7a389d9f553e1bdeceea0}} 
-{\bfseries Polygon} (vector$<$ Vector2f $>$ points)
-\item 
-\mbox{\Hypertarget{class_polygon_abb2febc822883a9bbc7fdfac64475539}\label{class_polygon_abb2febc822883a9bbc7fdfac64475539}} 
-{\bfseries Polygon} (Circle\+Shape shape)
-\item 
-\mbox{\Hypertarget{class_polygon_ac83748b0a87551cc4e190254303f9911}\label{class_polygon_ac83748b0a87551cc4e190254303f9911}} 
-{\bfseries Polygon} (Rectangle\+Shape shape)
-\item 
-\mbox{\Hypertarget{class_polygon_a37104a58675193c3598c19b41f4eadda}\label{class_polygon_a37104a58675193c3598c19b41f4eadda}} 
-{\bfseries Polygon} (Convex\+Shape shape)
-\item 
-\mbox{\Hypertarget{class_polygon_af16db77f60fa0f12b72cf0517aca0669}\label{class_polygon_af16db77f60fa0f12b72cf0517aca0669}} 
-virtual size\+\_\+t {\bfseries get\+Point\+Count} () const
-\item 
-\mbox{\Hypertarget{class_polygon_a336e2540d24e30a4be6be163e2137323}\label{class_polygon_a336e2540d24e30a4be6be163e2137323}} 
-virtual Vector2f {\bfseries get\+Point} (size\+\_\+t index) const
-\item 
-\mbox{\Hypertarget{class_polygon_a5013385231c9027d00cb57dffc030ae4}\label{class_polygon_a5013385231c9027d00cb57dffc030ae4}} 
-vector$<$ Vector2f $>$ {\bfseries get\+Points} ()
-\item 
+\mbox{\hyperlink{class_polygon_ac44cbd15f8a7a389d9f553e1bdeceea0}{Polygon}} (vector$<$ Vector2f $>$ points)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_polygon}{Polygon}} object from a vector of points. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_polygon_abb2febc822883a9bbc7fdfac64475539}{Polygon}} (Circle\+Shape shape)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_polygon}{Polygon}} object from a sf\+::\+Circle\+Shape object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_polygon_ac83748b0a87551cc4e190254303f9911}{Polygon}} (Rectangle\+Shape shape)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_polygon}{Polygon}} object from a sf\+::\+Rectangle\+Shape object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_polygon_a37104a58675193c3598c19b41f4eadda}{Polygon}} (Convex\+Shape shape)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_polygon}{Polygon}} object from a sf\+::\+Convex\+Shape object. \end{DoxyCompactList}\item 
+virtual size\+\_\+t \mbox{\hyperlink{class_polygon_af16db77f60fa0f12b72cf0517aca0669}{get\+Point\+Count}} () const
+\begin{DoxyCompactList}\small\item\em Get the number of verticies on our polygon. \end{DoxyCompactList}\item 
+virtual Vector2f \mbox{\hyperlink{class_polygon_a336e2540d24e30a4be6be163e2137323}{get\+Point}} (size\+\_\+t index) const
+\begin{DoxyCompactList}\small\item\em Get the vertex at index in the vector m\+\_\+points. \end{DoxyCompactList}\item 
+vector$<$ Vector2f $>$ \mbox{\hyperlink{class_polygon_a5013385231c9027d00cb57dffc030ae4}{get\+Points}} ()
+\begin{DoxyCompactList}\small\item\em Returns the entire vector of points that represent the shape, without any modifications from transformations (rotate, move, scale) \end{DoxyCompactList}\item 
 vector$<$ \mbox{\hyperlink{class_line}{Line}} $>$ \mbox{\hyperlink{class_polygon_acbeaa5a9990ee704fdfa766d4a34b86c}{get\+Lines}} ()
 \begin{DoxyCompactList}\small\item\em Return the lines that represent the polygon\textquotesingle{}s outline/border. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{class_polygon_aa4da77df0658cdcc0797443844c69a3f}\label{class_polygon_aa4da77df0658cdcc0797443844c69a3f}} 
-float {\bfseries get\+Farthest\+Vertex} ()
-\item 
+float \mbox{\hyperlink{class_polygon_aa4da77df0658cdcc0797443844c69a3f}{get\+Farthest\+Vertex}} ()
+\begin{DoxyCompactList}\small\item\em Returns the distance of the farthest vertex from the centroid. Calculated in find\+Centroid() \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{class_polygon_a70345633fc22991a66923b2b9db197fc}\label{class_polygon_a70345633fc22991a66923b2b9db197fc}} 
 Vector2f {\bfseries get\+Centroid} ()
 \item 
-\mbox{\Hypertarget{class_polygon_a0fc684c823f560d066bc8fdfe10fd8f0}\label{class_polygon_a0fc684c823f560d066bc8fdfe10fd8f0}} 
-void {\bfseries set\+Solid} (bool state)
-\item 
-\mbox{\Hypertarget{class_polygon_a531b42b03e52789c8b9c6869933bf7d3}\label{class_polygon_a531b42b03e52789c8b9c6869933bf7d3}} 
-bool {\bfseries is\+Solid} ()
-\item 
-\mbox{\Hypertarget{class_polygon_a5325135466047ff1a8bb215905c54c83}\label{class_polygon_a5325135466047ff1a8bb215905c54c83}} 
-void {\bfseries set\+Rigidity} (float value)
-\item 
-\mbox{\Hypertarget{class_polygon_a435f03ba82088fbde142d21950cfa1f3}\label{class_polygon_a435f03ba82088fbde142d21950cfa1f3}} 
-float {\bfseries get\+Rigidity} ()
-\item 
-\mbox{\Hypertarget{class_polygon_ac379bd1b47a91b062cb1489f4be11b2e}\label{class_polygon_ac379bd1b47a91b062cb1489f4be11b2e}} 
-void {\bfseries set\+Movable\+By\+Collision} (bool value)
-\item 
-\mbox{\Hypertarget{class_polygon_a83af7b70f89b8b27f5dc78f27dcd60d7}\label{class_polygon_a83af7b70f89b8b27f5dc78f27dcd60d7}} 
-bool {\bfseries is\+Movable\+By\+Collision} ()
-\item 
-\mbox{\Hypertarget{class_polygon_a21749fb83e0fa8fd98cf646e0e4cbadc}\label{class_polygon_a21749fb83e0fa8fd98cf646e0e4cbadc}} 
-void {\bfseries set\+Density} (float new\+Density)
-\item 
-\mbox{\Hypertarget{class_polygon_a93f38d702fe7c95af0ac72910c00908e}\label{class_polygon_a93f38d702fe7c95af0ac72910c00908e}} 
-float {\bfseries get\+Density} ()
-\item 
-\mbox{\Hypertarget{class_polygon_a9c5d5b2df7caf0dc80b00fbcae0a74e2}\label{class_polygon_a9c5d5b2df7caf0dc80b00fbcae0a74e2}} 
-float {\bfseries get\+Mass} ()
-\item 
-\mbox{\Hypertarget{class_polygon_af029d3b7c0e523ab07b376a193b6c7a3}\label{class_polygon_af029d3b7c0e523ab07b376a193b6c7a3}} 
-float {\bfseries get\+Moment\+Of\+Inertia} ()
-\item 
+void \mbox{\hyperlink{class_polygon_a0fc684c823f560d066bc8fdfe10fd8f0}{set\+Solid}} (bool state)
+\begin{DoxyCompactList}\small\item\em Set whether the shape is solid (can collide with other shapes) \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_polygon_a531b42b03e52789c8b9c6869933bf7d3}{is\+Solid}} ()
+\begin{DoxyCompactList}\small\item\em Check whether or not the shape can collide with other shapes. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_polygon_a5325135466047ff1a8bb215905c54c83}{set\+Rigidity}} (float value)
+\begin{DoxyCompactList}\small\item\em Set how much energy is conserved when this object collides with another. 0 for no energy conserved (completely inelastic collision) and 1 for completely elastic (all energy conserved) \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{class_polygon_a435f03ba82088fbde142d21950cfa1f3}{get\+Rigidity}} ()
+\begin{DoxyCompactList}\small\item\em Get how much energy is conserved when this object collides with another. 0 for no energy conserved (completely inelastic collision) and 1 for completely elastic (all energy conserved) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_polygon_ac379bd1b47a91b062cb1489f4be11b2e}{set\+Movable\+By\+Collision}} (bool value)
+\begin{DoxyCompactList}\small\item\em Set whether the shape can be moved by being collided with by another object. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_polygon_a83af7b70f89b8b27f5dc78f27dcd60d7}{is\+Movable\+By\+Collision}} ()
+\begin{DoxyCompactList}\small\item\em Get whether the shape can be moved by being collided with by another object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_polygon_a21749fb83e0fa8fd98cf646e0e4cbadc}{set\+Density}} (float new\+Density)
+\begin{DoxyCompactList}\small\item\em Set the density of the object, used in calculate its mass and moment of inertia (default is 1) and recalculate both values. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{class_polygon_a93f38d702fe7c95af0ac72910c00908e}{get\+Density}} ()
+\begin{DoxyCompactList}\small\item\em Get the relative density of the polygon. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{class_polygon_a9c5d5b2df7caf0dc80b00fbcae0a74e2}{get\+Mass}} ()
+\begin{DoxyCompactList}\small\item\em Return the mass of the polygon, using the density and area to calculate. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{class_polygon_af029d3b7c0e523ab07b376a193b6c7a3}{get\+Moment\+Of\+Inertia}} ()
+\begin{DoxyCompactList}\small\item\em Return the moment of inertia of the polygon, using the density and vertex distribution. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{class_polygon_ae404b76af51f552e3bc9dc57ea1d8985}\label{class_polygon_ae404b76af51f552e3bc9dc57ea1d8985}} 
 void {\bfseries set\+Velocity} (Vector2f new\+Velocity)
 \item 
@@ -154,21 +136,20 @@ bool {\bfseries contains} (Circle\+Shape shape)
 \mbox{\Hypertarget{class_polygon_aea5d69a1006a0b6b08dbc3e236b302ea}\label{class_polygon_aea5d69a1006a0b6b08dbc3e236b302ea}} 
 bool {\bfseries contains} (Convex\+Shape shape)
 \item 
-\mbox{\Hypertarget{class_polygon_a00dc79655e7be6b73a83414a6733ec9a}\label{class_polygon_a00dc79655e7be6b73a83414a6733ec9a}} 
-float {\bfseries get\+Area} ()
-\end{DoxyCompactItemize}
+float \mbox{\hyperlink{class_polygon_a00dc79655e7be6b73a83414a6733ec9a}{get\+Area}} ()
+\begin{DoxyCompactList}\small\item\em Return the area of the polygon. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 static void \mbox{\hyperlink{class_polygon_a21a607cdb559f8e4a98fa54d0b9d63a9}{get\+Area}} (vector$<$ Vector2f $>$ points, float \&value)
-\begin{DoxyCompactList}\small\item\em Ngl, I don\textquotesingle{}t remember where I found this method for finding the area of a polygon, but will post when I find it. This is a static method that finds the area of any given shape (vector of points) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em This is a static method that finds the area of any given shape (vector of points) Ngl, I don\textquotesingle{}t remember where I found this method for finding the area of a polygon, but will post when I find it. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Constructor \& Destructor Documentation}
 \mbox{\Hypertarget{class_polygon_a55f28f7bcae8df65ea11b99ff192b7d7}\label{class_polygon_a55f28f7bcae8df65ea11b99ff192b7d7}} 
 \index{Polygon@{Polygon}!Polygon@{Polygon}}
 \index{Polygon@{Polygon}!Polygon@{Polygon}}
-\subsubsection{\texorpdfstring{Polygon()}{Polygon()}}
+\subsubsection{\texorpdfstring{Polygon()}{Polygon()}\hspace{0.1cm}{\footnotesize\ttfamily [1/5]}}
 {\footnotesize\ttfamily Polygon\+::\+Polygon (\begin{DoxyParamCaption}\item[{Texture $\ast$}]{texture,  }\item[{Detail}]{detail = {\ttfamily Detail\+:\+:Optimal},  }\item[{vector$<$ Color $>$}]{ignored\+Colors = {\ttfamily \{\}} }\end{DoxyParamCaption})}
 
 
@@ -187,26 +168,125 @@ Construct a new \mbox{\hyperlink{class_polygon}{Polygon}} object from a given te
 
 \begin{DoxyItemize}
 \item 
-\end{DoxyItemize}
+\end{DoxyItemize}\mbox{\Hypertarget{class_polygon_ac44cbd15f8a7a389d9f553e1bdeceea0}\label{class_polygon_ac44cbd15f8a7a389d9f553e1bdeceea0}} 
+\index{Polygon@{Polygon}!Polygon@{Polygon}}
+\index{Polygon@{Polygon}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{Polygon()}{Polygon()}\hspace{0.1cm}{\footnotesize\ttfamily [2/5]}}
+{\footnotesize\ttfamily Polygon\+::\+Polygon (\begin{DoxyParamCaption}\item[{vector$<$ Vector2f $>$}]{points }\end{DoxyParamCaption})}
+
+
+
+Construct a new \mbox{\hyperlink{class_polygon}{Polygon}} object from a vector of points. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em points} & The points that constitute our shape \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_polygon_abb2febc822883a9bbc7fdfac64475539}\label{class_polygon_abb2febc822883a9bbc7fdfac64475539}} 
+\index{Polygon@{Polygon}!Polygon@{Polygon}}
+\index{Polygon@{Polygon}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{Polygon()}{Polygon()}\hspace{0.1cm}{\footnotesize\ttfamily [3/5]}}
+{\footnotesize\ttfamily Polygon\+::\+Polygon (\begin{DoxyParamCaption}\item[{Circle\+Shape}]{shape }\end{DoxyParamCaption})}
+
+
+
+Construct a new \mbox{\hyperlink{class_polygon}{Polygon}} object from a sf\+::\+Circle\+Shape object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em shape} & The Circle\+Shape object whose points we will use \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_polygon_ac83748b0a87551cc4e190254303f9911}\label{class_polygon_ac83748b0a87551cc4e190254303f9911}} 
+\index{Polygon@{Polygon}!Polygon@{Polygon}}
+\index{Polygon@{Polygon}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{Polygon()}{Polygon()}\hspace{0.1cm}{\footnotesize\ttfamily [4/5]}}
+{\footnotesize\ttfamily Polygon\+::\+Polygon (\begin{DoxyParamCaption}\item[{Rectangle\+Shape}]{shape }\end{DoxyParamCaption})}
+
+
+
+Construct a new \mbox{\hyperlink{class_polygon}{Polygon}} object from a sf\+::\+Rectangle\+Shape object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em shape} & The Rectangle\+Shape object whose points we will use \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_polygon_a37104a58675193c3598c19b41f4eadda}\label{class_polygon_a37104a58675193c3598c19b41f4eadda}} 
+\index{Polygon@{Polygon}!Polygon@{Polygon}}
+\index{Polygon@{Polygon}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{Polygon()}{Polygon()}\hspace{0.1cm}{\footnotesize\ttfamily [5/5]}}
+{\footnotesize\ttfamily Polygon\+::\+Polygon (\begin{DoxyParamCaption}\item[{Convex\+Shape}]{shape }\end{DoxyParamCaption})}
+
+
+
+Construct a new \mbox{\hyperlink{class_polygon}{Polygon}} object from a sf\+::\+Convex\+Shape object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em shape} & The Convex\+Shape object who points we will use \\
+\hline
+\end{DoxyParams}
+
 
 \subsection{Member Function Documentation}
 \mbox{\Hypertarget{class_polygon_a21a607cdb559f8e4a98fa54d0b9d63a9}\label{class_polygon_a21a607cdb559f8e4a98fa54d0b9d63a9}} 
 \index{Polygon@{Polygon}!getArea@{getArea}}
 \index{getArea@{getArea}!Polygon@{Polygon}}
-\subsubsection{\texorpdfstring{getArea()}{getArea()}}
+\subsubsection{\texorpdfstring{getArea()}{getArea()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily void Polygon\+::get\+Area (\begin{DoxyParamCaption}\item[{vector$<$ Vector2f $>$}]{points,  }\item[{float \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
-Ngl, I don\textquotesingle{}t remember where I found this method for finding the area of a polygon, but will post when I find it. This is a static method that finds the area of any given shape (vector of points) 
+This is a static method that finds the area of any given shape (vector of points) Ngl, I don\textquotesingle{}t remember where I found this method for finding the area of a polygon, but will post when I find it. 
 
 
 \begin{DoxyParams}{Parameters}
-{\em points} & A Vector of points the represent our shape. See Polygon\+::get\+Points() \\
+{\em points} & A Vector of points the represent our shape. See \mbox{\hyperlink{class_polygon_a5013385231c9027d00cb57dffc030ae4}{Polygon\+::get\+Points()}} \\
 \hline
 {\em value} & A referenced float that our area will be stored in \\
 \hline
 \end{DoxyParams}
+\mbox{\Hypertarget{class_polygon_a00dc79655e7be6b73a83414a6733ec9a}\label{class_polygon_a00dc79655e7be6b73a83414a6733ec9a}} 
+\index{Polygon@{Polygon}!getArea@{getArea}}
+\index{getArea@{getArea}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{getArea()}{getArea()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily float Polygon\+::get\+Area (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Return the area of the polygon. 
+
+\begin{DoxyReturn}{Returns}
+float The area of the polygon 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_polygon_a93f38d702fe7c95af0ac72910c00908e}\label{class_polygon_a93f38d702fe7c95af0ac72910c00908e}} 
+\index{Polygon@{Polygon}!getDensity@{getDensity}}
+\index{getDensity@{getDensity}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{getDensity()}{getDensity()}}
+{\footnotesize\ttfamily float Polygon\+::get\+Density (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get the relative density of the polygon. 
+
+\begin{DoxyReturn}{Returns}
+float The density of the polygon 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_polygon_aa4da77df0658cdcc0797443844c69a3f}\label{class_polygon_aa4da77df0658cdcc0797443844c69a3f}} 
+\index{Polygon@{Polygon}!getFarthestVertex@{getFarthestVertex}}
+\index{getFarthestVertex@{getFarthestVertex}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{getFarthestVertex()}{getFarthestVertex()}}
+{\footnotesize\ttfamily float Polygon\+::get\+Farthest\+Vertex (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Returns the distance of the farthest vertex from the centroid. Calculated in find\+Centroid() 
+
+\begin{DoxyReturn}{Returns}
+float The farthest distance of the shape 
+\end{DoxyReturn}
 \mbox{\Hypertarget{class_polygon_acbeaa5a9990ee704fdfa766d4a34b86c}\label{class_polygon_acbeaa5a9990ee704fdfa766d4a34b86c}} 
 \index{Polygon@{Polygon}!getLines@{getLines}}
 \index{getLines@{getLines}!Polygon@{Polygon}}
@@ -218,8 +298,181 @@ Ngl, I don\textquotesingle{}t remember where I found this method for finding the
 Return the lines that represent the polygon\textquotesingle{}s outline/border. 
 
 \begin{DoxyReturn}{Returns}
-vector$<$\+Line$>$ A vector of lines 
+vector$<$\+Line$>$ A vector of lines that represent the outline 
 \end{DoxyReturn}
+\mbox{\Hypertarget{class_polygon_a9c5d5b2df7caf0dc80b00fbcae0a74e2}\label{class_polygon_a9c5d5b2df7caf0dc80b00fbcae0a74e2}} 
+\index{Polygon@{Polygon}!getMass@{getMass}}
+\index{getMass@{getMass}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{getMass()}{getMass()}}
+{\footnotesize\ttfamily float Polygon\+::get\+Mass (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Return the mass of the polygon, using the density and area to calculate. 
+
+\begin{DoxyReturn}{Returns}
+float The mass of the shape 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_polygon_af029d3b7c0e523ab07b376a193b6c7a3}\label{class_polygon_af029d3b7c0e523ab07b376a193b6c7a3}} 
+\index{Polygon@{Polygon}!getMomentOfInertia@{getMomentOfInertia}}
+\index{getMomentOfInertia@{getMomentOfInertia}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{getMomentOfInertia()}{getMomentOfInertia()}}
+{\footnotesize\ttfamily float Polygon\+::get\+Moment\+Of\+Inertia (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Return the moment of inertia of the polygon, using the density and vertex distribution. 
+
+\begin{DoxyReturn}{Returns}
+float The moment of inertia of the shape 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_polygon_a336e2540d24e30a4be6be163e2137323}\label{class_polygon_a336e2540d24e30a4be6be163e2137323}} 
+\index{Polygon@{Polygon}!getPoint@{getPoint}}
+\index{getPoint@{getPoint}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{getPoint()}{getPoint()}}
+{\footnotesize\ttfamily Vector2f Polygon\+::get\+Point (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{index }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Get the vertex at index in the vector m\+\_\+points. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & The index of the point we are looking for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Vector2f The point at index in m\+\_\+points 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_polygon_af16db77f60fa0f12b72cf0517aca0669}\label{class_polygon_af16db77f60fa0f12b72cf0517aca0669}} 
+\index{Polygon@{Polygon}!getPointCount@{getPointCount}}
+\index{getPointCount@{getPointCount}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{getPointCount()}{getPointCount()}}
+{\footnotesize\ttfamily size\+\_\+t Polygon\+::get\+Point\+Count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Get the number of verticies on our polygon. 
+
+\begin{DoxyReturn}{Returns}
+size\+\_\+t The number of verticies 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_polygon_a5013385231c9027d00cb57dffc030ae4}\label{class_polygon_a5013385231c9027d00cb57dffc030ae4}} 
+\index{Polygon@{Polygon}!getPoints@{getPoints}}
+\index{getPoints@{getPoints}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{getPoints()}{getPoints()}}
+{\footnotesize\ttfamily vector$<$ Vector2f $>$ Polygon\+::get\+Points (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Returns the entire vector of points that represent the shape, without any modifications from transformations (rotate, move, scale) 
+
+\begin{DoxyReturn}{Returns}
+vector$<$\+Vector2f$>$ Our shape\textquotesingle{}s vector of verticies 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_polygon_a435f03ba82088fbde142d21950cfa1f3}\label{class_polygon_a435f03ba82088fbde142d21950cfa1f3}} 
+\index{Polygon@{Polygon}!getRigidity@{getRigidity}}
+\index{getRigidity@{getRigidity}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{getRigidity()}{getRigidity()}}
+{\footnotesize\ttfamily float Polygon\+::get\+Rigidity (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get how much energy is conserved when this object collides with another. 0 for no energy conserved (completely inelastic collision) and 1 for completely elastic (all energy conserved) 
+
+\begin{DoxyReturn}{Returns}
+float The rigidity, 0 for complete inelastic, 1 for complete elastic 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_polygon_a83af7b70f89b8b27f5dc78f27dcd60d7}\label{class_polygon_a83af7b70f89b8b27f5dc78f27dcd60d7}} 
+\index{Polygon@{Polygon}!isMovableByCollision@{isMovableByCollision}}
+\index{isMovableByCollision@{isMovableByCollision}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{isMovableByCollision()}{isMovableByCollision()}}
+{\footnotesize\ttfamily bool Polygon\+::is\+Movable\+By\+Collision (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get whether the shape can be moved by being collided with by another object. 
+
+\begin{DoxyReturn}{Returns}
+true The shape can be moved 
+
+false The shape cannot be moved 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_polygon_a531b42b03e52789c8b9c6869933bf7d3}\label{class_polygon_a531b42b03e52789c8b9c6869933bf7d3}} 
+\index{Polygon@{Polygon}!isSolid@{isSolid}}
+\index{isSolid@{isSolid}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{isSolid()}{isSolid()}}
+{\footnotesize\ttfamily bool Polygon\+::is\+Solid (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Check whether or not the shape can collide with other shapes. 
+
+\begin{DoxyReturn}{Returns}
+true Can collide 
+
+false Cannot collide 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_polygon_a21749fb83e0fa8fd98cf646e0e4cbadc}\label{class_polygon_a21749fb83e0fa8fd98cf646e0e4cbadc}} 
+\index{Polygon@{Polygon}!setDensity@{setDensity}}
+\index{setDensity@{setDensity}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{setDensity()}{setDensity()}}
+{\footnotesize\ttfamily void Polygon\+::set\+Density (\begin{DoxyParamCaption}\item[{float}]{new\+Density }\end{DoxyParamCaption})}
+
+
+
+Set the density of the object, used in calculate its mass and moment of inertia (default is 1) and recalculate both values. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em new\+Density} & The density of the object (default is 1) \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_polygon_ac379bd1b47a91b062cb1489f4be11b2e}\label{class_polygon_ac379bd1b47a91b062cb1489f4be11b2e}} 
+\index{Polygon@{Polygon}!setMovableByCollision@{setMovableByCollision}}
+\index{setMovableByCollision@{setMovableByCollision}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{setMovableByCollision()}{setMovableByCollision()}}
+{\footnotesize\ttfamily void Polygon\+::set\+Movable\+By\+Collision (\begin{DoxyParamCaption}\item[{bool}]{value }\end{DoxyParamCaption})}
+
+
+
+Set whether the shape can be moved by being collided with by another object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & Whether or not the shape can be moved by another polygon \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_polygon_a5325135466047ff1a8bb215905c54c83}\label{class_polygon_a5325135466047ff1a8bb215905c54c83}} 
+\index{Polygon@{Polygon}!setRigidity@{setRigidity}}
+\index{setRigidity@{setRigidity}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{setRigidity()}{setRigidity()}}
+{\footnotesize\ttfamily void Polygon\+::set\+Rigidity (\begin{DoxyParamCaption}\item[{float}]{value }\end{DoxyParamCaption})}
+
+
+
+Set how much energy is conserved when this object collides with another. 0 for no energy conserved (completely inelastic collision) and 1 for completely elastic (all energy conserved) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & The new rigidity, 0 for complete inelastic, 1 for complete elastic \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_polygon_a0fc684c823f560d066bc8fdfe10fd8f0}\label{class_polygon_a0fc684c823f560d066bc8fdfe10fd8f0}} 
+\index{Polygon@{Polygon}!setSolid@{setSolid}}
+\index{setSolid@{setSolid}!Polygon@{Polygon}}
+\subsubsection{\texorpdfstring{setSolid()}{setSolid()}}
+{\footnotesize\ttfamily void Polygon\+::set\+Solid (\begin{DoxyParamCaption}\item[{bool}]{state }\end{DoxyParamCaption})}
+
+
+
+Set whether the shape is solid (can collide with other shapes) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em state} & Whether or not the shape is solid \\
+\hline
+\end{DoxyParams}
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}

@@ -1,0 +1,243 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="_intersects_8cpp" kind="file" language="C++">
+    <compoundname>Intersects.cpp</compoundname>
+    <includes refid="_polygon_8hpp" local="yes">Polygon.hpp</includes>
+    <incdepgraph>
+      <node id="2">
+        <label>SFML/Graphics.hpp</label>
+      </node>
+      <node id="1">
+        <label>Polygon.hpp</label>
+        <link refid="_polygon_8hpp_source"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>Line.hpp</label>
+        <link refid="_line_8hpp_source"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="0">
+        <label>src/Intersects.cpp</label>
+        <link refid="_intersects_8cpp"/>
+        <childnode refid="1" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>tgmath.h</label>
+      </node>
+      <node id="3">
+        <label>iostream</label>
+      </node>
+      <node id="6">
+        <label>VectorMath.hpp</label>
+        <link refid="_vector_math_8hpp_source"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+    </incdepgraph>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;Polygon.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="4"><highlight class="comment">We<sp/>have<sp/>constructors<sp/>to<sp/>convert<sp/>other<sp/>SFML<sp/>shapes<sp/>into<sp/>polygons,<sp/>so<sp/>these<sp/>wrappers<sp/>are<sp/>all<sp/>going</highlight></codeline>
+<codeline lineno="5"><highlight class="comment">to<sp/>be<sp/>exactly<sp/>the<sp/>same.<sp/>The<sp/>constructors<sp/>and<sp/>defined<sp/>in<sp/>Polygon.cpp,<sp/>but<sp/>essentially<sp/>just<sp/>copy</highlight></codeline>
+<codeline lineno="6"><highlight class="comment">over<sp/>the<sp/>points<sp/>and<sp/>update<sp/>a<sp/>few<sp/>values.</highlight></codeline>
+<codeline lineno="7"><highlight class="comment">*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>Polygon::intersects(RectangleShape<sp/>shape)<sp/>{</highlight></codeline>
+<codeline lineno="9"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_polygon" kindref="compound">Polygon</ref><sp/>poly(shape);</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>intersects(poly);</highlight></codeline>
+<codeline lineno="11"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>Polygon::intersects(CircleShape<sp/>shape)<sp/>{</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_polygon" kindref="compound">Polygon</ref><sp/>poly(shape);</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>intersects(poly);</highlight></codeline>
+<codeline lineno="16"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>Polygon::intersects(ConvexShape<sp/>shape)<sp/>{</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_polygon" kindref="compound">Polygon</ref><sp/>poly(shape);</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>intersects(poly);</highlight></codeline>
+<codeline lineno="21"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="24"><highlight class="comment">The<sp/>big<sp/>one</highlight></codeline>
+<codeline lineno="25"><highlight class="comment"></highlight></codeline>
+<codeline lineno="26"><highlight class="comment">This<sp/>is<sp/>the<sp/>actual<sp/>intersection<sp/>method,<sp/>that<sp/>is<sp/>called<sp/>in<sp/>all<sp/>of<sp/>the<sp/>above<sp/>&quot;wrappers&quot;<sp/>for<sp/>it</highlight></codeline>
+<codeline lineno="27"><highlight class="comment"></highlight></codeline>
+<codeline lineno="28"><highlight class="comment">It<sp/>uses<sp/>barycentric<sp/>coordinates<sp/>as<sp/>well<sp/>as<sp/>proximity<sp/>detection<sp/>to<sp/>reduce<sp/>the<sp/>amount<sp/>of<sp/>calculations</highlight></codeline>
+<codeline lineno="29"><highlight class="comment">when<sp/>applicable</highlight></codeline>
+<codeline lineno="30"><highlight class="comment"></highlight></codeline>
+<codeline lineno="31"><highlight class="comment">Also,<sp/>up<sp/>until<sp/>this<sp/>point<sp/>we<sp/>have<sp/>been<sp/>ignoring<sp/>a<sp/>pretty<sp/>large<sp/>issue<sp/>about<sp/>the<sp/>nature<sp/>of<sp/>this<sp/>class:</highlight></codeline>
+<codeline lineno="32"><highlight class="comment">we<sp/>have<sp/>only<sp/>worried<sp/>about<sp/>the<sp/>local<sp/>coordinates<sp/>of<sp/>the<sp/>verticies.<sp/>That<sp/>is,<sp/>we<sp/>now<sp/>will<sp/>need<sp/>to<sp/>add<sp/>certain</highlight></codeline>
+<codeline lineno="33"><highlight class="comment">values<sp/>to<sp/>our<sp/>vertex<sp/>coordinates<sp/>to<sp/>find<sp/>their<sp/>position<sp/>on<sp/>the<sp/>screen<sp/>--<sp/>and<sp/>in<sp/>relation<sp/>to<sp/>another<sp/>object<sp/>on<sp/>the</highlight></codeline>
+<codeline lineno="34"><highlight class="comment">screen<sp/>--<sp/>by<sp/>using<sp/>the<sp/>getPosition()<sp/>function<sp/>defined<sp/>in<sp/>Shape.<sp/>We<sp/>assume<sp/>here<sp/>that<sp/>the<sp/>user<sp/>has<sp/>been<sp/>updating</highlight></codeline>
+<codeline lineno="35"><highlight class="comment">the<sp/>polygons&apos;<sp/>location<sp/>with<sp/>the<sp/>setPosition()<sp/>properly</highlight></codeline>
+<codeline lineno="36"><highlight class="comment">*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>Polygon::intersects(<ref refid="class_polygon" kindref="compound">Polygon</ref><sp/>shape)<sp/>{</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//We<sp/>first<sp/>check<sp/>to<sp/>make<sp/>sure<sp/>the<sp/>two<sp/>polygons<sp/>are<sp/>actually<sp/>capable<sp/>of<sp/>intersecting<sp/>by<sp/>checking<sp/>their<sp/>rectangular<sp/>boundary</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/>FloatRect<sp/>overlap;</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!getGlobalBounds().intersects(shape.getGlobalBounds(),<sp/>overlap))<sp/>{</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//cout<sp/>&lt;&lt;<sp/>&quot;Rect<sp/>bounds&quot;<sp/>&lt;&lt;<sp/>endl;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//The<sp/>next<sp/>order<sp/>of<sp/>business<sp/>here<sp/>is<sp/>that<sp/>we<sp/>need<sp/>to<sp/>grab<sp/>the<sp/>lines<sp/>of<sp/>each<sp/>shape<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/>vector&lt;Line&gt;<sp/>l1<sp/>=<sp/><ref refid="class_polygon_1acbeaa5a9990ee704fdfa766d4a34b86c" kindref="member">getLines</ref>();</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/>vector&lt;Line&gt;<sp/>l2<sp/>=<sp/>shape.<ref refid="class_polygon_1acbeaa5a9990ee704fdfa766d4a34b86c" kindref="member">getLines</ref>();</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//And<sp/>now<sp/>we<sp/>actually<sp/>check<sp/>the<sp/>intersection<sp/>between<sp/>our<sp/>lines</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>l1.size();<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>j<sp/>=<sp/>0;<sp/>j<sp/>&lt;<sp/>l2.size();<sp/>j++)<sp/>{</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(l1[i].intersects(l2[j]))<sp/>{</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//cout<sp/>&lt;&lt;<sp/>i<sp/>&lt;&lt;<sp/>&quot;<sp/>&quot;<sp/>&lt;&lt;<sp/>j<sp/>&lt;&lt;<sp/>endl;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>We<sp/>only<sp/>care<sp/>about<sp/>the<sp/>fact<sp/>that<sp/>something<sp/>intersects<sp/>here,<sp/>so<sp/>we<sp/>end<sp/>right<sp/>after</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="63"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>Polygon::intersects(<ref refid="class_polygon" kindref="compound">Polygon</ref><sp/>shape,<sp/>Vector2f&amp;<sp/>resultant)<sp/>{</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//We<sp/>first<sp/>check<sp/>to<sp/>make<sp/>sure<sp/>the<sp/>two<sp/>polygons<sp/>are<sp/>actually<sp/>capable<sp/>of<sp/>intersecting<sp/>by<sp/>checking<sp/>their<sp/>circular<sp/>boundary</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>This<sp/>uses<sp/>the<sp/>farthest<sp/>distance<sp/>of<sp/>each<sp/>shape<sp/>as<sp/>the<sp/>radius<sp/>of<sp/>a<sp/>circle,</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>centroidDistance<sp/>=<sp/>sqrt(pow(getCentroid().x<sp/>-<sp/>shape.getCentroid().x,<sp/>2)\</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>+<sp/>pow(getCentroid().y<sp/>-<sp/>shape.getCentroid().y,<sp/>2));</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(centroidDistance<sp/>&gt;<sp/>)<sp/>{</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//cout<sp/>&lt;&lt;<sp/>&quot;Rect<sp/>bounds&quot;<sp/>&lt;&lt;<sp/>endl;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Now<sp/>we<sp/>grab<sp/>our<sp/>lines</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/>vector&lt;Line&gt;<sp/>l1<sp/>=<sp/><ref refid="class_polygon_1acbeaa5a9990ee704fdfa766d4a34b86c" kindref="member">getLines</ref>();</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/>vector&lt;Line&gt;<sp/>l2<sp/>=<sp/>shape.<ref refid="class_polygon_1acbeaa5a9990ee704fdfa766d4a34b86c" kindref="member">getLines</ref>();</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"></highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="82"><highlight class="comment"><sp/><sp/><sp/><sp/>And<sp/>now<sp/>we<sp/>actually<sp/>check<sp/>the<sp/>intersection<sp/>between<sp/>our<sp/>lines</highlight></codeline>
+<codeline lineno="83"><highlight class="comment"><sp/><sp/><sp/><sp/>Since<sp/>we<sp/>want<sp/>to<sp/>be<sp/>able<sp/>to<sp/>respond<sp/>to<sp/>a<sp/>collision<sp/>properly<sp/>(in<sp/>what<sp/>direction)</highlight></codeline>
+<codeline lineno="84"><highlight class="comment"><sp/><sp/><sp/><sp/>should<sp/>we<sp/>move<sp/>the<sp/>objects),<sp/>we<sp/>want<sp/>to<sp/>know<sp/>which<sp/>lines<sp/>were<sp/>actually<sp/>intersecting</highlight></codeline>
+<codeline lineno="85"><highlight class="comment"></highlight></codeline>
+<codeline lineno="86"><highlight class="comment"><sp/><sp/><sp/><sp/>These<sp/>are<sp/>stored<sp/>in<sp/>a<sp/>vector<sp/>of<sp/>line<sp/>pairs<sp/>such<sp/>that<sp/>we<sp/>can<sp/>keep<sp/>track<sp/>of<sp/>which<sp/>lines</highlight></codeline>
+<codeline lineno="87"><highlight class="comment"><sp/><sp/><sp/><sp/>are<sp/>intersecting<sp/>which<sp/>ones</highlight></codeline>
+<codeline lineno="88"><highlight class="comment"><sp/><sp/><sp/><sp/>We<sp/>also<sp/>record<sp/>the<sp/>points<sp/>at<sp/>which<sp/>each<sp/>pair<sp/>of<sp/>lines<sp/>intersect</highlight></codeline>
+<codeline lineno="89"><highlight class="comment"><sp/><sp/><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/>vector&lt;Line&gt;<sp/>intersectingLines;</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"></highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>l1.size();<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>j<sp/>=<sp/>0;<sp/>j<sp/>&lt;<sp/>l2.size();<sp/>j++)<sp/>{</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(l1[i].intersects(l2[j]))<sp/>{</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//cout<sp/>&lt;&lt;<sp/>i<sp/>&lt;&lt;<sp/>&quot;<sp/>&quot;<sp/>&lt;&lt;<sp/>j<sp/>&lt;&lt;<sp/>endl;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>intersectingLines.push_back(l2[j]);</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(intersectingLines.size()<sp/>==<sp/>0)</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"></highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>We<sp/>now<sp/>take<sp/>the<sp/>&quot;average<sp/>of<sp/>all<sp/>of<sp/>our<sp/>lines&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>This<sp/>actually<sp/>means<sp/>we<sp/>just<sp/>take<sp/>the<sp/>average<sp/>of<sp/>their<sp/>slopes</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>averageSlope<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(<ref refid="class_line" kindref="compound">Line</ref><sp/>l:<sp/>intersectingLines)<sp/>{</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>averageSlope<sp/>+=<sp/>l.getSlope();</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/>averageSlope<sp/>/=<sp/>intersectingLines.size();</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"></highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Take<sp/>the<sp/>negative<sp/>reciprical<sp/>of<sp/>the<sp/>slope</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>pSlope<sp/>=<sp/>-1<sp/>/<sp/>averageSlope;</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"></highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Now<sp/>our<sp/>slope<sp/>is<sp/>y/x,<sp/>so<sp/>our<sp/>vector<sp/>is<sp/>(1,<sp/>slope)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2f<sp/>perpendicular(1,<sp/>pSlope);</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>And<sp/>normalize<sp/>it</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/>VectorMath::normalize(perpendicular);</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"></highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/>adjustVelocityFromCollision(perpendicular,<sp/>shape);</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="124"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"></highlight></codeline>
+<codeline lineno="126"><highlight class="normal"></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="127"><highlight class="comment">We<sp/>use<sp/>conservation<sp/>of<sp/>momentum<sp/>and<sp/>conservation<sp/>of<sp/>energy<sp/>(sorta)<sp/>to<sp/>figure<sp/>out<sp/>how<sp/>things<sp/>move</highlight></codeline>
+<codeline lineno="128"><highlight class="comment">after<sp/>they<sp/>collide</highlight></codeline>
+<codeline lineno="129"><highlight class="comment">*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="130"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>Polygon::adjustVelocityFromCollision(Vector2f<sp/>resultant,<sp/><ref refid="class_polygon" kindref="compound">Polygon</ref><sp/>shape)<sp/>{</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Whether<sp/>our<sp/>collision<sp/>is<sp/>elastic<sp/>or<sp/>not</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>energyConserved<sp/>=<sp/><ref refid="class_polygon_1a435f03ba82088fbde142d21950cfa1f3" kindref="member">getRigidity</ref>()<sp/>*<sp/>shape.<ref refid="class_polygon_1a435f03ba82088fbde142d21950cfa1f3" kindref="member">getRigidity</ref>();</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"></highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2f<sp/>initialLinearMomentum<sp/>=<sp/>getVelocity()<sp/>*<sp/><ref refid="class_polygon_1a9c5d5b2df7caf0dc80b00fbcae0a74e2" kindref="member">getMass</ref>()<sp/>+<sp/>shape.getVelocity()<sp/>*<sp/>shape.<ref refid="class_polygon_1a9c5d5b2df7caf0dc80b00fbcae0a74e2" kindref="member">getMass</ref>();</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"></highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>poly1TransKE0<sp/>=<sp/>(1/2)<sp/>*<sp/><ref refid="class_polygon_1a9c5d5b2df7caf0dc80b00fbcae0a74e2" kindref="member">getMass</ref>()<sp/>*<sp/>pow(VectorMath::mag(getVelocity()),<sp/>2);</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>poly2TransKE0<sp/>=<sp/>(1/2)<sp/>*<sp/>shape.<ref refid="class_polygon_1a9c5d5b2df7caf0dc80b00fbcae0a74e2" kindref="member">getMass</ref>()<sp/>*<sp/>pow(VectorMath::mag(shape.getVelocity()),<sp/>2);</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"></highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>poly1RotKE0<sp/>=<sp/>(1/2)<sp/>*<sp/><ref refid="class_polygon_1af029d3b7c0e523ab07b376a193b6c7a3" kindref="member">getMomentOfInertia</ref>()<sp/>*<sp/>pow(getAngularVelocity(),<sp/>2);</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>poly2RotKE0<sp/>=<sp/>(1/2)<sp/>*<sp/>shape.<ref refid="class_polygon_1af029d3b7c0e523ab07b376a193b6c7a3" kindref="member">getMomentOfInertia</ref>()<sp/>*<sp/>pow(shape.getAngularVelocity(),<sp/>2);</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"></highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">float</highlight><highlight class="normal"><sp/>initialKineticEnergy<sp/>=<sp/>poly1TransKE0<sp/>+<sp/>poly1RotKE0<sp/>+<sp/>poly2TransKE0<sp/>+<sp/>poly2RotKE0;</highlight></codeline>
+<codeline lineno="143"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"></highlight></codeline>
+<codeline lineno="146"><highlight class="comment">//<sp/>CONTAINS</highlight></codeline>
+<codeline lineno="148"><highlight class="comment"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="149"><highlight class="normal"></highlight><highlight class="comment">//<sp/>These<sp/>next<sp/>few<sp/>methods<sp/>are<sp/>our<sp/>wrappers<sp/>and<sp/>are<sp/>more<sp/>or<sp/>less<sp/>copied<sp/>from<sp/>our<sp/>wrappers</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="150"><highlight class="normal"></highlight><highlight class="comment">//<sp/>for<sp/>intersection</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="151"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>Polygon::contains(RectangleShape<sp/>shape)<sp/>{</highlight></codeline>
+<codeline lineno="152"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_polygon" kindref="compound">Polygon</ref><sp/>poly(shape);</highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>contains(poly);</highlight></codeline>
+<codeline lineno="154"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"></highlight></codeline>
+<codeline lineno="156"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>Polygon::contains(CircleShape<sp/>shape)<sp/>{</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_polygon" kindref="compound">Polygon</ref><sp/>poly(shape);</highlight></codeline>
+<codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>contains(poly);</highlight></codeline>
+<codeline lineno="159"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="160"><highlight class="normal"></highlight></codeline>
+<codeline lineno="161"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>Polygon::contains(ConvexShape<sp/>shape)<sp/>{</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_polygon" kindref="compound">Polygon</ref><sp/>poly(shape);</highlight></codeline>
+<codeline lineno="163"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>contains(poly);</highlight></codeline>
+<codeline lineno="164"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="165"><highlight class="normal"></highlight></codeline>
+<codeline lineno="166"><highlight class="normal"></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="167"><highlight class="comment">The<sp/>actual<sp/>method<sp/>that<sp/>will<sp/>be<sp/>called<sp/>by<sp/>the<sp/>above<sp/>wrappers</highlight></codeline>
+<codeline lineno="168"><highlight class="comment"></highlight></codeline>
+<codeline lineno="169"><highlight class="comment">First,<sp/>e<sp/>check<sp/>the<sp/>width<sp/>and<sp/>height<sp/>of<sp/>the<sp/>parameter<sp/>shape<sp/>against<sp/>this<sp/>one.<sp/>If<sp/>the<sp/>other<sp/>has<sp/>a</highlight></codeline>
+<codeline lineno="170"><highlight class="comment">larger<sp/>height<sp/>or<sp/>width,<sp/>it<sp/>cannot<sp/>be<sp/>inside<sp/>this,<sp/>and<sp/>we<sp/>return<sp/>false</highlight></codeline>
+<codeline lineno="171"><highlight class="comment"></highlight></codeline>
+<codeline lineno="172"><highlight class="comment">Now<sp/>we<sp/>actually<sp/>do<sp/>the<sp/>real<sp/>calculation:</highlight></codeline>
+<codeline lineno="173"><highlight class="comment">If<sp/>we<sp/>take<sp/>any<sp/>given<sp/>line<sp/>of<sp/>the<sp/>object<sp/>we<sp/>suspect<sp/>to<sp/>be<sp/>insde<sp/>of<sp/>the<sp/>other,<sp/>we<sp/>can<sp/>extend<sp/>that<sp/>segment<sp/>to<sp/>be<sp/>a<sp/>full</highlight></codeline>
+<codeline lineno="174"><highlight class="comment">line<sp/>and<sp/>find<sp/>how<sp/>many<sp/>times<sp/>it<sp/>intersects<sp/>with<sp/>the<sp/>outer<sp/>shape.<sp/>If<sp/>this<sp/>amount<sp/>is<sp/>an<sp/>integer<sp/>multiple<sp/>of<sp/>2,<sp/>and<sp/>at</highlight></codeline>
+<codeline lineno="175"><highlight class="comment">least<sp/>one<sp/>intersection<sp/>point<sp/>is<sp/>on<sp/>either<sp/>side<sp/>of<sp/>the<sp/>shape,<sp/>the<sp/>shape<sp/>must<sp/>be<sp/>inside<sp/>of<sp/>the<sp/>other.</highlight></codeline>
+<codeline lineno="176"><highlight class="comment"></highlight></codeline>
+<codeline lineno="177"><highlight class="comment">*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="178"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>Polygon::contains(<ref refid="class_polygon" kindref="compound">Polygon</ref><sp/>shape)<sp/>{</highlight></codeline>
+<codeline lineno="179"><highlight class="normal"></highlight></codeline>
+<codeline lineno="180"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="src/Intersects.cpp"/>
+  </compounddef>
+</doxygen>

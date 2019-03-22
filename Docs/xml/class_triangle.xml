@@ -1,0 +1,281 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="class_triangle" kind="class" language="C++" prot="public">
+    <compoundname>Triangle</compoundname>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_triangle_1ae9e35126df2e5ce3db20b5791b5d761a" prot="private" static="no" mutable="no">
+        <type>vector&lt; Vector2f &gt;</type>
+        <definition>vector&lt;Vector2f&gt; Triangle::m_verticies</definition>
+        <argsstring></argsstring>
+        <name>m_verticies</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Triangle.hpp" line="53" column="1" bodyfile="src/Triangle.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_triangle_1abe45756d4cbd4c8a4074dd4ce3b43cb1" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Triangle::m_invDenom</definition>
+        <argsstring></argsstring>
+        <name>m_invDenom</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Triangle.hpp" line="61" column="1" bodyfile="src/Triangle.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_triangle_1a2f21d43300aac46f98fdbd070ab94b72" prot="private" static="no" mutable="no">
+        <type>Vector2f</type>
+        <definition>Vector2f Triangle::m_v1</definition>
+        <argsstring></argsstring>
+        <name>m_v1</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Triangle.hpp" line="63" column="1" bodyfile="src/Triangle.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_triangle_1a5f1940a5bb3b2baee99db328800cedfa" prot="private" static="no" mutable="no">
+        <type>Vector2f</type>
+        <definition>Vector2f Triangle::m_v2</definition>
+        <argsstring></argsstring>
+        <name>m_v2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Triangle.hpp" line="64" column="1" bodyfile="src/Triangle.hpp" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_triangle_1a990a3791f8eb88b17cb4aee605ffbed4" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Triangle::m_dot11</definition>
+        <argsstring></argsstring>
+        <name>m_dot11</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Triangle.hpp" line="66" column="1" bodyfile="src/Triangle.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_triangle_1a72f13ba10931c80ce9d1b967330262f2" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Triangle::m_dot12</definition>
+        <argsstring></argsstring>
+        <name>m_dot12</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Triangle.hpp" line="67" column="1" bodyfile="src/Triangle.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_triangle_1a20ce56533f47f3477089a9591d15a195" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Triangle::m_dot22</definition>
+        <argsstring></argsstring>
+        <name>m_dot22</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Triangle.hpp" line="68" column="1" bodyfile="src/Triangle.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_triangle_1a44fb96e6554c97ad695cc09e83ef7c22" prot="private" static="no" mutable="no">
+        <type>Vector2f</type>
+        <definition>Vector2f Triangle::m_offset</definition>
+        <argsstring></argsstring>
+        <name>m_offset</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Triangle.hpp" line="70" column="1" bodyfile="src/Triangle.hpp" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="class_triangle_1a4e8130e47e04037fa175b5bf5b7a291a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Triangle::precomputeBarycentric</definition>
+        <argsstring>()</argsstring>
+        <name>precomputeBarycentric</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Triangle.hpp" line="80" column="1" bodyfile="src/Triangle.cpp" bodystart="21" bodyend="40"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_triangle_1ab7e2ea6c13f332ae1545455ab8a8fcec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Triangle::Triangle</definition>
+        <argsstring>(Vector2f v1, Vector2f v2, Vector2f v3)</argsstring>
+        <name>Triangle</name>
+        <param>
+          <type>Vector2f</type>
+          <declname>v1</declname>
+        </param>
+        <param>
+          <type>Vector2f</type>
+          <declname>v2</declname>
+        </param>
+        <param>
+          <type>Vector2f</type>
+          <declname>v3</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Triangle.hpp" line="86" column="1" bodyfile="src/Triangle.cpp" bodystart="11" bodyend="19"/>
+      </memberdef>
+      <memberdef kind="function" id="class_triangle_1aaefe4ed500c07918d30c6f0e286332c5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Triangle::Triangle</definition>
+        <argsstring>()</argsstring>
+        <name>Triangle</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Triangle.hpp" line="91" column="1" bodyfile="src/Triangle.cpp" bodystart="3" bodyend="9"/>
+      </memberdef>
+      <memberdef kind="function" id="class_triangle_1acf9ed1087565f30c1958688b77e8fecc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector2f</type>
+        <definition>Vector2f Triangle::getVertex1</definition>
+        <argsstring>()</argsstring>
+        <name>getVertex1</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Triangle.hpp" line="96" column="1" bodyfile="src/Triangle.cpp" bodystart="67" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="function" id="class_triangle_1aded502a5993f98594e7da89e789edd48" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector2f</type>
+        <definition>Vector2f Triangle::getVertex2</definition>
+        <argsstring>()</argsstring>
+        <name>getVertex2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Triangle.hpp" line="97" column="1" bodyfile="src/Triangle.cpp" bodystart="71" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="function" id="class_triangle_1a4a3727b262c60cc952f6d2bfe1dff3c4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector2f</type>
+        <definition>Vector2f Triangle::getVertex3</definition>
+        <argsstring>()</argsstring>
+        <name>getVertex3</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Triangle.hpp" line="98" column="1" bodyfile="src/Triangle.cpp" bodystart="75" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="class_triangle_1a72b494a788a9a0bea036011d47a79315" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>vector&lt; Vector2f &gt;</type>
+        <definition>vector&lt; Vector2f &gt; Triangle::getVerticies</definition>
+        <argsstring>()</argsstring>
+        <name>getVerticies</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Triangle.hpp" line="100" column="1" bodyfile="src/Triangle.cpp" bodystart="79" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="function" id="class_triangle_1ab08c9b24ff5e7cc9bc29045d13f4300e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Triangle::offset</definition>
+        <argsstring>(Vector2f offset)</argsstring>
+        <name>offset</name>
+        <param>
+          <type>Vector2f</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Triangle.hpp" line="107" column="1" bodyfile="src/Triangle.cpp" bodystart="55" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="function" id="class_triangle_1affee4378730835d14e1d3db4eb2d8622" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Triangle::computeBarycentric</definition>
+        <argsstring>(Vector2f p, Vector3f &amp;result)</argsstring>
+        <name>computeBarycentric</name>
+        <param>
+          <type>Vector2f</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>Vector3f &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/Triangle.hpp" line="112" column="1" bodyfile="src/Triangle.cpp" bodystart="42" bodyend="53"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/Triangle.hpp" line="46" column="1" bodyfile="src/Triangle.hpp" bodystart="46" bodyend="113"/>
+    <listofallmembers>
+      <member refid="class_triangle_1affee4378730835d14e1d3db4eb2d8622" prot="public" virt="non-virtual"><scope>Triangle</scope><name>computeBarycentric</name></member>
+      <member refid="class_triangle_1acf9ed1087565f30c1958688b77e8fecc" prot="public" virt="non-virtual"><scope>Triangle</scope><name>getVertex1</name></member>
+      <member refid="class_triangle_1aded502a5993f98594e7da89e789edd48" prot="public" virt="non-virtual"><scope>Triangle</scope><name>getVertex2</name></member>
+      <member refid="class_triangle_1a4a3727b262c60cc952f6d2bfe1dff3c4" prot="public" virt="non-virtual"><scope>Triangle</scope><name>getVertex3</name></member>
+      <member refid="class_triangle_1a72b494a788a9a0bea036011d47a79315" prot="public" virt="non-virtual"><scope>Triangle</scope><name>getVerticies</name></member>
+      <member refid="class_triangle_1a990a3791f8eb88b17cb4aee605ffbed4" prot="private" virt="non-virtual"><scope>Triangle</scope><name>m_dot11</name></member>
+      <member refid="class_triangle_1a72f13ba10931c80ce9d1b967330262f2" prot="private" virt="non-virtual"><scope>Triangle</scope><name>m_dot12</name></member>
+      <member refid="class_triangle_1a20ce56533f47f3477089a9591d15a195" prot="private" virt="non-virtual"><scope>Triangle</scope><name>m_dot22</name></member>
+      <member refid="class_triangle_1abe45756d4cbd4c8a4074dd4ce3b43cb1" prot="private" virt="non-virtual"><scope>Triangle</scope><name>m_invDenom</name></member>
+      <member refid="class_triangle_1a44fb96e6554c97ad695cc09e83ef7c22" prot="private" virt="non-virtual"><scope>Triangle</scope><name>m_offset</name></member>
+      <member refid="class_triangle_1a2f21d43300aac46f98fdbd070ab94b72" prot="private" virt="non-virtual"><scope>Triangle</scope><name>m_v1</name></member>
+      <member refid="class_triangle_1a5f1940a5bb3b2baee99db328800cedfa" prot="private" virt="non-virtual"><scope>Triangle</scope><name>m_v2</name></member>
+      <member refid="class_triangle_1ae9e35126df2e5ce3db20b5791b5d761a" prot="private" virt="non-virtual"><scope>Triangle</scope><name>m_verticies</name></member>
+      <member refid="class_triangle_1ab08c9b24ff5e7cc9bc29045d13f4300e" prot="public" virt="non-virtual"><scope>Triangle</scope><name>offset</name></member>
+      <member refid="class_triangle_1a4e8130e47e04037fa175b5bf5b7a291a" prot="private" virt="non-virtual"><scope>Triangle</scope><name>precomputeBarycentric</name></member>
+      <member refid="class_triangle_1ab7e2ea6c13f332ae1545455ab8a8fcec" prot="public" virt="non-virtual"><scope>Triangle</scope><name>Triangle</name></member>
+      <member refid="class_triangle_1aaefe4ed500c07918d30c6f0e286332c5" prot="public" virt="non-virtual"><scope>Triangle</scope><name>Triangle</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

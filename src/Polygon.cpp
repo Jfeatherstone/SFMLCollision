@@ -1136,7 +1136,11 @@ float Polygon::getFarthestVertex() {
     return m_farthestVertex;
 }
 
-
+/**
+ * @brief Returns the centroid of the shape (does not recalculate it)
+ * 
+ * @return Vector2f The centroid of the shape
+ */
 Vector2f Polygon::getCentroid() {
     return m_centroid;
 }
@@ -1147,60 +1151,124 @@ the points we have on our polygon, we need to recreate (or hopefully only update
 bound the outside
 */
 
+/**
+ * @brief An overriden method from sf::Shape that changes the scale like its super-counterpart
+ * and also recreates the lines that represent the shape.
+ * 
+ * @param scale The scaling factors for our polygon
+ */
 void Polygon::setScale(const Vector2f& scale) {
     Transformable::setScale(scale.x, scale.y);
 
     createLines();
 }
 
+/**
+ * @brief An overriden method from sf::Shape that changes the scale like its super-counterpart
+ * and also recreates the lines that represent the shape.
+ * 
+ * @param xFactor The x scaling factor
+ * @param yFactor The y scaling factor
+ */
 void Polygon::setScale(float xFactor, float yFactor) {
     Transformable::setScale(xFactor, yFactor);
 
     createLines();
 }
 
+/**
+ * @brief An overriden method from sf::Shape that changes the scale like its super-counterpart
+ * and also recreates the lines that represent the shape.
+ * 
+ * @param scale The scaling factors for our polygon
+ */
 void Polygon::scale(const Vector2f& scale) {
     Transformable::scale(scale.x, scale.y);
 
     createLines();
 }
 
+/**
+ * @brief An overriden method from sf::Shape that changes the scale like its super-counterpart
+ * and also recreates the lines that represent the shape.
+ * 
+ * @param xFactor The x scaling factor
+ * @param yFactor The y scaling factor
+ */
 void Polygon::scale(float xFactor, float yFactor) {
     Transformable::scale(xFactor, yFactor);
 
     createLines();
 }
 
+/**
+ * @brief An overriden method from sf::Shape that changes the rotation like its super-counterpart
+ * and also recreates the lines that represent the shape.
+ * 
+ * @param angle The angle we are setting the rotation to (default is 0)
+ */
 void Polygon::setRotation(float angle) {
     Transformable::setRotation(angle);
 
     createLines();
 }
 
+/**
+ * @brief An overriden method from sf::Shape that changes the rotation like its super-counterpart
+ * and also recreates the lines that represent the shape.
+ * 
+ * @param angle The angle we are rotating the shape by
+ */
 void Polygon::rotate(float angle) {
     Transformable::rotate(angle);
 
     createLines();
 }
 
+/**
+ * @brief An overriden method from sf::Shape that changes the position like its super-counterpart
+ * and also recreates the lines that represent the shape.
+ * 
+ * @param position The new x and y coordinates of the shape
+ */
 void Polygon::setPosition(const Vector2f& position) {
     Transformable::setPosition(position.x, position.y);
 
     createLines();
 }
 
+/**
+ * @brief An overriden method from sf::Shape that changes the position like its super-counterpart
+ * and also recreates the lines that represent the shape.
+ * 
+ * @param x New x coordinate
+ * @param y New y coordinate
+ */
 void Polygon::setPosition(float x, float y) {
     Transformable::setPosition(x, y);
 
     createLines();
 }
 
+/**
+ * @brief An overriden method from sf::Shape that changes the position like its super-counterpart
+ * and also recreates the lines that represent the shape.
+ * 
+ * @param d The amount to change x and y by 
+ */
 void Polygon::move(const Vector2f& d) {
     Transformable::move(d.x, d.y);
 
     createLines();
 }
 
+/**
+ * @brief An overriden method from sf::Shape that changes the position like its super-counterpart
+ * and also recreates the lines that represent the shape.
+ * 
+ * @param dx Amount to change the x coordinate by
+ * @param dy Amount to change the y coordinate by
+ */
 void Polygon::move(float dx, float dy) {
     Transformable::move(dx, dy);
 
@@ -1212,24 +1280,50 @@ void Polygon::move(float dx, float dy) {
  * VELOCITY AND MOVEMENT THINGS
 **********************************/
 
+/**
+ * @brief Updates the shape and applies both linear and angular velocity to update the
+ * position and rotation of the polygon
+ * 
+ * @param elapsedTime The amount of time that has elapsed since the last update
+ */
 void Polygon::update(float elapsedTime) {
     // Update the position
     setPosition(getPosition() + m_velocity * elapsedTime);
     setRotation(getRotation() + m_angularVelocity * elapsedTime);
 }
 
+/**
+ * @brief Returns the current linear velocity of the shape
+ * 
+ * @return Vector2f Current linear velocity of the shape
+ */
 Vector2f Polygon::getVelocity() {
     return m_velocity;
 }
 
+/**
+ * @brief Changes the linear velocity of the polygon to the paramter provided
+ * 
+ * @param newVelocity The new velocity of the polygon
+ */
 void Polygon::setVelocity(Vector2f newVelocity) {
     m_velocity = newVelocity;
 }
 
+/**
+ * @brief Returns the current angular velocity of the polygon to the paramter provided
+ * 
+ * @return float Current angular velocity of the polygon
+ */
 float Polygon::getAngularVelocity() {
     return m_angularVelocity;
 }
 
+/**
+ * @brief Changes the angular velocity of the polygon to the paramter provided
+ * 
+ * @param newAngularVelocity The new angular velocity of the polygon
+ */
 void Polygon::setAngularVelocity(float newAngularVelocity) {
     m_angularVelocity = newAngularVelocity;
 }

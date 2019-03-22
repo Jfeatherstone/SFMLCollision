@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.8.15">
+  <compound refid="class_line" kind="class"><name>Line</name>
+    <member refid="class_line_1a499bb2dc1195dccd6b8178013dec6baf" kind="variable"><name>m_slope</name></member>
+    <member refid="class_line_1a6d1106b3b6289223387fec68c91dec94" kind="variable"><name>m_intercept</name></member>
+    <member refid="class_line_1affc6b0bffe4991c2362630a32fe3cb01" kind="variable"><name>m_angle</name></member>
+    <member refid="class_line_1a169a58250db92f6120f3c49a399cc5bf" kind="variable"><name>m_vertical</name></member>
+    <member refid="class_line_1a82c9270e65486f8d50be75582213cf53" kind="variable"><name>m_horizontal</name></member>
+    <member refid="class_line_1a51de133e0d9bee4b8e61bb56498413b1" kind="variable"><name>m_quadrant</name></member>
+    <member refid="class_line_1afff14445c4dc34a0da6a8857bbf4e77c" kind="variable"><name>m_start</name></member>
+    <member refid="class_line_1a5e85f8b59eb43416ba20e31c9b2013b1" kind="variable"><name>m_end</name></member>
+    <member refid="class_line_1a5863ba4d0a16e8791fb10752336a35f8" kind="variable"><name>m_offset</name></member>
+    <member refid="class_line_1a87c990ebbd0efec194d04a3ce8e9e85d" kind="variable"><name>VERTICAL_SLOPE</name></member>
+    <member refid="class_line_1af8ba5d7a6b96648647208ae85d147ef7" kind="function"><name>calculateSlope</name></member>
+    <member refid="class_line_1a23929af5f108da62714bbdde6bc71906" kind="function"><name>calculateIntercept</name></member>
+    <member refid="class_line_1a8c2c3f8f4bd6cf38117732b40b230f1f" kind="function"><name>calculateAngle</name></member>
+    <member refid="class_line_1a572ac62632ccab120d4ea83800079092" kind="function"><name>calculateQuadrant</name></member>
+    <member refid="class_line_1a14086366b8143477126e1e707c39c926" kind="function"><name>Line</name></member>
+    <member refid="class_line_1acc11b8a429d8cdd63ba6803dff5602b3" kind="function"><name>Line</name></member>
+    <member refid="class_line_1a5d43019cccd837ec42290bea0e2ad17a" kind="function"><name>y</name></member>
+    <member refid="class_line_1a34a6df58140aa191f8c4718ccd613aeb" kind="function"><name>intersects</name></member>
+    <member refid="class_line_1a69d1d2dabe536f41bff826effa84ac6e" kind="function"><name>intersects</name></member>
+    <member refid="class_line_1ace99d3c925c8b71cb967188c029879e7" kind="function"><name>getAngle</name></member>
+    <member refid="class_line_1a9ed298f661aa86dc50099ba2bbf035d2" kind="function"><name>getIntercept</name></member>
+    <member refid="class_line_1a982898ab2cf3a5e4d7a18c7b6f985492" kind="function"><name>getSlope</name></member>
+    <member refid="class_line_1a535f3ce12c85a6cccfc183967b082b83" kind="function"><name>getStart</name></member>
+    <member refid="class_line_1a0cddf1496f2b5efd58ea1484631d0cbc" kind="function"><name>getEnd</name></member>
+    <member refid="class_line_1a9764252ce3d039cba826643eb87f74e5" kind="function"><name>getPerpendicular</name></member>
+    <member refid="class_line_1afa01770fb4ff6266ae8454fbed9f1650" kind="function"><name>offset</name></member>
+    <member refid="class_line_1a1bd25ca4caf671c99dbfa20c0aa32f27" kind="function"><name>getDrawable</name></member>
+    <member refid="class_line_1a1f12eb00fab756fb01962e1307b369a8" kind="function"><name>rotate</name></member>
+  </compound>
+  <compound refid="class_polygon" kind="class"><name>Polygon</name>
+    <member refid="class_polygon_1abea0da7beb9be628d593e14708aa6212" kind="variable"><name>DEFAULT_DENSITY</name></member>
+    <member refid="class_polygon_1aa0c37ebb94e0d1c24acf7888ab82e5ef" kind="variable"><name>m_points</name></member>
+    <member refid="class_polygon_1ab96f8891ca282600d1ae55bdc40b8f5d" kind="variable"><name>m_numVerticies</name></member>
+    <member refid="class_polygon_1a39f1daf0c324877ece7a1e64fd5fe03a" kind="variable"><name>m_centroid</name></member>
+    <member refid="class_polygon_1adde6345f2f140d54db82f22cb8b433c7" kind="variable"><name>m_farthestVertex</name></member>
+    <member refid="class_polygon_1aa2bd50d4ea5bfa2572cfc318745f6e36" kind="variable"><name>m_area</name></member>
+    <member refid="class_polygon_1ab6e4175395d76cb532590c7998dceeb3" kind="variable"><name>m_lines</name></member>
+    <member refid="class_polygon_1a1a97491c2637b2aa13949dc8bf2079d6" kind="variable"><name>m_triangleHeights</name></member>
+    <member refid="class_polygon_1ab441b8e27ee343911b1eaa6b0d8cc4ec" kind="variable"><name>m_isSolid</name></member>
+    <member refid="class_polygon_1ad5dae3150d623b3b4b3b794fb3bf204f" kind="variable"><name>m_moveableByCollision</name></member>
+    <member refid="class_polygon_1aabde0aa076f286296be2a5a3e91b6eb0" kind="variable"><name>m_density</name></member>
+    <member refid="class_polygon_1abeba61b3ad1a2268feb5e5b68455a8b9" kind="variable"><name>m_mass</name></member>
+    <member refid="class_polygon_1ab74b324dc831b37689f497b4c8e1dabe" kind="variable"><name>m_momentOfInertia</name></member>
+    <member refid="class_polygon_1afd3913ac98e65db160c9a20f5c6076e8" kind="variable"><name>m_velocity</name></member>
+    <member refid="class_polygon_1a2ebe6c75ef6bfcad3ae3f04cb04ed5b1" kind="variable"><name>m_angularVelocity</name></member>
+    <member refid="class_polygon_1af7169e174e095973fad13620adb78a3f" kind="variable"><name>m_rigidity</name></member>
+    <member refid="class_polygon_1a86eb37b0d2b846a11b8ff384e026529f" kind="function"><name>getPixels</name></member>
+    <member refid="class_polygon_1a41b48218ddb7bba06869a75edc108ba6" kind="function"><name>contains</name></member>
+    <member refid="class_polygon_1ad32929fd8d534e13549e25b9b0726fad" kind="function"><name>contains</name></member>
+    <member refid="class_polygon_1a83af7f84793d27a041951881db7c2597" kind="function"><name>findCentroid</name></member>
+    <member refid="class_polygon_1a60bbab52a8835dd170679798210999b9" kind="function"><name>createLines</name></member>
+    <member refid="class_polygon_1aa58325851211da753e5b7fcc5ac89844" kind="function"><name>calculateMass</name></member>
+    <member refid="class_polygon_1aa27c42ef89bdced218b65477fabaf6d1" kind="function"><name>calculateMomentOfInertia</name></member>
+    <member refid="class_polygon_1a55f28f7bcae8df65ea11b99ff192b7d7" kind="function"><name>Polygon</name></member>
+    <member refid="class_polygon_1ac44cbd15f8a7a389d9f553e1bdeceea0" kind="function"><name>Polygon</name></member>
+    <member refid="class_polygon_1abb2febc822883a9bbc7fdfac64475539" kind="function"><name>Polygon</name></member>
+    <member refid="class_polygon_1ac83748b0a87551cc4e190254303f9911" kind="function"><name>Polygon</name></member>
+    <member refid="class_polygon_1a37104a58675193c3598c19b41f4eadda" kind="function"><name>Polygon</name></member>
+    <member refid="class_polygon_1af16db77f60fa0f12b72cf0517aca0669" kind="function"><name>getPointCount</name></member>
+    <member refid="class_polygon_1a336e2540d24e30a4be6be163e2137323" kind="function"><name>getPoint</name></member>
+    <member refid="class_polygon_1a5013385231c9027d00cb57dffc030ae4" kind="function"><name>getPoints</name></member>
+    <member refid="class_polygon_1acbeaa5a9990ee704fdfa766d4a34b86c" kind="function"><name>getLines</name></member>
+    <member refid="class_polygon_1aa4da77df0658cdcc0797443844c69a3f" kind="function"><name>getFarthestVertex</name></member>
+    <member refid="class_polygon_1a70345633fc22991a66923b2b9db197fc" kind="function"><name>getCentroid</name></member>
+    <member refid="class_polygon_1a0fc684c823f560d066bc8fdfe10fd8f0" kind="function"><name>setSolid</name></member>
+    <member refid="class_polygon_1a531b42b03e52789c8b9c6869933bf7d3" kind="function"><name>isSolid</name></member>
+    <member refid="class_polygon_1a5325135466047ff1a8bb215905c54c83" kind="function"><name>setRigidity</name></member>
+    <member refid="class_polygon_1a435f03ba82088fbde142d21950cfa1f3" kind="function"><name>getRigidity</name></member>
+    <member refid="class_polygon_1ac379bd1b47a91b062cb1489f4be11b2e" kind="function"><name>setMovableByCollision</name></member>
+    <member refid="class_polygon_1a83af7b70f89b8b27f5dc78f27dcd60d7" kind="function"><name>isMovableByCollision</name></member>
+    <member refid="class_polygon_1a21749fb83e0fa8fd98cf646e0e4cbadc" kind="function"><name>setDensity</name></member>
+    <member refid="class_polygon_1a93f38d702fe7c95af0ac72910c00908e" kind="function"><name>getDensity</name></member>
+    <member refid="class_polygon_1a9c5d5b2df7caf0dc80b00fbcae0a74e2" kind="function"><name>getMass</name></member>
+    <member refid="class_polygon_1af029d3b7c0e523ab07b376a193b6c7a3" kind="function"><name>getMomentOfInertia</name></member>
+    <member refid="class_polygon_1ae404b76af51f552e3bc9dc57ea1d8985" kind="function"><name>setVelocity</name></member>
+    <member refid="class_polygon_1a82909752be649f103b26657aae3ff0c9" kind="function"><name>getVelocity</name></member>
+    <member refid="class_polygon_1a9444a506f5e33f11772854396e1aae0e" kind="function"><name>setAngularVelocity</name></member>
+    <member refid="class_polygon_1a1c28d47f1c0f779cfd5ef31815046a6f" kind="function"><name>getAngularVelocity</name></member>
+    <member refid="class_polygon_1a556290c37a29ce71f8488a75509b56af" kind="function"><name>update</name></member>
+    <member refid="class_polygon_1aeb1576854a28a02afaa636aadf31b992" kind="function"><name>adjustVelocityFromCollision</name></member>
+    <member refid="class_polygon_1aacc719afa9e8befd7ab7ba5ea3eb4d24" kind="function"><name>setScale</name></member>
+    <member refid="class_polygon_1a1454b2d9f4ca39f627ea6c54a26a3287" kind="function"><name>setScale</name></member>
+    <member refid="class_polygon_1ab908fe54a3dfad70b489578b4d0f0e42" kind="function"><name>scale</name></member>
+    <member refid="class_polygon_1ac2b18a3139994184f83967add25f72aa" kind="function"><name>scale</name></member>
+    <member refid="class_polygon_1a6eaf72c376c1fc1d6a9fba7b34b2d93d" kind="function"><name>setRotation</name></member>
+    <member refid="class_polygon_1aa31dcb66b6c3bffd9643590abf805c26" kind="function"><name>rotate</name></member>
+    <member refid="class_polygon_1a79db7b74993e7c419e1e3243a6b2e4e2" kind="function"><name>setPosition</name></member>
+    <member refid="class_polygon_1a59fc0fa86f807dc3921bae20739fdbb1" kind="function"><name>setPosition</name></member>
+    <member refid="class_polygon_1a21dc29d3c6dfa6d59a4f62dc0b135e50" kind="function"><name>move</name></member>
+    <member refid="class_polygon_1ab809ff31ab4a7ec2ebe6e5b3ef2217c5" kind="function"><name>move</name></member>
+    <member refid="class_polygon_1a15574e83f243b648b0d70537b41118ae" kind="function"><name>intersects</name></member>
+    <member refid="class_polygon_1ad4a0ce3f20094604b01dd96d06257ea1" kind="function"><name>intersects</name></member>
+    <member refid="class_polygon_1ad9ce9cb3c6871e75099a261a810bedcc" kind="function"><name>intersects</name></member>
+    <member refid="class_polygon_1a24df2b2ee889cdd07ea91ccaa4810a93" kind="function"><name>intersects</name></member>
+    <member refid="class_polygon_1a713983b426b75523599e862924bca782" kind="function"><name>intersects</name></member>
+    <member refid="class_polygon_1aa1af5f5482999785aed533d16279c67b" kind="function"><name>intersects</name></member>
+    <member refid="class_polygon_1a874be1c28a2a1477d1ea5d85ece74822" kind="function"><name>intersects</name></member>
+    <member refid="class_polygon_1ab7fb23f4dbf6277688c4fb11f0a5938f" kind="function"><name>intersects</name></member>
+    <member refid="class_polygon_1a1501a824c6d97ce3ef8efc5443ab1f8e" kind="function"><name>contains</name></member>
+    <member refid="class_polygon_1a1712cd82ff38472dd9ba87f0f8b37a9f" kind="function"><name>contains</name></member>
+    <member refid="class_polygon_1a60fe86ef61eeb9903a8eef32870ea1c4" kind="function"><name>contains</name></member>
+    <member refid="class_polygon_1aea5d69a1006a0b6b08dbc3e236b302ea" kind="function"><name>contains</name></member>
+    <member refid="class_polygon_1a00dc79655e7be6b73a83414a6733ec9a" kind="function"><name>getArea</name></member>
+    <member refid="class_polygon_1a21a607cdb559f8e4a98fa54d0b9d63a9" kind="function"><name>getArea</name></member>
+  </compound>
+  <compound refid="class_triangle" kind="class"><name>Triangle</name>
+    <member refid="class_triangle_1ae9e35126df2e5ce3db20b5791b5d761a" kind="variable"><name>m_verticies</name></member>
+    <member refid="class_triangle_1abe45756d4cbd4c8a4074dd4ce3b43cb1" kind="variable"><name>m_invDenom</name></member>
+    <member refid="class_triangle_1a2f21d43300aac46f98fdbd070ab94b72" kind="variable"><name>m_v1</name></member>
+    <member refid="class_triangle_1a5f1940a5bb3b2baee99db328800cedfa" kind="variable"><name>m_v2</name></member>
+    <member refid="class_triangle_1a990a3791f8eb88b17cb4aee605ffbed4" kind="variable"><name>m_dot11</name></member>
+    <member refid="class_triangle_1a72f13ba10931c80ce9d1b967330262f2" kind="variable"><name>m_dot12</name></member>
+    <member refid="class_triangle_1a20ce56533f47f3477089a9591d15a195" kind="variable"><name>m_dot22</name></member>
+    <member refid="class_triangle_1a44fb96e6554c97ad695cc09e83ef7c22" kind="variable"><name>m_offset</name></member>
+    <member refid="class_triangle_1a4e8130e47e04037fa175b5bf5b7a291a" kind="function"><name>precomputeBarycentric</name></member>
+    <member refid="class_triangle_1ab7e2ea6c13f332ae1545455ab8a8fcec" kind="function"><name>Triangle</name></member>
+    <member refid="class_triangle_1aaefe4ed500c07918d30c6f0e286332c5" kind="function"><name>Triangle</name></member>
+    <member refid="class_triangle_1acf9ed1087565f30c1958688b77e8fecc" kind="function"><name>getVertex1</name></member>
+    <member refid="class_triangle_1aded502a5993f98594e7da89e789edd48" kind="function"><name>getVertex2</name></member>
+    <member refid="class_triangle_1a4a3727b262c60cc952f6d2bfe1dff3c4" kind="function"><name>getVertex3</name></member>
+    <member refid="class_triangle_1a72b494a788a9a0bea036011d47a79315" kind="function"><name>getVerticies</name></member>
+    <member refid="class_triangle_1ab08c9b24ff5e7cc9bc29045d13f4300e" kind="function"><name>offset</name></member>
+    <member refid="class_triangle_1affee4378730835d14e1d3db4eb2d8622" kind="function"><name>computeBarycentric</name></member>
+  </compound>
+  <compound refid="class_vector_math" kind="class"><name>VectorMath</name>
+    <member refid="class_vector_math_1ab7feb7163643f293264e51233fbcee4d" kind="function"><name>dot</name></member>
+    <member refid="class_vector_math_1af89936fd293c39ce91711a4ee51041d8" kind="function"><name>dot</name></member>
+    <member refid="class_vector_math_1aa333f14c9aaa2282ebf685e22d5a349d" kind="function"><name>cross</name></member>
+    <member refid="class_vector_math_1a8b19d8b931829c0e77672ce9d98cc7a2" kind="function"><name>cross</name></member>
+    <member refid="class_vector_math_1a0dfedf93cc0e354fc5988c2899e5e3e2" kind="function"><name>angleBetween</name></member>
+    <member refid="class_vector_math_1a3b0826708334176a87bb42379724e1a9" kind="function"><name>rotate</name></member>
+    <member refid="class_vector_math_1aeed3d06db6a54a94bdfd3224eba499c9" kind="function"><name>mag</name></member>
+    <member refid="class_vector_math_1a0c779539ea6f776b1628c48df66d2f54" kind="function"><name>normalize</name></member>
+    <member refid="class_vector_math_1a2292b414d13f5c07f3d3d3764e68584f" kind="function"><name>quadrant</name></member>
+  </compound>
+  <compound refid="namespacesf" kind="namespace"><name>sf</name>
+  </compound>
+  <compound refid="namespacestd" kind="namespace"><name>std</name>
+  </compound>
+  <compound refid="_intersects_8cpp" kind="file"><name>Intersects.cpp</name>
+  </compound>
+  <compound refid="_line_8cpp" kind="file"><name>Line.cpp</name>
+  </compound>
+  <compound refid="_line_8hpp" kind="file"><name>Line.hpp</name>
+  </compound>
+  <compound refid="main_8cpp" kind="file"><name>main.cpp</name>
+    <member refid="main_8cpp_1aca5eba8c350e01a6aff57b2637cefa23" kind="variable"><name>colors</name></member>
+    <member refid="main_8cpp_1ae66f6b31b5ad750f1fe042a706a4e3d4" kind="function"><name>main</name></member>
+  </compound>
+  <compound refid="_polygon_8cpp" kind="file"><name>Polygon.cpp</name>
+  </compound>
+  <compound refid="_polygon_8hpp" kind="file"><name>Polygon.hpp</name>
+    <member refid="_polygon_8hpp_1a07022d9d70ec844f271df1e4dbd0d831" kind="enum"><name>Detail</name></member>
+    <member refid="_polygon_8hpp_1a07022d9d70ec844f271df1e4dbd0d831a1cfdf0e8d0c87a228c1f40d9bee7888b" kind="enumvalue"><name>Less</name></member>
+    <member refid="_polygon_8hpp_1a07022d9d70ec844f271df1e4dbd0d831ad3da97e2d9aee5c8fbe03156ad051c99" kind="enumvalue"><name>More</name></member>
+    <member refid="_polygon_8hpp_1a07022d9d70ec844f271df1e4dbd0d831acb61fef1e5e79e07a80421cb9a073a80" kind="enumvalue"><name>Optimal</name></member>
+    <member refid="_polygon_8hpp_1a07022d9d70ec844f271df1e4dbd0d831a1649aed298f99d587e2eb30c1db5946b" kind="enumvalue"><name>Exact</name></member>
+  </compound>
+  <compound refid="_triangle_8cpp" kind="file"><name>Triangle.cpp</name>
+  </compound>
+  <compound refid="_triangle_8hpp" kind="file"><name>Triangle.hpp</name>
+  </compound>
+  <compound refid="_vector_math_8cpp" kind="file"><name>VectorMath.cpp</name>
+  </compound>
+  <compound refid="_vector_math_8hpp" kind="file"><name>VectorMath.hpp</name>
+  </compound>
+  <compound refid="dir_68267d1309a1af8e8297ef4c3efbcdba" kind="dir"><name>src</name>
+  </compound>
+</doxygenindex>

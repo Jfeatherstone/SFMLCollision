@@ -1,0 +1,223 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.15">
+  <compounddef id="class_vector_math" kind="class" language="C++" prot="public">
+    <compoundname>VectorMath</compoundname>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="class_vector_math_1ab7feb7163643f293264e51233fbcee4d" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void VectorMath::dot</definition>
+        <argsstring>(Vector2f v1, Vector2f v2, float &amp;value)</argsstring>
+        <name>dot</name>
+        <param>
+          <type>Vector2f</type>
+          <declname>v1</declname>
+        </param>
+        <param>
+          <type>Vector2f</type>
+          <declname>v2</declname>
+        </param>
+        <param>
+          <type>float &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/VectorMath.hpp" line="40" column="1" bodyfile="src/VectorMath.cpp" bodystart="3" bodyend="5"/>
+      </memberdef>
+      <memberdef kind="function" id="class_vector_math_1af89936fd293c39ce91711a4ee51041d8" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void VectorMath::dot</definition>
+        <argsstring>(Vector3f v1, Vector3f v2, float &amp;value)</argsstring>
+        <name>dot</name>
+        <param>
+          <type>Vector3f</type>
+          <declname>v1</declname>
+        </param>
+        <param>
+          <type>Vector3f</type>
+          <declname>v2</declname>
+        </param>
+        <param>
+          <type>float &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/VectorMath.hpp" line="41" column="1" bodyfile="src/VectorMath.cpp" bodystart="7" bodyend="9"/>
+      </memberdef>
+      <memberdef kind="function" id="class_vector_math_1aa333f14c9aaa2282ebf685e22d5a349d" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector2f</type>
+        <definition>static Vector2f VectorMath::cross</definition>
+        <argsstring>(Vector2f, Vector2f)</argsstring>
+        <name>cross</name>
+        <param>
+          <type>Vector2f</type>
+        </param>
+        <param>
+          <type>Vector2f</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/VectorMath.hpp" line="43" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_vector_math_1a8b19d8b931829c0e77672ce9d98cc7a2" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector3f</type>
+        <definition>static Vector3f VectorMath::cross</definition>
+        <argsstring>(Vector3f, Vector3f)</argsstring>
+        <name>cross</name>
+        <param>
+          <type>Vector3f</type>
+        </param>
+        <param>
+          <type>Vector3f</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/VectorMath.hpp" line="44" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_vector_math_1a0dfedf93cc0e354fc5988c2899e5e3e2" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void VectorMath::angleBetween</definition>
+        <argsstring>(Vector2f v1, Vector2f v2, float &amp;angle)</argsstring>
+        <name>angleBetween</name>
+        <param>
+          <type>Vector2f</type>
+          <declname>v1</declname>
+        </param>
+        <param>
+          <type>Vector2f</type>
+          <declname>v2</declname>
+        </param>
+        <param>
+          <type>float &amp;</type>
+          <declname>angle</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/VectorMath.hpp" line="46" column="1" bodyfile="src/VectorMath.cpp" bodystart="11" bodyend="18"/>
+      </memberdef>
+      <memberdef kind="function" id="class_vector_math_1a3b0826708334176a87bb42379724e1a9" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void VectorMath::rotate</definition>
+        <argsstring>(Vector2f &amp;p, Vector2f origin, float angle)</argsstring>
+        <name>rotate</name>
+        <param>
+          <type>Vector2f &amp;</type>
+          <declname>p</declname>
+        </param>
+        <param>
+          <type>Vector2f</type>
+          <declname>origin</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>angle</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/VectorMath.hpp" line="48" column="1" bodyfile="src/VectorMath.cpp" bodystart="20" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="function" id="class_vector_math_1aeed3d06db6a54a94bdfd3224eba499c9" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>float</type>
+        <definition>float VectorMath::mag</definition>
+        <argsstring>(Vector2f v)</argsstring>
+        <name>mag</name>
+        <param>
+          <type>Vector2f</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/VectorMath.hpp" line="50" column="1" bodyfile="src/VectorMath.cpp" bodystart="33" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="class_vector_math_1a0c779539ea6f776b1628c48df66d2f54" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void VectorMath::normalize</definition>
+        <argsstring>(Vector2f &amp;v, float magnitude=1)</argsstring>
+        <name>normalize</name>
+        <param>
+          <type>Vector2f &amp;</type>
+          <declname>v</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>magnitude</declname>
+          <defval>1</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/VectorMath.hpp" line="52" column="1" bodyfile="src/VectorMath.cpp" bodystart="37" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="class_vector_math_1a2292b414d13f5c07f3d3d3764e68584f" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int VectorMath::quadrant</definition>
+        <argsstring>(Vector2f point, Vector2f origin=Vector2f(0, 0))</argsstring>
+        <name>quadrant</name>
+        <param>
+          <type>Vector2f</type>
+          <declname>point</declname>
+        </param>
+        <param>
+          <type>Vector2f</type>
+          <declname>origin</declname>
+          <defval>Vector2f(0, 0)</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/VectorMath.hpp" line="54" column="1" bodyfile="src/VectorMath.cpp" bodystart="43" bodyend="60"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/VectorMath.hpp" line="36" column="1" bodyfile="src/VectorMath.hpp" bodystart="36" bodyend="56"/>
+    <listofallmembers>
+      <member refid="class_vector_math_1a0dfedf93cc0e354fc5988c2899e5e3e2" prot="public" virt="non-virtual"><scope>VectorMath</scope><name>angleBetween</name></member>
+      <member refid="class_vector_math_1aa333f14c9aaa2282ebf685e22d5a349d" prot="public" virt="non-virtual"><scope>VectorMath</scope><name>cross</name></member>
+      <member refid="class_vector_math_1a8b19d8b931829c0e77672ce9d98cc7a2" prot="public" virt="non-virtual"><scope>VectorMath</scope><name>cross</name></member>
+      <member refid="class_vector_math_1ab7feb7163643f293264e51233fbcee4d" prot="public" virt="non-virtual"><scope>VectorMath</scope><name>dot</name></member>
+      <member refid="class_vector_math_1af89936fd293c39ce91711a4ee51041d8" prot="public" virt="non-virtual"><scope>VectorMath</scope><name>dot</name></member>
+      <member refid="class_vector_math_1aeed3d06db6a54a94bdfd3224eba499c9" prot="public" virt="non-virtual"><scope>VectorMath</scope><name>mag</name></member>
+      <member refid="class_vector_math_1a0c779539ea6f776b1628c48df66d2f54" prot="public" virt="non-virtual"><scope>VectorMath</scope><name>normalize</name></member>
+      <member refid="class_vector_math_1a2292b414d13f5c07f3d3d3764e68584f" prot="public" virt="non-virtual"><scope>VectorMath</scope><name>quadrant</name></member>
+      <member refid="class_vector_math_1a3b0826708334176a87bb42379724e1a9" prot="public" virt="non-virtual"><scope>VectorMath</scope><name>rotate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
