@@ -9,6 +9,7 @@ over the points and update a few values.
 
 /**
  * @brief A wrapper method to check the intersection between a Polygon shape and a RectangleShape
+ * by converting it to a polygon and then using our full intersection method
  * See intersects(Polygon shape) for the full intersection method
  * 
  * @param shape The shape we are checking to be colliding with the current one
@@ -22,6 +23,7 @@ bool Polygon::intersects(RectangleShape shape) {
 
 /**
  * @brief A wrapper method to check the intersection between a Polygon shape and a CircleShape
+ * by converting it to a polygon and then using our full intersection method
  * See intersects(Polygon shape) for the full intersection method
 
  * @param shape The shape we are checking to be colliding with the current one
@@ -35,6 +37,7 @@ bool Polygon::intersects(CircleShape shape) {
 
 /**
  * @brief A wrapper method to check the intersection between a Polygon shape and a ConvexShape
+ * by converting it to a polygon and then using our full intersection method
  * See intersects(Polygon shape) for the full intersection method
  * 
  * @param shape The shape we are checking to be colliding with the current one
@@ -52,15 +55,34 @@ The big one
 This is the actual intersection method, that is called in all of the above "wrappers" for it
 */
 
+/**
+ * @brief Check the intersection between two polygon shapes. Has three levels of detection, to reduce
+ * unecessary calculations and resource usage. Returns no information about collision after-effects
+ * or resultants. For that, see intersects(Polygon shape, Vector2f& resultant).
+ * 
+ * @param shape The shape we are checking to be colliding with the current one
+ * @return true The two shapes are colliding
+ * @return false The two shapes aren't colliding
+ */
 bool Polygon::intersects(Polygon shape) {
     
-    //We first check to make sure the two polygons are actually capable of intersecting by checking their rectangular boundary
+    // We first creating a circle around our objects with the radius equal to the farthest vertex distance and see if they intersect
+    float centroidDistance = sqrt(pow((getPosition().x + getCentroid().x - getOrigin().x) - (shape.getPosition().x + shape.getCentroid().x - shape.getOrigin().x), 2)\
+     + pow((getPosition().y - getOrigin().y + getCentroid().y) - (shape.getPosition().y - shape.getOrigin().y) + shape.getCentroid().y, 2));
+
+    if (centroidDistance > getFarthestVertex() + shape.getFarthestVertex()) {
+        //cout << "Rect bounds" << endl;
+        //cout << "Vertex elim" << endl;
+        return false;
+    }
+    
+    // Next, we check to make sure the two polygons are actually capable of intersecting by checking their rectangular boundary
     FloatRect overlap;
     if (!getGlobalBounds().intersects(shape.getGlobalBounds(), overlap)) {
         //cout << "Rect bounds" << endl;
         return false;
     }
-    
+
     //The next order of business here is that we need to grab the lines of each shape 
     vector<Line> l1 = getLines();
     vector<Line> l2 = shape.getLines();
@@ -79,14 +101,22 @@ bool Polygon::intersects(Polygon shape) {
     return false;
 }
 
+/**
+ * @brief Currently WIP!!
+ * 
+ * @param shape The shape we are checking to be colliding with the current one
+ * @param resultant The resultant of the collision (i.e. how the object moves afterwards)
+ * @return true The two shapes are colliding
+ * @return false The two shapes aren't colliding
+ */
 bool Polygon::intersects(Polygon shape, Vector2f& resultant) {
     //We first check to make sure the two polygons are actually capable of intersecting by checking their circular boundary
     // This uses the farthest distance of each shape as the radius of a circle,
     
-    float centroidDistance = sqrt(pow(getCentroid().x - shape.getCentroid().x, 2)\
-     + pow(getCentroid().y - shape.getCentroid().y, 2));
+    float centroidDistance = sqrt(pow((getPosition().x + getCentroid().x - getOrigin().x) - (shape.getPosition().x + shape.getCentroid().x - shape.getOrigin().x), 2)\
+     + pow((getPosition().y - getOrigin().y + getCentroid().y) - (shape.getPosition().y - shape.getOrigin().y) + shape.getCentroid().y, 2));
 
-    if (centroidDistance > ) {
+    if (centroidDistance > getFarthestVertex() + shape.getFarthestVertex()) {
         //cout << "Rect bounds" << endl;
         return false;
     }
@@ -144,6 +174,13 @@ bool Polygon::intersects(Polygon shape, Vector2f& resultant) {
 We use conservation of momentum and conservation of energy (sorta) to figure out how things move
 after they collide
 */
+
+/**
+ * @brief Currently WIP!!
+ * 
+ * @param resultant The unit vector in the direction of the new motion
+ * @param shape The other colliding shape
+ */
 void Polygon::adjustVelocityFromCollision(Vector2f resultant, Polygon shape) {
     // Whether our collision is elastic or not
     float energyConserved = getRigidity() * shape.getRigidity();
@@ -165,16 +202,38 @@ void Polygon::adjustVelocityFromCollision(Vector2f resultant, Polygon shape) {
 
 // These next few methods are our wrappers and are more or less copied from our wrappers
 // for intersection
+
+/**
+ * @brief Not implemented!
+ * 
+ * @param shape 
+ * @return true 
+ * @return false 
+ */
 bool Polygon::contains(RectangleShape shape) {
     Polygon poly(shape);
     return contains(poly);
 }
 
+/**
+ * @brief Not implemented!
+ * 
+ * @param shape 
+ * @return true 
+ * @return false 
+ */
 bool Polygon::contains(CircleShape shape) {
     Polygon poly(shape);
     return contains(poly);
 }
 
+/**
+ * @brief Not implemented!
+ * 
+ * @param shape 
+ * @return true 
+ * @return false 
+ */
 bool Polygon::contains(ConvexShape shape) {
     Polygon poly(shape);
     return contains(poly);
@@ -183,7 +242,7 @@ bool Polygon::contains(ConvexShape shape) {
 /*
 The actual method that will be called by the above wrappers
 
-First, e check the width and height of the parameter shape against this one. If the other has a
+First, we check the width and height of the parameter shape against this one. If the other has a
 larger height or width, it cannot be inside this, and we return false
 
 Now we actually do the real calculation:
@@ -192,6 +251,14 @@ line and find how many times it intersects with the outer shape. If this amount 
 least one intersection point is on either side of the shape, the shape must be inside of the other.
 
 */
+
+/**
+ * @brief Not implemented!
+ * 
+ * @param shape 
+ * @return true 
+ * @return false 
+ */
 bool Polygon::contains(Polygon shape) {
 
 }

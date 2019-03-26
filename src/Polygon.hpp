@@ -67,7 +67,7 @@ private:
     */
     int m_numVerticies;
     Vector2f m_centroid;
-    float m_farthestVertex;
+    Vector2f m_farthestVertex;
     float m_area;
 
     /*

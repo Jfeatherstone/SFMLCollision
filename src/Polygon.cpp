@@ -923,11 +923,16 @@ void Polygon::findCentroid() {
     m_centroid.x = left + (right - left) / 2;
     m_centroid.y = top + (bottom - top) / 2;
 
+    float previousFarthest = 0;
+
     // Now, we record the farthest vertex from the centroid
     for (int i = 0; i < m_numVerticies; i++) {
         float d = sqrt(pow(m_centroid.x - m_points[i].x , 2) + pow(m_centroid.y - m_points[i].y, 2));
-        if (d > m_farthestVertex)
-            m_farthestVertex = d;
+        if (d > previousFarthest) {
+            previousFarthest = d;
+            m_farthestVertex.x = m_centroid.x - m_points[i].x;
+            m_farthestVertex.y = m_centroid.y - m_points[i].y;
+        }
     }
 }
 
@@ -1133,7 +1138,7 @@ float Polygon::getFarthestVertex() {
     Since we use this method to detect collisions, we also want to update the lines before we do calculations
     with them. This is done through the createLines() method, which accounts for rotation and scale.
     */
-    return m_farthestVertex;
+    return sqrt(pow(m_farthestVertex.x * getScale().x, 2) + pow(m_farthestVertex.y * getScale().y, 2));
 }
 
 /**
