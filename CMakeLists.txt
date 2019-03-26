@@ -8,7 +8,7 @@ project(collision)
 file(GLOB SRC src/*.cpp)
 
 # Set our include directories
-include_directories(src/)
+include_directories(include/)
 
 # This imports the sfml libraries
 find_package(SFML 2.5 COMPONENTS system window graphics audio REQUIRED)

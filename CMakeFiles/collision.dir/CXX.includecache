@@ -10,7 +10,23 @@
 Polygon.hpp
 /home/jack/cpp-workspace/SFMLCollision/src/Polygon.hpp
 
+/home/jack/cpp-workspace/SFMLCollision/src/Line.cpp
+Line.hpp
 /home/jack/cpp-workspace/SFMLCollision/src/Line.hpp
+
+/home/jack/cpp-workspace/SFMLCollision/src/Polygon.cpp
+Polygon.hpp
+/home/jack/cpp-workspace/SFMLCollision/src/Polygon.hpp
+
+/home/jack/cpp-workspace/SFMLCollision/src/VectorMath.cpp
+VectorMath.hpp
+/home/jack/cpp-workspace/SFMLCollision/src/VectorMath.hpp
+
+/home/jack/cpp-workspace/SFMLCollision/src/main.cpp
+Polygon.hpp
+/home/jack/cpp-workspace/SFMLCollision/src/Polygon.hpp
+
+include/Line.hpp
 SFML/Graphics.hpp
 -
 iostream
@@ -18,13 +34,9 @@ iostream
 tgmath.h
 -
 VectorMath.hpp
-/home/jack/cpp-workspace/SFMLCollision/src/VectorMath.hpp
+include/VectorMath.hpp
 
-/home/jack/cpp-workspace/SFMLCollision/src/Polygon.cpp
-Polygon.hpp
-/home/jack/cpp-workspace/SFMLCollision/src/Polygon.hpp
-
-/home/jack/cpp-workspace/SFMLCollision/src/Polygon.hpp
+include/Polygon.hpp
 SFML/Graphics.hpp
 -
 iostream
@@ -32,11 +44,11 @@ iostream
 tgmath.h
 -
 Line.hpp
-/home/jack/cpp-workspace/SFMLCollision/src/Line.hpp
+include/Line.hpp
 VectorMath.hpp
-/home/jack/cpp-workspace/SFMLCollision/src/VectorMath.hpp
+include/VectorMath.hpp
 
-/home/jack/cpp-workspace/SFMLCollision/src/VectorMath.hpp
+include/VectorMath.hpp
 SFML/Graphics.hpp
 -
 tgmath.h

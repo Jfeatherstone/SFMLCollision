@@ -3,27 +3,23 @@
 
 CMakeFiles/collision.dir/src/Intersects.cpp.o
  /home/jack/cpp-workspace/SFMLCollision/src/Intersects.cpp
- /home/jack/cpp-workspace/SFMLCollision/src/Line.hpp
- /home/jack/cpp-workspace/SFMLCollision/src/Polygon.hpp
- /home/jack/cpp-workspace/SFMLCollision/src/VectorMath.hpp
+ include/Line.hpp
+ include/Polygon.hpp
+ include/VectorMath.hpp
 CMakeFiles/collision.dir/src/Line.cpp.o
  /home/jack/cpp-workspace/SFMLCollision/src/Line.cpp
- /home/jack/cpp-workspace/SFMLCollision/src/Line.hpp
- /home/jack/cpp-workspace/SFMLCollision/src/VectorMath.hpp
+ include/Line.hpp
+ include/VectorMath.hpp
 CMakeFiles/collision.dir/src/Polygon.cpp.o
- /home/jack/cpp-workspace/SFMLCollision/src/Line.hpp
  /home/jack/cpp-workspace/SFMLCollision/src/Polygon.cpp
- /home/jack/cpp-workspace/SFMLCollision/src/Polygon.hpp
- /home/jack/cpp-workspace/SFMLCollision/src/VectorMath.hpp
-CMakeFiles/collision.dir/src/Triangle.cpp.o
- /home/jack/cpp-workspace/SFMLCollision/src/Triangle.cpp
- /home/jack/cpp-workspace/SFMLCollision/src/Triangle.hpp
- /home/jack/cpp-workspace/SFMLCollision/src/VectorMath.hpp
+ include/Line.hpp
+ include/Polygon.hpp
+ include/VectorMath.hpp
 CMakeFiles/collision.dir/src/VectorMath.cpp.o
  /home/jack/cpp-workspace/SFMLCollision/src/VectorMath.cpp
- /home/jack/cpp-workspace/SFMLCollision/src/VectorMath.hpp
+ include/VectorMath.hpp
 CMakeFiles/collision.dir/src/main.cpp.o
- /home/jack/cpp-workspace/SFMLCollision/src/Line.hpp
- /home/jack/cpp-workspace/SFMLCollision/src/Polygon.hpp
- /home/jack/cpp-workspace/SFMLCollision/src/VectorMath.hpp
  /home/jack/cpp-workspace/SFMLCollision/src/main.cpp
+ include/Line.hpp
+ include/Polygon.hpp
+ include/VectorMath.hpp

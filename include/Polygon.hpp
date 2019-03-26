@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2018 Jack Featherstone
+Copyright (c) 2019 Jack Featherstone
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,22 +35,39 @@ SOFTWARE.
 using namespace sf;
 using namespace std;
 
-/*
-We can assume that the polygon class will be used for a variety of different objects,
-some of which will require more accurate and representative shapes than others. Because of
-this, we will give the user the option to specifiy whether or not to simplify the polygon by
-a certain degree on its creation.
-
-Note: This option is only present and important in the creation of polygons through a texture.
-If instead a vector of verticies is provided, this enum is irrelevant, which is why our class
-doesn't have a member variable to store the level of detail,  since it is only used in the
-constructor.
-*/
-
+/**
+ * @brief We can assume that the polygon class will be used for a variety of different objects,
+ * some of which will require more accurate and representative shapes than others. Because of
+ * this, we will give the user the option to specifiy whether or not to simplify the polygon by
+ * a certain degree on its creation.
+ * 
+ * Note: This option is only present and important in the creation of polygons through a texture.
+ * If instead a vector of verticies is provided, this enum is irrelevant, which is why our class
+ * doesn't have a member variable to store the level of detail,  since it is only used in the
+ * constructor.
+ */
 enum class Detail {Less, More, Optimal, Exact};
 
-
-
+/**
+ * @brief The polygon object is the most important aspect of our collisions class, and accounts for most
+ * of what will likely be used externally. Polygons can be created through either a texture, a vector of points,
+ * or any other child class of sf::Shape (CircleShape, RectangleShape, etc.). 
+ * Polygon objects act very similarly to the other sf::Shape classes, being able to be drawn by a RenderWindow 
+ * and are able to be transformed by any method from sf::Transformable. On top of these stock attributes, Polygons
+ * are also able to be either convex or concave (unlike convexshape) and have a method to detect collision between 
+ * two instances of the class, or between the class and any other sf::Shape class.
+ * With this ability comes a few more paramters that can be changed about the shape, including the density, rigidity,
+ * moment of inertia, etc. that all affect how a shape reacts to colliding with another shape.
+ * 
+ * Dependencies:
+ * <SFML/Graphics.hpp>
+ * <iostream>
+ * <tgmath.h>
+ * 
+ * Namespaces:
+ * sf (SFML)
+ * std (Standard)
+ */
 class Polygon: public Shape {
 
 private:

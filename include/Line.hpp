@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2018 Jack Featherstone
+Copyright (c) 2019 Jack Featherstone
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -41,6 +41,21 @@ This line class will be used for two main purposes:
 
 */
 
+/**
+ * @brief The line class is integral to detecting collisions between polygon classes, and thus is used
+ * internalling in the intersection method, and Polygon objects. A note about these is that the name is
+ * a slight misnomer, in that by default, the lines are actually line segments, having a finite length
+ * and a start and end point.
+ * 
+ * Dependencies:
+ * <SFML/Graphics.hpp>
+ * <iostream>
+ * <tgmath.h>
+ * 
+ * Namespaces:
+ * sf (SFML)
+ * std (Standard)
+ */
 class Line {
 
 private:

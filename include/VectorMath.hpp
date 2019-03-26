@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2018 Jack Featherstone
+Copyright (c) 2019 Jack Featherstone
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,10 +29,20 @@ SOFTWARE.
 
 using namespace sf;
 
-/*
-    Some basic functions for some of SFML vector classes, mainly Vector2f and Vector3f
-*/
-
+/**
+ * @brief This class contains several different mathematical operations and calculations used
+ * to apply transformations, find dot/cross products, and several other use cases. All methods
+ * defined in this class are static (and any new additions should follow suit), though there is
+ * no other connection between the functions. Also, not all functions use vectors, as the name
+ * might suggest, but rather that they have to deal with directionality.
+ * 
+ * Dependencies:
+ * <SFML/Graphics.hpp> (Vector2f and Vector3f)
+ * <tgmath.h> (cos and sin)
+ * 
+ * Namespaces:
+ * sf (SFML)
+ */
 class VectorMath {
 
 public:
