@@ -74,6 +74,8 @@ private:
 
     const float DEFAULT_DENSITY = 1.f;
 
+    const float VELOCITY_THRESHOLD = 1.0f;
+
     /*
     An array of points that define our shape
     */
@@ -96,15 +98,16 @@ private:
     
     // Whether our shape is solid or not
     bool m_isSolid = true; // True by default
-    bool m_moveableByCollision = false; // If our shape can be moved by another hitting it
+    bool m_moveableByCollision = true; // If our shape can be moved by another hitting it
     float m_density = DEFAULT_DENSITY;
     float m_mass; // Mass found from area times density
     float m_momentOfInertia; // How our object rotates about its origin
+    Vector2f m_centerOfMass;
 
     // Since this is more or a less a lite physics engine, we need to keep track of the object's
     // velocity
-    Vector2f m_velocity;
-    float m_angularVelocity;
+    Vector2f m_velocity = Vector2f(0, 0);
+    float m_angularVelocity = 0;
 
     // The rigidity is how velocity is conserved when an object bounces off
     // 1 means it loses no velocity (elastic), 0 means it sticks (inelastic)
@@ -171,6 +174,8 @@ public:
     float getMass();
     float getMomentOfInertia();
     
+    Vector2f getCenterOfMass();
+
     /*
     We need to be able to apply a velocity to our shape and iterate it through every frame
     */
@@ -180,7 +185,7 @@ public:
     float getAngularVelocity();
 
     void update(float elapsedTime);
-    void adjustVelocityFromCollision(Vector2f resultant, Polygon shape);
+    void adjustVelocityFromCollision(Vector2f resultant, Vector2f collisionPoint, Polygon& shape);
 
     /*
     These methods a pseudo-overriden in that they reference their super class
@@ -219,7 +224,7 @@ public:
     We also may want to know which direction to move the objects after they have collided, so we can do that
     by passing in a reference to a vector
     */
-    bool intersects(Polygon shape, Vector2f& resultant);
+    bool intersects(Polygon& shape, Vector2f& resultant);
     bool intersects(RectangleShape shape, Vector2f& resultant);
     bool intersects(CircleShape shape, Vector2f& resultant);
     bool intersects(ConvexShape shape, Vector2f& resultant);

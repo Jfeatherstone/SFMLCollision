@@ -1,6 +1,8 @@
 #include "Polygon.hpp"
+#include <SFML/Graphics.hpp>
+#include <sstream>
 
-Color colors[] = {Color::Red, Color::Yellow, Color::Green, Color::Blue, Color::Magenta};
+/*Color colors[] = {Color::Red, Color::Yellow, Color::Green, Color::Blue, Color::Magenta};
 
 int main() {
 
@@ -27,7 +29,7 @@ int main() {
     
     /*
     // VERTEX DEBUGGING
-    cout << "Less: " << poly.getPointCount() << endl;
+    cout << "Less: " << poly.getPointCount() << endl;test
     cout << "More: " << poly2.getPointCount() << endl;
     cout << "Perfect: " << poly3.getPointCount() << endl;
     */
@@ -41,7 +43,7 @@ int main() {
     Line l2(Vector2f(0, 0), Vector2f(0, 100));
     l2.offset(Vector2f(100, 100));
     cout << "L1 angle: " << l1.getAngle() / (M_PI / 180.0f) << endl;
-    */
+    ///
 
     // SETUP THE WINDOW
     RenderWindow window;
@@ -93,7 +95,7 @@ int main() {
         window.draw(poly2);
         //window.draw(poly3);
         window.setTitle((poly2.intersects(poly)) ? "Colliding" : "Not colliding!");
-        //*/
+        //
 
         ///*
         // LINE ALIGNMENT TESTING
@@ -115,11 +117,107 @@ int main() {
             if (i > 4)
                 i = 0;
         }
-        //*/
+        //
 
         // SHOW 
         window.display();
     }
     
+    return 0;
+}
+*/
+
+int main() {
+
+    Clock timeSinceCircle;
+    Clock clock;
+
+    Texture* binTex = new Texture();
+    binTex->loadFromFile("Images/bin.png");
+
+    Polygon bin(binTex, Detail::Exact);
+    bin.setOrigin(bin.getCentroid());
+    bin.setPosition(250, 150);
+    bin.setFillColor(Color::Blue);
+    bin.setScale(14, 16);
+    bin.setMovableByCollision(false);
+    bin.setRigidity(.9f);
+
+    cout << bin.getPointCount() << endl;
+
+    // SETUP THE WINDOW
+    RenderWindow window;
+    window.create(VideoMode(500, 400), "Ball Simulation", Style::Default);
+    window.setFramerateLimit(60);
+
+    // Array of current objects to check collisions
+    vector<Polygon> objects;
+
+    //RectangleShape c;
+    //c.setSize(Vector2f(30, 30));
+    CircleShape c(20);
+
+    Vector2f gravity(0, 1000);
+
+    while (window.isOpen()) {
+        float elapsed = clock.restart().asSeconds();
+        Vector2f res;
+        
+        for (int i = 0; i < objects.size(); i++) {
+            // Apply gravity
+            bool colliding = false;
+
+            colliding = objects[i].intersects(bin, res);
+                
+
+            for (int j = 0; j < objects.size(); j++) {
+                if (j != i) {
+                    if (objects[i].intersects(objects[j], res))
+                        colliding = true;
+                }
+            }
+
+            if (!colliding)
+                objects[i].setVelocity(objects[i].getVelocity() + gravity * elapsed);
+
+            objects[i].update(elapsed);
+
+            //cout << objects[i].getAngularVelocity() << endl;
+        }
+
+        // Add balls at the mouse position on click
+        if (Mouse::isButtonPressed(Mouse::Button::Left) && timeSinceCircle.getElapsedTime().asSeconds() > .1) {
+            //cout << "Added ball!" << endl;
+            Polygon ball(c);
+            ball.setOrigin(ball.getCentroid());
+            ball.setPosition( (Vector2f)(Mouse::getPosition() - window.getPosition()));
+            if (!ball.intersects(bin)) {
+                ball.setRigidity(.90f);
+                objects.push_back(ball);
+                stringstream s;
+                s << "Polyon Test (" << objects.size() << ")";
+                window.setTitle(s.str());
+                timeSinceCircle.restart();
+            }
+        }
+
+        window.clear();
+
+        for (Line l: bin.getLines()) {
+            window.draw(*l.getDrawable());
+        }
+
+        for (Polygon p: objects) {
+            for (Line l: p.getLines()) {
+                window.draw(*l.getDrawable());
+            }
+
+            //window.draw(p);
+        }
+        //cout << objects.size() << endl;
+
+        window.display();
+    }
+
     return 0;
 }

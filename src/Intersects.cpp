@@ -109,7 +109,7 @@ bool Polygon::intersects(Polygon shape) {
  * @return true The two shapes are colliding
  * @return false The two shapes aren't colliding
  */
-bool Polygon::intersects(Polygon shape, Vector2f& resultant) {
+bool Polygon::intersects(Polygon& shape, Vector2f& resultant) {
     //We first check to make sure the two polygons are actually capable of intersecting by checking their circular boundary
     // This uses the farthest distance of each shape as the radius of a circle,
     
@@ -117,6 +117,14 @@ bool Polygon::intersects(Polygon shape, Vector2f& resultant) {
      + pow((getPosition().y - getOrigin().y + getCentroid().y) - (shape.getPosition().y - shape.getOrigin().y) + shape.getCentroid().y, 2));
 
     if (centroidDistance > getFarthestVertex() + shape.getFarthestVertex()) {
+        //cout << "Rect bounds" << endl;
+        //cout << "Vertex elim" << endl;
+        return false;
+    }
+    
+    // Next, we check to make sure the two polygons are actually capable of intersecting by checking their rectangular boundary
+    FloatRect overlap;
+    if (!getGlobalBounds().intersects(shape.getGlobalBounds(), overlap)) {
         //cout << "Rect bounds" << endl;
         return false;
     }
@@ -135,16 +143,19 @@ bool Polygon::intersects(Polygon shape, Vector2f& resultant) {
     We also record the points at which each pair of lines intersect
     */
     vector<Line> intersectingLines;
+    vector<Vector2f> intersectingPoints;
 
     for (int i = 0; i < l1.size(); i++) {
         for (int j = 0; j < l2.size(); j++) {
-            if (l1[i].intersects(l2[j])) {
+            Vector2f p;
+            if (l1[i].intersects(l2[j], p)) {
                 //cout << i << " " << j << endl;
                 intersectingLines.push_back(l2[j]);
+                intersectingPoints.push_back(p);
             }
         }
     }
-    
+
     if (intersectingLines.size() == 0)
         return false;
 
@@ -152,22 +163,35 @@ bool Polygon::intersects(Polygon shape, Vector2f& resultant) {
     // This actually means we just take the average of their slopes
     float averageSlope = 0;
     for (Line l: intersectingLines) {
+        cout << l.getSlope() << endl;
         averageSlope += l.getSlope();
     }
     averageSlope /= intersectingLines.size();
 
     // Take the negative reciprical of the slope
-    float pSlope = -1 / averageSlope;
+    float pSlope = -1.0f / averageSlope;
+
+    cout << pSlope << endl;
 
     // Now our slope is y/x, so our vector is (1, slope)
-    Vector2f perpendicular(1, pSlope);
+    Vector2f perpendicular(pSlope, 1);
     
     // And normalize it
     VectorMath::normalize(perpendicular);
 
-    adjustVelocityFromCollision(perpendicular, shape);
+    //cout << intersectingLines.size() << endl;
 
+    // Since there could be more than one collision point, we want to take the average
+    Vector2f averageCollision(0, 0);
+    for (Vector2f p: intersectingPoints) {
+        averageCollision += p;
+    }
+    averageCollision.x /= intersectingPoints.size();
+    averageCollision.y /= intersectingPoints.size();
+
+    adjustVelocityFromCollision(perpendicular, averageCollision, shape);
     return true;
+
 }
 
 /*
@@ -181,11 +205,110 @@ after they collide
  * @param resultant The unit vector in the direction of the new motion
  * @param shape The other colliding shape
  */
-void Polygon::adjustVelocityFromCollision(Vector2f resultant, Polygon shape) {
+void Polygon::adjustVelocityFromCollision(Vector2f resultant, Vector2f collisionPoint, Polygon& shape) {
+
+    Vector2f v1f;
+    Vector2f v2f;
+    
+    // This one's really simple
+    if (!isMovableByCollision() && shape.isMovableByCollision()) {
+        //cout << "This immovable" << endl;
+        float loss = getRigidity() * shape.getRigidity();
+        v1f = getVelocity(); // Doesn't change
+        v1f = -1.0f * VectorMath::mag(shape.getVelocity() + getVelocity()) * resultant - getVelocity();
+        shape.setVelocity(loss * v2f);
+        return;
+    }
+
+    if (!shape.isMovableByCollision() && isMovableByCollision()) {
+        //cout << "Shape immovable" << endl;        
+        float loss = getRigidity() * shape.getRigidity();
+        v2f = shape.getVelocity(); // Doesn't change
+        v1f = -1.0f * VectorMath::mag(shape.getVelocity() + getVelocity()) * resultant - shape.getVelocity();
+        setVelocity(loss * v1f);
+        return;
+    }
+    
+    // We are going to rename some variables so we can simplify the montrous equations below
+    float ma = getMass();
+    float mb = shape.getMass();
+    float e = getRigidity() * shape.getRigidity();
+    float Ia = getMomentOfInertia();
+    float Ib = getMomentOfInertia();
+    Vector2f ra = -(getPosition() - getOrigin() + getCenterOfMass()) + collisionPoint;
+    Vector2f rb = -(shape.getPosition() - shape.getOrigin() + shape.getCenterOfMass()) + collisionPoint;
+    Vector2f v1i = getVelocity();
+    Vector2f v2i = shape.getVelocity();
+
+    v1f = v1i * (ma-mb)/(ma+mb) + v2i * (2*mb)/(ma+mb);
+    v2f = v2i * (ma-mb)/(ma+mb) + v1i * (2*ma)/(ma+mb);
+
+    //cout << resultant.x << " " << resultant.y << endl;
+
+    setVelocity(v1f);
+    shape.setVelocity(v2f);
+
+    /*
+    const float MIN_DISPLACEMENT = .01f;
+
+    float poly1TransKE0 = (.5f) * getMass() * pow(VectorMath::mag(getVelocity()), 2);
+    float poly2TransKE0 = (.5f) * shape.getMass() * pow(VectorMath::mag(shape.getVelocity()), 2);
+
+    float initialKineticEnergy = poly1TransKE0 + poly2TransKE0;
+
+    // We want to model things as springs, with a displacement based on the rigidity of both shapes
+    float displacement = MIN_DISPLACEMENT / (pow(getRigidity() * shape.getRigidity(), 2));
+
+    VectorMath::normalize(resultant, displacement);
+
+    float k = 2.0f * initialKineticEnergy / (displacement*displacement);
+
+    //cout << k << endl;
+
+    Vector2f averageForce = -.5f * k * resultant;
+    
+    float w = sqrt(k/getMass());
+
+    Vector2f impulse = averageForce * (3.14f)/w;
+
+    //cout << impulse.x << " " << impulse.y << endl;
+
+    v1f.x = (getMass() * getVelocity().x + impulse.x) / getMass();
+    v1f.y = (getMass() * getVelocity().y + impulse.y) / getMass();
+    
+    v2f.x = (shape.getMass() * shape.getVelocity().x - impulse.x) / shape.getMass();
+    v2f.y = (shape.getMass() * shape.getVelocity().y - impulse.y) / shape.getMass();
+
+
+    float loss = getRigidity() * shape.getRigidity();
+
+    //VectorMath::normalize(v1f, loss * VectorMath::mag((shape.getMass() / (shape.getMass() + getMass())) * (shape.getVelocity() + getVelocity())));
+    //VectorMath::normalize(v2f, loss * VectorMath::mag((getMass() / (shape.getMass() + getMass())) * (getVelocity() + shape.getVelocity())));
+    VectorMath::normalize(v1f, loss * VectorMath::mag(getVelocity()));
+    VectorMath::normalize(v2f, loss * VectorMath::mag(shape.getVelocity()));
+
+    
+
+    // Make sure we don't get nan
+    if ((v1f.x >= 0 || v1f.x <= 0) && (v1f.y >= 0 || v1f.y <= 0)) {
+        setVelocity(v1f);
+        shape.setVelocity(v2f);
+    }
+    */
+
+    /*
     // Whether our collision is elastic or not
     float energyConserved = getRigidity() * shape.getRigidity();
 
+    // The values we are solving for
+    float v1f = 0;
+    float v2f = 0;
+    float w1f = 0;
+    float w2f = 0;
+
     Vector2f initialLinearMomentum = getVelocity() * getMass() + shape.getVelocity() * shape.getMass();
+
+    float initialAngularMomentum = getAngularVelocity()*getMomentOfInertia() + shape.getAngularVelocity()*shape.getMomentOfInertia();
 
     float poly1TransKE0 = (1/2) * getMass() * pow(VectorMath::mag(getVelocity()), 2);
     float poly2TransKE0 = (1/2) * shape.getMass() * pow(VectorMath::mag(shape.getVelocity()), 2);
@@ -194,6 +317,48 @@ void Polygon::adjustVelocityFromCollision(Vector2f resultant, Polygon shape) {
     float poly2RotKE0 = (1/2) * shape.getMomentOfInertia() * pow(shape.getAngularVelocity(), 2);
 
     float initialKineticEnergy = poly1TransKE0 + poly1RotKE0 + poly2TransKE0 + poly2RotKE0;
+
+    float forceShape1On2 = 1;
+    float forceShape2On1 = -forceShape1On2;
+
+    // Since we need to solve for 4 variables (v1f, v2f, w1f, w2f) but only have 3 equations,
+    // we can approximate that after a collision, on one object will be rotating
+    // We decide which object rotates by which is hit further from their centroid (more torque)
+
+    float averageDistance1 = 0;
+    float averageDistance2 = 0;
+
+    for (Vector2f v: collisionPoints) {
+
+        averageDistance1 += VectorMath::mag(getCentroid() + (getPosition() - getOrigin()) - v);
+        averageDistance2 += VectorMath::mag(shape.getCentroid() + (shape.getPosition() - shape.getOrigin()) - v);
+    }
+
+    averageDistance1 /= collisionPoints.size();
+    averageDistance2 /= collisionPoints.size();
+
+    bool thisRotates = averageDistance1 > averageDistance2;
+
+    // We can then easily calculate both angular velocities
+    if (thisRotates) {
+        w2f = 0;
+        w1f = initialAngularMomentum / getMomentOfInertia();
+    } else {
+        w1f = 0;
+        w2f = initialAngularMomentum / shape.getMomentOfInertia();
+    }
+
+    float finalAngularKineticEnergy = (1/2) * shape.getMomentOfInertia() * pow(w2f, 2) + (1/2) * getMomentOfInertia() * pow(w1f, 2);
+
+    // Now, by solving our systems of equations, we get the following quadratic
+    float c = (1/2) * pow(VectorMath::mag(initialLinearMomentum), 2) / getMass() + finalAngularKineticEnergy - initialKineticEnergy;
+    float b = - VectorMath::mag(initialLinearMomentum) * shape.getMass() / getMass();
+    float a = (1/2) * (pow(shape.getMass(), 2)/getMass() + shape.getMass());
+
+    float solutions[2] = {(-b + sqrt(pow(b, 2) - 4*a*c))/(2*a), (-b - sqrt(pow(b, 2) - 4*a*c))/(2*a)};
+    cout << solutions[0] << " " << solutions[1] << endl;
+    //*/
+
 }
 
 //////////////////////////////////////////

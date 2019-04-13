@@ -206,7 +206,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         }
     } 
 
-    /*
+    ///*
     ///////////////////////////////////////////////
     // Print out our current verticies to help debug
     cout << endl;
@@ -218,7 +218,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     }
     cout << "\n\n";
     ///////////////////////////////////////////////
-    */
+    //*/
 
     ///////////////////////////////////////////
     //     Removing the inside
@@ -252,13 +252,15 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             if ((hitboxInclude[i*textureSize.x + j - 1] == 1 && i*textureSize.x + j - 1 >= i*textureSize.x)
             && (hitboxInclude[i*textureSize.x + j + 1] == 1 && i*textureSize.x + j + 1 < (i+1)*textureSize.x)
             && (hitboxInclude[(i-1)*textureSize.x + j] == 1) && (hitboxInclude[(i+1)*textureSize.x + j] == 1)
-            && ((i+1)*textureSize.x + j < hitboxInclude.size() && (i-1) >= 0))
+            && ((i+1)*textureSize.x + j < hitboxInclude.size() && (i-1) >= 0)
+            && (hitboxInclude[(i-1)*textureSize.x + j - 1] == 1) && (hitboxInclude[(i-1)*textureSize.x + j + 1] == 1)
+            && (hitboxInclude[(i+1)*textureSize.x + j - 1] == 1) && (hitboxInclude[(i+1)*textureSize.x + j + 1] == 1))            
                 newHitbox[i*textureSize.x + j] = 2;
         }
     }
     hitboxInclude = newHitbox;
 
-    /*
+    ///*
     ///////////////////////////////////////////////
     // Print out our current verticies to help debug
     cout << endl;
@@ -270,7 +272,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     }
     cout << "\n\n";
     ///////////////////////////////////////////////
-    */
+    //*/
 
     /*****************************************
      *      Remove excess verticies
@@ -280,6 +282,10 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     for (int i = 0; i < textureSize.y; i++) {
         for (int j = 0; j < textureSize.x; j++) {
             
+            // We don't change inside points
+            if (hitboxInclude[i*textureSize.x + j] == 2)
+                continue;
+
             // This just checks that both the left and right pixels are either on a different line or are included.
             if ((hitboxInclude[i*textureSize.x + j - 1] == 1 && i*textureSize.x + j - 1 >= i*textureSize.x)
             && (hitboxInclude[i*textureSize.x + j + 1] == 1 && i*textureSize.x + j + 1 < (i+1)*textureSize.x))
@@ -294,7 +300,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     }
     hitboxInclude = newHitbox;
 
-    /*
+    ///*
     ///////////////////////////////////////////////
     // Print out our current verticies to help debug
     cout << endl;
@@ -306,7 +312,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     }
     cout << "\n\n";
     ///////////////////////////////////////////////
-    */
+    //*/
 
     /*
     Remove diagonal verticies
@@ -369,7 +375,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         }
     }
 
-    /*
+    ///*
     ///////////////////////////////////////////////
     // Print out our current verticies to help debug
     cout << endl;
@@ -381,7 +387,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     }
     cout << "\n\n";
     ///////////////////////////////////////////////
-    */
+    //*/
 
     /*
     Remove diagonal verticies part 2 - Lines
@@ -416,7 +422,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         }
     }
 
-    /*
+    ///*
     ///////////////////////////////////////////////
     // Print out our current verticies to help debug
     cout << endl;
@@ -428,7 +434,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     }
     cout << "\n\n";
     ///////////////////////////////////////////////
-    */
+    //*/
 
     //////////////////////////////////////////
     //      Add verticies in order
@@ -465,18 +471,20 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
     cout << m_numVerticies << endl;
 
+    Vector2f previousMovement(0, 0);
+
     while (vertexIndex < m_numVerticies) {
         if (hitboxInclude[currPixel.y*textureSize.x + currPixel.x] == 1 || hitboxInclude[currPixel.y*textureSize.x + currPixel.x] == 3) {
             // Even if it isn't an actual vertex, we record it in our other vector
             hitboxVerticies.push_back(currPixel);
-            //cout << currPixel.x << " " << currPixel.y;
+            cout << currPixel.x << " " << currPixel.y;
 
             if (hitboxInclude[currPixel.y*textureSize.x + currPixel.x] == 1) {
                 // We record the vertex in our polygon
-                //cout << " - Added " << vertexIndex << endl;
+                cout << " - Added " << vertexIndex << endl;
                 m_points[vertexIndex++] = currPixel;
             } else {
-                //cout << endl;
+                cout << endl;
             }
             // We now look for the next pixel that is marked either as a 3 or a 1
             /*
@@ -486,6 +494,18 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             //for (Vector2f v: m_hitboxVertices)
               //  cout << v.x << " " << v.y << " --- ";
 
+            // First check the direction we moved in last
+            if (previousMovement != Vector2f(0, 0)) {
+                Vector2f newPixel = currPixel + previousMovement;
+
+                if ((hitboxInclude[(newPixel.y)*textureSize.x + newPixel.x] == 1 
+                || hitboxInclude[(newPixel.y)*textureSize.x + newPixel.x] == 3)
+                && ((newPixel.x) >= 0 && newPixel.x < textureSize.x && (newPixel.y)*textureSize.x + newPixel.x < hitboxInclude.size())
+                && !contains(hitboxVerticies, newPixel)) {
+                    currPixel = newPixel;
+                    continue;
+                }
+            }
 
             // Top
             if ((hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x] == 1 
@@ -494,6 +514,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             && !contains(hitboxVerticies, Vector2f(currPixel.x, currPixel.y - 1))) {
                 currPixel.x += 0;
                 currPixel.y += -1;
+                previousMovement = Vector2f(0, -1);
                 continue;
             } else
             // Top right
@@ -504,6 +525,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             && !contains(hitboxVerticies, Vector2f(currPixel.x + 1, currPixel.y - 1))) {
                 currPixel.x += 1;
                 currPixel.y += -1;
+                previousMovement = Vector2f(1, -1);
                 continue;
             } else
             // Right
@@ -514,6 +536,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             && !contains(hitboxVerticies, Vector2f(currPixel.x + 1, currPixel.y))) {
                 currPixel.x += 1;
                 currPixel.y += 0;
+                previousMovement = Vector2f(1, 0);
                 continue;
             } else
             // Bottom right
@@ -524,6 +547,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             && !contains(hitboxVerticies, Vector2f(currPixel.x + 1, currPixel.y + 1))) {
                 currPixel.x += 1;
                 currPixel.y += 1;
+                previousMovement = Vector2f(1, 1);
                 continue;
             } else
             // Bottom
@@ -533,6 +557,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             && !contains(hitboxVerticies, Vector2f(currPixel.x, currPixel.y + 1))) {
                 currPixel.x += 0;
                 currPixel.y += 1;
+                previousMovement = Vector2f(0, 1);
                 continue;
             } else
             // Bottom left
@@ -543,6 +568,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             && !contains(hitboxVerticies, Vector2f(currPixel.x - 1, currPixel.y + 1))) {
                 currPixel.x += -1;
                 currPixel.y += 1;
+                previousMovement = Vector2f(-1, 1);
                 continue;
             } else
             // Left
@@ -553,6 +579,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             && !contains(hitboxVerticies, Vector2f(currPixel.x - 1, currPixel.y))) {
                 currPixel.x += -1;
                 currPixel.y += 0;
+                previousMovement = Vector2f(-1, 0);
                 continue;
             } else
             // Top left
@@ -563,6 +590,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             && !contains(hitboxVerticies, Vector2f(currPixel.x - 1, currPixel.y - 1))) {
                 currPixel.x += -1;
                 currPixel.y += -1;
+                previousMovement = Vector2f(-1, -1);
                 continue;
             } else {
                 //cout << "Done" << endl;
@@ -988,6 +1016,8 @@ void Polygon::calculateMass() {
  * centroid to every vertex on the boundary. Only has value when comparing moment of inertia's between
  * shapes, doesn't give the actual moment of inertia of a real object.
  * 
+ * Todo: Make this use the average point location times the mass
+ * 
  */
 void Polygon::calculateMomentOfInertia() {
     // We assume a uniform distribution of density throughout the object
@@ -1000,14 +1030,28 @@ void Polygon::calculateMomentOfInertia() {
 
     This makes the calculation super easy, as we just add up the distance from the origin to the points\
     */
+    m_centerOfMass = Vector2f(0, 0);
     m_momentOfInertia = 0;
 
     for (Vector2f p: m_points) {
-        m_momentOfInertia += pow(p.x - getCentroid().x, 2) + pow(p.y - getCentroid().y, 2);
+        m_centerOfMass += p;
     }
 
-    m_momentOfInertia *= m_density;
+    m_centerOfMass.x /= getPointCount();
+    m_centerOfMass.y /= getPointCount();
 
+    // Now find the average distance from the center of mass to the points
+    for (Vector2f p: m_points) {
+        m_momentOfInertia += VectorMath::mag(m_centerOfMass - p);
+    }
+
+    m_momentOfInertia /= getPointCount();
+    m_momentOfInertia *= m_momentOfInertia * getMass();
+
+}
+
+Vector2f Polygon::getCenterOfMass() {
+    return m_centerOfMass;
 }
 
 /**
@@ -1295,6 +1339,10 @@ void Polygon::update(float elapsedTime) {
     // Update the position
     setPosition(getPosition() + m_velocity * elapsedTime);
     setRotation(getRotation() + m_angularVelocity * elapsedTime);
+
+    if (VectorMath::mag(m_velocity) <= VELOCITY_THRESHOLD) {
+        m_velocity = Vector2f(0, 0);
+    }
 }
 
 /**
