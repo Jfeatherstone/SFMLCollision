@@ -129,39 +129,39 @@ int main() {
 
 int main() {
 
-    Clock timeSinceCircle;
-    Clock clock;
+    sf::Clock timeSinceCircle;
+    sf::Clock clock;
 
-    Texture* binTex = new Texture();
+    sf::Texture* binTex = new sf::Texture();
     binTex->loadFromFile("Images/bin.png");
 
     Polygon bin(binTex, Detail::Exact);
     bin.setOrigin(bin.getCentroid());
     bin.setPosition(250, 150);
-    bin.setFillColor(Color::Blue);
+    bin.setFillColor(sf::Color::Blue);
     bin.setScale(14, 16);
     bin.setMovableByCollision(false);
     bin.setRigidity(.75f);
 
-    cout << bin.getPointCount() << endl;
+    std::cout << bin.getPointCount() << std::endl;
 
     // SETUP THE WINDOW
-    RenderWindow window;
-    window.create(VideoMode(500, 400), "Ball Simulation", Style::Default);
+    sf::RenderWindow window;
+    window.create(sf::VideoMode(500, 400), "Ball Simulation", sf::Style::Default);
     window.setFramerateLimit(60);
 
     // Array of current objects to check collisions
-    vector<Polygon> objects;
+    std::vector<Polygon> objects;
 
     //RectangleShape c;
     //c.setSize(Vector2f(30, 30));
-    CircleShape c(20);
+    sf::CircleShape c(20);
 
-    Vector2f gravity(0, 1000);
+    sf::Vector2f gravity(0, 1000);
 
     while (window.isOpen()) {
         float elapsed = clock.restart().asSeconds();
-        Vector2f res;
+        sf::Vector2f res;
         
         for (int i = 0; i < objects.size(); i++)
             objects[i].update(elapsed);
@@ -188,15 +188,15 @@ int main() {
         }
 
         // Add balls at the mouse position on click
-        if (Mouse::isButtonPressed(Mouse::Button::Left) && timeSinceCircle.getElapsedTime().asSeconds() > .1) {
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && timeSinceCircle.getElapsedTime().asSeconds() > .1) {
             //cout << "Added ball!" << endl;
             Polygon ball(c);
             ball.setOrigin(ball.getCentroid());
-            ball.setPosition( (Vector2f)(Mouse::getPosition() - window.getPosition()));
+            ball.setPosition( (sf::Vector2f)(sf::Mouse::getPosition() - window.getPosition()));
             if (!ball.intersects(bin)) {
                 ball.setRigidity(1.0f);
                 objects.push_back(ball);
-                stringstream s;
+                std::stringstream s;
                 s << "Polyon Test (" << objects.size() << ")";
                 window.setTitle(s.str());
                 timeSinceCircle.restart();

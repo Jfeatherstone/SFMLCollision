@@ -5,9 +5,9 @@
  * 
  * @param texture The texture for the shape/sprite we want to model
  * @param detail The level of detail to keep in the shape, from least to most: Less, More, Optimal, Exact
- * @param ignoredColors By default, all pixels that arent (0, 0, 0, 0) will be included, any colors specified here will also be ignored
+ * @param ignoredsf::Colors By default, all pixels that arent (0, 0, 0, 0) will be included, any colors specified here will also be ignored
  */
-Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
+Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ignoredColors) {
 
 
     // First we store the texture such that the polygon looks like the image
@@ -39,53 +39,53 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     ////////////////////////////////////////
     //      Parsing RGB values from the image
     ////////////////////////////////////////
-    vector<Color> pixels;
+    std::vector<sf::Color> pixels;
 
     // Convert our texture to an image
-    Image image = texture->copyToImage();
+    sf::Image image = texture->copyToImage();
 
     // This will be the number of pixels in the image
     int length = image.getSize().x * image.getSize().y;
 
     // This will happen if our image is empty (the file doesn't exist)
     if (length == 0) {
-        cout << "Attempt to pass in empty image to constructor!\n In Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors)" << endl;
+        std::cout << "Attempt to pass in empty image to constructor!\n In Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ignoredsf::Colors)" << std::endl;
         return;
     }
 
-    // Reassign our pixel vector
+    // Reassign our pixel std::vector
     pixels.clear();
     pixels.resize(length);
 
     // The actual array of pixels
-    const Uint8* arr = image.getPixelsPtr();
+    const sf::Uint8* arr = image.getPixelsPtr();
 
-    // Separate out each color and create an object to add to our vector
+    // Separate out each color and create an object to add to our std::vector
     for (int i = 0; i < length; i++) {
         int red = (int) arr[4*i];
         int green = (int) arr[4*i + 1];
         int blue = (int) arr[4*i + 2];
         int alpha = (int) arr[4*i + 3];
-        Color c(red, green, blue, alpha);
+        sf::Color c(red, green, blue, alpha);
         pixels[i] = c;
     }
 
     ///////////////////////////////////////////
     //     Create our first set of verticies
     ///////////////////////////////////////////
-    vector<int> hitboxInclude;
+    std::vector<int> hitboxInclude;
     // Next, we want to go through every color and if it isn't empty or on the ignore list, we
     // add it to our include for the hitbox calculation
     hitboxInclude.resize(pixels.size());
 
-    Vector2f textureSize;
+    sf::Vector2f textureSize;
 
     textureSize.x = texture->getSize().x;
     textureSize.y = texture->getSize().y;
 
     int i = 0;
 
-    for (Color c: pixels) {
+    for (sf::Color c: pixels) {
         if (!contains(ignoredColors, c) && (int) c.a > 0) {
             //cout << (int)c.r << " " << (int)c.g << " " << (int)c.b << " " << (int)c.a << endl;
             hitboxInclude[i] = 1;
@@ -209,14 +209,14 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     ///*
     ///////////////////////////////////////////////
     // Print out our current verticies to help debug
-    cout << endl;
+    std::cout << std::endl;
     for (int i = 0; i < hitboxInclude.size(); i++) {
         if (i % (int)(textureSize.x) == 0 && i > 0)
-            cout << endl;
-        cout << hitboxInclude[i];
+            std::cout << std::endl;
+        std::cout << hitboxInclude[i];
 
     }
-    cout << "\n\n";
+    std::cout << "\n\n";
     ///////////////////////////////////////////////
     //*/
 
@@ -224,7 +224,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     //     Removing the inside
     ///////////////////////////////////////////
     // Now, we go through and remove everything except for the outline
-    vector<int> newHitbox;
+    std::vector<int> newHitbox;
     newHitbox.resize(hitboxInclude.size());
 
     for (int i = 0; i < textureSize.y; i++) {
@@ -263,14 +263,14 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     ///*
     ///////////////////////////////////////////////
     // Print out our current verticies to help debug
-    cout << endl;
+    std::cout << std::endl;
     for (int i = 0; i < hitboxInclude.size(); i++) {
         if (i % (int)(textureSize.x) == 0 && i > 0)
-            cout << endl;
-        cout << hitboxInclude[i];
+            std::cout << std::endl;
+        std::cout << hitboxInclude[i];
 
     }
-    cout << "\n\n";
+    std::cout << "\n\n";
     ///////////////////////////////////////////////
     //*/
 
@@ -303,14 +303,14 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     ///*
     ///////////////////////////////////////////////
     // Print out our current verticies to help debug
-    cout << endl;
+    std::cout << std::endl;
     for (int i = 0; i < hitboxInclude.size(); i++) {
         if (i % (int)(textureSize.x) == 0 && i > 0)
-            cout << endl;
-        cout << hitboxInclude[i];
+            std::cout << std::endl;
+        std::cout << hitboxInclude[i];
 
     }
-    cout << "\n\n";
+    std::cout << "\n\n";
     ///////////////////////////////////////////////
     //*/
 
@@ -330,7 +330,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 
             // Top right diagonal
             if (hitboxInclude[i*textureSize.x + j] == 1 // The current point is a vertex
-            && hitboxInclude[(i-1)*textureSize.x + j + 1] == 1 // The top right point is a vertex and in our vector
+            && hitboxInclude[(i-1)*textureSize.x + j + 1] == 1 // The top right point is a vertex and in our std::vector
             && (i-1) >= 0 && j + 1 < textureSize.x) { // Make sure we are within bounds
             // We want to make sure that the vertex was actually a point before (might be unnecessary)
                 if (hitboxInclude[i*textureSize.x + j + 1] == 1)
@@ -378,14 +378,14 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     ///*
     ///////////////////////////////////////////////
     // Print out our current verticies to help debug
-    cout << endl;
+    std::cout << std::endl;
     for (int i = 0; i < hitboxInclude.size(); i++) {
         if (i % (int)(textureSize.x) == 0 && i > 0)
-            cout << endl;
-        cout << hitboxInclude[i];
+            std::cout << std::endl;
+        std::cout << hitboxInclude[i];
 
     }
-    cout << "\n\n";
+    std::cout << "\n\n";
     ///////////////////////////////////////////////
     //*/
 
@@ -425,14 +425,14 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     ///*
     ///////////////////////////////////////////////
     // Print out our current verticies to help debug
-    cout << endl;
+    std::cout << std::endl;
     for (int i = 0; i < hitboxInclude.size(); i++) {
         if (i % (int)(textureSize.x) == 0 && i > 0)
-            cout << endl;
-        cout << hitboxInclude[i];
+            std::cout << std::endl;
+        std::cout << hitboxInclude[i];
 
     }
-    cout << "\n\n";
+    std::cout << "\n\n";
     ///////////////////////////////////////////////
     //*/
 
@@ -450,12 +450,12 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     We need to find a way to assign each pixel in the outline by following the path around our
     shape.
 
-    Since we have an outline of the sprite (where the lines should go) indicated by a 3 in our vector,
+    Since we have an outline of the sprite (where the lines should go) indicated by a 3 in our std::vector,
     we should be able to begin at a given pixel and move along in one direction
     */
-    Vector2f currPixel;
+    sf::Vector2f currPixel;
     int vertexIndex = 0;
-    vector<Vector2f> hitboxVerticies;
+    std::vector<sf::Vector2f> hitboxVerticies;
     hitboxVerticies.resize(hitboxInclude.size()); // This is a little overkill, but that's okay
 
     // Setup our polygon
@@ -469,34 +469,34 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
     }
     m_points.resize(m_numVerticies);
 
-    cout << m_numVerticies << endl;
+    std::cout << m_numVerticies << std::endl;
 
-    Vector2f previousMovement(0, 0);
+    sf::Vector2f previousMovement(0, 0);
 
     while (vertexIndex < m_numVerticies) {
         if (hitboxInclude[currPixel.y*textureSize.x + currPixel.x] == 1 || hitboxInclude[currPixel.y*textureSize.x + currPixel.x] == 3) {
-            // Even if it isn't an actual vertex, we record it in our other vector
+            // Even if it isn't an actual vertex, we record it in our other std::vector
             hitboxVerticies.push_back(currPixel);
-            cout << currPixel.x << " " << currPixel.y;
+            std::cout << currPixel.x << " " << currPixel.y;
 
             if (hitboxInclude[currPixel.y*textureSize.x + currPixel.x] == 1) {
                 // We record the vertex in our polygon
-                cout << " - Added " << vertexIndex << endl;
+                std::cout << " - Added " << vertexIndex << std::endl;
                 m_points[vertexIndex++] = currPixel;
             } else {
-                cout << endl;
+                std::cout << std::endl;
             }
             // We now look for the next pixel that is marked either as a 3 or a 1
             /*
             We check starting at the top and move clockwise 
             */
             //cout << currPixel.x << " " << currPixel.y << " " << vertexIndex << endl;
-            //for (Vector2f v: m_hitboxVertices)
+            //for (sf::Vector2f v: m_hitboxVertices)
               //  cout << v.x << " " << v.y << " --- ";
 
             // First check the direction we moved in last
-            if (previousMovement != Vector2f(0, 0)) {
-                Vector2f newPixel = currPixel + previousMovement;
+            if (previousMovement != sf::Vector2f(0, 0)) {
+                sf::Vector2f newPixel = currPixel + previousMovement;
 
                 if ((hitboxInclude[(newPixel.y)*textureSize.x + newPixel.x] == 1 
                 || hitboxInclude[(newPixel.y)*textureSize.x + newPixel.x] == 3)
@@ -511,10 +511,10 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             if ((hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x] == 1 
             || hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x] == 3)
             && ((currPixel.y - 1) >= 0 && (currPixel.y - 1)*textureSize.x + currPixel.x < hitboxInclude.size())
-            && !contains(hitboxVerticies, Vector2f(currPixel.x, currPixel.y - 1))) {
+            && !contains(hitboxVerticies, sf::Vector2f(currPixel.x, currPixel.y - 1))) {
                 currPixel.x += 0;
                 currPixel.y += -1;
-                previousMovement = Vector2f(0, -1);
+                previousMovement = sf::Vector2f(0, -1);
                 continue;
             } else
             // Top right
@@ -522,10 +522,10 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             || hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x + 1] == 3)
             && ((currPixel.y - 1) >= 0 && (currPixel.y - 1)*textureSize.x + currPixel.x + 1 < hitboxInclude.size())
             && (currPixel.x + 1 < textureSize.x)
-            && !contains(hitboxVerticies, Vector2f(currPixel.x + 1, currPixel.y - 1))) {
+            && !contains(hitboxVerticies, sf::Vector2f(currPixel.x + 1, currPixel.y - 1))) {
                 currPixel.x += 1;
                 currPixel.y += -1;
-                previousMovement = Vector2f(1, -1);
+                previousMovement = sf::Vector2f(1, -1);
                 continue;
             } else
             // Right
@@ -533,10 +533,10 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             || hitboxInclude[(currPixel.y)*textureSize.x + currPixel.x + 1] == 3)
             && ((currPixel.y)*textureSize.x + currPixel.x + 1 >= 0 && (currPixel.y)*textureSize.x + currPixel.x + 1 < hitboxInclude.size())
             && (currPixel.x + 1 < textureSize.x)
-            && !contains(hitboxVerticies, Vector2f(currPixel.x + 1, currPixel.y))) {
+            && !contains(hitboxVerticies, sf::Vector2f(currPixel.x + 1, currPixel.y))) {
                 currPixel.x += 1;
                 currPixel.y += 0;
-                previousMovement = Vector2f(1, 0);
+                previousMovement = sf::Vector2f(1, 0);
                 continue;
             } else
             // Bottom right
@@ -544,20 +544,20 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             || hitboxInclude[(currPixel.y + 1)*textureSize.x + currPixel.x + 1] == 3)
             && ((currPixel.y + 1)*textureSize.x + currPixel.x + 1 >= 0 && (currPixel.y + 1)*textureSize.x + currPixel.x + 1 < hitboxInclude.size())
             && (currPixel.x + 1 < textureSize.x)
-            && !contains(hitboxVerticies, Vector2f(currPixel.x + 1, currPixel.y + 1))) {
+            && !contains(hitboxVerticies, sf::Vector2f(currPixel.x + 1, currPixel.y + 1))) {
                 currPixel.x += 1;
                 currPixel.y += 1;
-                previousMovement = Vector2f(1, 1);
+                previousMovement = sf::Vector2f(1, 1);
                 continue;
             } else
             // Bottom
             if ((hitboxInclude[(currPixel.y + 1)*textureSize.x + currPixel.x] == 1 
             || hitboxInclude[(currPixel.y + 1)*textureSize.x + currPixel.x] == 3)
             && ((currPixel.y + 1)*textureSize.x + currPixel.x >= 0 && (currPixel.y + 1)*textureSize.x + currPixel.x < hitboxInclude.size())
-            && !contains(hitboxVerticies, Vector2f(currPixel.x, currPixel.y + 1))) {
+            && !contains(hitboxVerticies, sf::Vector2f(currPixel.x, currPixel.y + 1))) {
                 currPixel.x += 0;
                 currPixel.y += 1;
-                previousMovement = Vector2f(0, 1);
+                previousMovement = sf::Vector2f(0, 1);
                 continue;
             } else
             // Bottom left
@@ -565,10 +565,10 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             || hitboxInclude[(currPixel.y + 1)*textureSize.x + currPixel.x - 1] == 3)
             && ((currPixel.y + 1)*textureSize.x + currPixel.x - 1 >= 0 && (currPixel.y + 1)*textureSize.x + currPixel.x - 1 < hitboxInclude.size())
             && (currPixel.x - 1 >= 0)
-            && !contains(hitboxVerticies, Vector2f(currPixel.x - 1, currPixel.y + 1))) {
+            && !contains(hitboxVerticies, sf::Vector2f(currPixel.x - 1, currPixel.y + 1))) {
                 currPixel.x += -1;
                 currPixel.y += 1;
-                previousMovement = Vector2f(-1, 1);
+                previousMovement = sf::Vector2f(-1, 1);
                 continue;
             } else
             // Left
@@ -576,10 +576,10 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             || hitboxInclude[(currPixel.y)*textureSize.x + currPixel.x - 1] == 3)
             && ((currPixel.y)*textureSize.x + currPixel.x - 1 >= 0 && (currPixel.y)*textureSize.x + currPixel.x - 1 < hitboxInclude.size())
             && (currPixel.x - 1 >= 0)
-            && !contains(hitboxVerticies, Vector2f(currPixel.x - 1, currPixel.y))) {
+            && !contains(hitboxVerticies, sf::Vector2f(currPixel.x - 1, currPixel.y))) {
                 currPixel.x += -1;
                 currPixel.y += 0;
-                previousMovement = Vector2f(-1, 0);
+                previousMovement = sf::Vector2f(-1, 0);
                 continue;
             } else
             // Top left
@@ -587,10 +587,10 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             || hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x - 1] == 3)
             && ((currPixel.y - 1)*textureSize.x + currPixel.x - 1 >= 0 && (currPixel.y - 1)*textureSize.x + currPixel.x - 1 < hitboxInclude.size())
             && (currPixel.x - 1 >= 0)
-            && !contains(hitboxVerticies, Vector2f(currPixel.x - 1, currPixel.y - 1))) {
+            && !contains(hitboxVerticies, sf::Vector2f(currPixel.x - 1, currPixel.y - 1))) {
                 currPixel.x += -1;
                 currPixel.y += -1;
-                previousMovement = Vector2f(-1, -1);
+                previousMovement = sf::Vector2f(-1, -1);
                 continue;
             } else {
                 //cout << "Done" << endl;
@@ -608,14 +608,14 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
         }
     }
 
-    cout << vertexIndex << endl;
+    std::cout << vertexIndex << std::endl;
 
     ///*
     // 0, 0 has been causing some trouble, so we remove it if it isn't actually there
     if (hitboxInclude[0] != 1) {
         //cout << "Excess zero present" << endl;
         for (int i = 0; i < m_points.size(); i++) {
-            if (m_points[i] == Vector2f(0, 0)) {
+            if (m_points[i] == sf::Vector2f(0, 0)) {
                 m_points.erase(m_points.begin() + i);
                 i--; // So we don't skip the following one
             }
@@ -664,7 +664,7 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
             bool reduced = false;
             for (int i = 0; i < m_points.size(); i++) {
                 // Store the old points to calculate the previous area
-                vector<Vector2f> old = m_points;
+                std::vector<sf::Vector2f> old = m_points;
                 
                 // Yeet that point out of here
                 m_points.erase(m_points.begin() + i);
@@ -702,20 +702,20 @@ Polygon::Polygon(Texture* texture, Detail detail, vector<Color> ignoredColors) {
 /////////////////////////////////////////////////////////////
 
 /**
- * @brief Checks whether a color is contained within a vector of colors
+ * @brief Checks whether a color is contained within a std::vector of colors
  * 
- * @param vec A vector of colors
+ * @param vec A std::vector of colors
  * @param c A specific color
  * @return true If vec contains c
  * @return false If vec doesn't contain c
  */
-bool Polygon::contains(vector<Color>& vec, Color c) {
+bool Polygon::contains(std::vector<sf::Color>& vec, sf::Color c) {
     /*
     We use this method in determining whether a list of colors to be ignored was provided
-    As we read every pixel from an image, we check whether the ignoredColors vector
+    As we read every pixel from an image, we check whether the ignoredsf::Colors std::vector
     contains the rgba value
     */
-    for (Color col: vec) {
+    for (sf::Color col: vec) {
         if (col == c)
             return true;
     }
@@ -723,14 +723,14 @@ bool Polygon::contains(vector<Color>& vec, Color c) {
 }
 
 /**
- * @brief Checks whether a point is contained within a vector of points
+ * @brief Checks whether a point is contained within a std::vector of points
  * 
- * @param vec A vector of points
+ * @param vec A std::vector of points
  * @param point A specific point
  * @return true If vec contains point
  * @return false If vec doesn't contain point
  */
-bool Polygon::contains(vector<Vector2f>& vec, Vector2f point) {
+bool Polygon::contains(std::vector<sf::Vector2f>& vec, sf::Vector2f point) {
     //cout << point.x << " " << point.y << endl;
     for (int i = 0; i < vec.size(); i++) {
         if (point.x == vec[i].x && point.y == vec[i].y) {
@@ -752,11 +752,11 @@ shape to our class here
 */
 
 /**
- * @brief Construct a new Polygon object from a vector of points
+ * @brief Construct a new Polygon object from a std::vector of points
  * 
  * @param points The points that constitute our shape
  */
-Polygon::Polygon(vector<Vector2f> points) {
+Polygon::Polygon(std::vector<sf::Vector2f> points) {
     m_points = points;
 
     m_numVerticies = m_points.size();
@@ -772,8 +772,8 @@ Polygon::Polygon(vector<Vector2f> points) {
  * 
  * @param shape The CircleShape object whose points we will use
  */
-Polygon::Polygon(CircleShape shape) {
-    vector<Vector2f> points;
+Polygon::Polygon(sf::CircleShape shape) {
+    std::vector<sf::Vector2f> points;
     points.resize(shape.getPointCount());
     for (int i = 0; i < shape.getPointCount(); i++) {
         points[i] = shape.getPoint(i);
@@ -794,8 +794,8 @@ Polygon::Polygon(CircleShape shape) {
  * 
  * @param shape The RectangleShape object whose points we will use
  */
-Polygon::Polygon(RectangleShape shape) {
-    vector<Vector2f> points;
+Polygon::Polygon(sf::RectangleShape shape) {
+    std::vector<sf::Vector2f> points;
     points.resize(shape.getPointCount());
     for (int i = 0; i < shape.getPointCount(); i++) {
         points[i] = shape.getPoint(i);
@@ -816,8 +816,8 @@ Polygon::Polygon(RectangleShape shape) {
  * 
  * @param shape The ConvexShape object who points we will use
  */
-Polygon::Polygon(ConvexShape shape) {
-    vector<Vector2f> points;
+Polygon::Polygon(sf::ConvexShape shape) {
+    std::vector<sf::Vector2f> points;
     points.resize(shape.getPointCount());
     for (int i = 0; i < shape.getPointCount(); i++) {
         points[i] = shape.getPoint(i);
@@ -841,7 +841,7 @@ Polygon::Polygon(ConvexShape shape) {
 void Polygon::createLines() {
     //cout << "Creating Lines" << endl;
     /*
-    This method is mostly linear algebra and (more or less) simple transformations on our vector of points.
+    This method is mostly linear algebra and (more or less) simple transformations on our std::vector of points.
     First, we rotate our points, around the origin of the shape, followed by scaling them up, and finally
     by adding the offset of the shape (its position).
     */
@@ -851,7 +851,7 @@ void Polygon::createLines() {
     revert to the old so when we then rotate, translate, or scale, we don't have to do some weird math to
     account for the previous transformations of the points.
     */
-    vector<Vector2f> pointsCopy = m_points;
+    std::vector<sf::Vector2f> pointsCopy = m_points;
 
     /*
     The first transformation we do on our object is a rotation of the points. This is followed by the scale transform,
@@ -882,7 +882,7 @@ void Polygon::createLines() {
     Now that our first two transformations are out of the way, we have to translate the points to their actual position
     on the screen. This offset is calculated using the origin and position.
     */ 
-    Vector2f offset(getPosition().x - getOrigin().x, getPosition().y - getOrigin().y);
+    sf::Vector2f offset(getPosition().x - getOrigin().x, getPosition().y - getOrigin().y);
     for (int i = 0; i < m_numVerticies; i++) {
         m_points[i].x += offset.x;
         m_points[i].y += offset.y; 
@@ -906,9 +906,9 @@ void Polygon::createLines() {
 /**
  * @brief Return the lines that represent the polygon's outline/border
  * 
- * @return vector<Line> A vector of lines that represent the outline
+ * @return std::vector<Line> A std::vector of lines that represent the outline
  */
-vector<Line> Polygon::getLines() {
+std::vector<Line> Polygon::getLines() {
     //createLines();
     return m_lines;
 }
@@ -934,7 +934,7 @@ void Polygon::findCentroid() {
     float top = 0.f;
     float bottom = 0.f;
     
-    for (Vector2f v: m_points) {
+    for (sf::Vector2f v: m_points) {
         // Check each condition and reassign if its true
         if (v.x < left)
             left = v.x;
@@ -974,22 +974,22 @@ size_t Polygon::getPointCount() const {
 }
 
 /**
- * @brief Get the vertex at index in the vector m_points
+ * @brief Get the vertex at index in the std::vector m_points
  * 
  * @param index The index of the point we are looking for
- * @return Vector2f The point at index in m_points
+ * @return sf::Vector2f The point at index in m_points
  */
-Vector2f Polygon::getPoint(size_t index) const {
+sf::Vector2f Polygon::getPoint(size_t index) const {
     return m_points[index];
 }
 
 /**
- * @brief Returns the entire vector of points that represent the shape, without any modifications from
+ * @brief Returns the entire std::vector of points that represent the shape, without any modifications from
  * transformations (rotate, move, scale)
  * 
- * @return vector<Vector2f> Our shape's vector of verticies
+ * @return std::vector<sf::Vector2f> Our shape's std::vector of verticies
  */
-vector<Vector2f> Polygon::getPoints() {
+std::vector<sf::Vector2f> Polygon::getPoints() {
     return m_points;
 }
 
@@ -1030,10 +1030,10 @@ void Polygon::calculateMomentOfInertia() {
 
     This makes the calculation super easy, as we just add up the distance from the origin to the points\
     */
-    m_centerOfMass = Vector2f(0, 0);
+    m_centerOfMass = sf::Vector2f(0, 0);
     m_momentOfInertia = 0;
 
-    for (Vector2f p: m_points) {
+    for (sf::Vector2f p: m_points) {
         m_centerOfMass += p;
     }
 
@@ -1041,7 +1041,7 @@ void Polygon::calculateMomentOfInertia() {
     m_centerOfMass.y /= getPointCount();
 
     // Now find the average distance from the center of mass to the points
-    for (Vector2f p: m_points) {
+    for (sf::Vector2f p: m_points) {
         m_momentOfInertia += VectorMath::mag(m_centerOfMass - p);
     }
 
@@ -1050,7 +1050,7 @@ void Polygon::calculateMomentOfInertia() {
 
 }
 
-Vector2f Polygon::getCenterOfMass() {
+sf::Vector2f Polygon::getCenterOfMass() {
     return m_centerOfMass;
 }
 
@@ -1130,15 +1130,15 @@ void Polygon::setGamma(float gamma) {
     m_gamma = gamma;
 }
 
-Vector2f Polygon::getForce() {
+sf::Vector2f Polygon::getForce() {
     return m_force;
 }
 
-void Polygon::addForce(Vector2f force) {
+void Polygon::addForce(sf::Vector2f force) {
     m_force += force;
 }
 
-void Polygon::setForce(Vector2f force) {
+void Polygon::setForce(sf::Vector2f force) {
     m_force = force;
 }
 
@@ -1193,14 +1193,14 @@ float Polygon::getMomentOfInertia() {
 }
 
 /**
- * @brief This is a static method that finds the area of any given shape (vector of points)
+ * @brief This is a static method that finds the area of any given shape (std::vector of points)
  * Ngl, I don't remember where I found this method for finding the area of a polygon, but 
  * will post when I find it. 
  * 
  * @param points A Vector of points the represent our shape. See Polygon::getPoints()
  * @param value A referenced float that our area will be stored in
  */
-void Polygon::getArea(vector<Vector2f> points, float& value) {
+void Polygon::getArea(std::vector<sf::Vector2f> points, float& value) {
     value = 0;
     for (int i = 0; i < points.size() - 1; i++) {
         float avgY = (points[i].y + points[i+1].y) / 2;
@@ -1228,9 +1228,9 @@ float Polygon::getFarthestVertex() {
 /**
  * @brief Returns the centroid of the shape (does not recalculate it)
  * 
- * @return Vector2f The centroid of the shape
+ * @return sf::Vector2f The centroid of the shape
  */
-Vector2f Polygon::getCentroid() {
+sf::Vector2f Polygon::getCentroid() {
     return m_centroid;
 }
 
@@ -1246,7 +1246,7 @@ bound the outside
  * 
  * @param scale The scaling factors for our polygon
  */
-void Polygon::setScale(const Vector2f& scale) {
+void Polygon::setScale(const sf::Vector2f& scale) {
     Transformable::setScale(scale.x, scale.y);
 
     createLines();
@@ -1271,7 +1271,7 @@ void Polygon::setScale(float xFactor, float yFactor) {
  * 
  * @param scale The scaling factors for our polygon
  */
-void Polygon::scale(const Vector2f& scale) {
+void Polygon::scale(const sf::Vector2f& scale) {
     Transformable::scale(scale.x, scale.y);
 
     createLines();
@@ -1320,7 +1320,7 @@ void Polygon::rotate(float angle) {
  * 
  * @param position The new x and y coordinates of the shape
  */
-void Polygon::setPosition(const Vector2f& position) {
+void Polygon::setPosition(const sf::Vector2f& position) {
     Transformable::setPosition(position.x, position.y);
 
     createLines();
@@ -1345,7 +1345,7 @@ void Polygon::setPosition(float x, float y) {
  * 
  * @param d The amount to change x and y by 
  */
-void Polygon::move(const Vector2f& d) {
+void Polygon::move(const sf::Vector2f& d) {
     Transformable::move(d.x, d.y);
 
     createLines();
@@ -1381,16 +1381,16 @@ void Polygon::update(float elapsedTime) {
     setRotation(getRotation() + m_angularVelocity * elapsedTime);
 
     if (VectorMath::mag(m_velocity) <= VELOCITY_THRESHOLD) {
-        m_velocity = Vector2f(0, 0);
+        m_velocity = sf::Vector2f(0, 0);
     }
 }
 
 /**
  * @brief Returns the current linear velocity of the shape
  * 
- * @return Vector2f Current linear velocity of the shape
+ * @return sf::Vector2f Current linear velocity of the shape
  */
-Vector2f Polygon::getVelocity() {
+sf::Vector2f Polygon::getVelocity() {
     return m_velocity;
 }
 
@@ -1399,7 +1399,7 @@ Vector2f Polygon::getVelocity() {
  * 
  * @param newVelocity The new velocity of the polygon
  */
-void Polygon::setVelocity(Vector2f newVelocity) {
+void Polygon::setVelocity(sf::Vector2f newVelocity) {
     m_velocity = newVelocity;
 }
 
