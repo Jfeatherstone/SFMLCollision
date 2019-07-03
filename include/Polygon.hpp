@@ -32,9 +32,6 @@ SOFTWARE.
 #include "Line.hpp"
 #include "VectorMath.hpp"
 
-using namespace sf;
-using namespace std;
-
 /**
  * @brief We can assume that the polygon class will be used for a variety of different objects,
  * some of which will require more accurate and representative shapes than others. Because of
@@ -51,10 +48,10 @@ enum class Detail {Less, More, Optimal, Exact};
 /**
  * @brief The polygon object is the most important aspect of our collisions class, and accounts for most
  * of what will likely be used externally. Polygons can be created through either a texture, a vector of points,
- * or any other child class of sf::Shape (CircleShape, RectangleShape, etc.). 
+ * or any other child class of sf::Shape (sf::CircleShape, sf::RectangleShape, etc.). 
  * Polygon objects act very similarly to the other sf::Shape classes, being able to be drawn by a RenderWindow 
  * and are able to be transformed by any method from sf::Transformable. On top of these stock attributes, Polygons
- * are also able to be either convex or concave (unlike convexshape) and have a method to detect collision between 
+ * are also able to be either convex or concave (unlike sf::ConvexShape) and have a method to detect collision between 
  * two instances of the class, or between the class and any other sf::Shape class.
  * With this ability comes a few more paramters that can be changed about the shape, including the density, rigidity,
  * moment of inertia, etc. that all affect how a shape reacts to colliding with another shape.
@@ -64,11 +61,8 @@ enum class Detail {Less, More, Optimal, Exact};
  * <iostream>
  * <tgmath.h>
  * 
- * Namespaces:
- * sf (SFML)
- * std (Standard)
  */
-class Polygon: public Shape {
+class Polygon: public sf::Shape {
 
 private:
 
@@ -79,22 +73,22 @@ private:
     /*
     An array of points that define our shape
     */
-    vector<Vector2f> m_points;
+    std::vector<sf::Vector2f> m_points;
 
     /*
     How many verticies our shape has
     */
     int m_numVerticies;
-    Vector2f m_centroid;
-    Vector2f m_farthestVertex;
+    sf::Vector2f m_centroid;
+    sf::Vector2f m_farthestVertex;
     float m_area;
 
     /*
     To detect collision, we will also want to divide our shape into triangles, so we can do that once on creation as to
     not have to repeat it ever again
     */
-    vector<Line> m_lines;
-    vector<float> m_triangleHeights;
+    std::vector<Line> m_lines;
+    std::vector<float> m_triangleHeights;
     
     // Whether our shape is solid or not
     bool m_isSolid = true; // True by default
@@ -102,14 +96,14 @@ private:
     float m_density = DEFAULT_DENSITY;
     float m_mass; // Mass found from area times density
     float m_momentOfInertia; // How our object rotates about its origin
-    Vector2f m_centerOfMass;
+    sf::Vector2f m_centerOfMass;
     float m_youngsModulus = 1.0f;
     float m_gamma = 1.0f;
-    Vector2f m_force;
+    sf::Vector2f m_force;
     
     // Since this is more or a less a lite physics engine, we need to keep track of the object's
     // velocity
-    Vector2f m_velocity = Vector2f(0, 0);
+    sf::Vector2f m_velocity = sf::Vector2f(0, 0);
     float m_angularVelocity = 0;
 
     // The rigidity is how velocity is conserved when an object bounces off
@@ -117,8 +111,8 @@ private:
     float m_rigidity = 1;
 
 	void getPixels();
-	bool contains(vector<Color>& vec, Color c);
-	bool contains(vector<Vector2f>& hitboxVerticies, Vector2f point);
+	bool contains(std::vector<sf::Color>& vec, sf::Color c);
+	bool contains(std::vector<sf::Vector2f>& hitboxVerticies, sf::Vector2f point);
     void findCentroid();
 
     void createLines();
@@ -139,27 +133,27 @@ public:
     vector<Color>: In case we want to ignore certain parts of a sprite, we can provide their rgb values
     and the parser will pass over them
     */
-    Polygon(Texture* texture, Detail detail = Detail::Optimal, vector<Color> ignoredColors = {});
+    Polygon(sf::Texture* texture, Detail detail = Detail::Optimal, std::vector<sf::Color> ignoredColors = {});
 
     /*
     Converting other SFML objects into a Polygon type
     */
-    Polygon(vector<Vector2f> points);
-    Polygon(CircleShape shape);
-    Polygon(RectangleShape shape);
-    Polygon(ConvexShape shape);
+    Polygon(std::vector<sf::Vector2f> points);
+    Polygon(sf::CircleShape shape);
+    Polygon(sf::RectangleShape shape);
+    Polygon(sf::ConvexShape shape);
 
     /*
     The following two methods are overridden from Shape
     */
     virtual size_t getPointCount() const;
-    virtual Vector2f getPoint(size_t index) const;
+    virtual sf::Vector2f getPoint(size_t index) const;
 
-    vector<Vector2f> getPoints();
+    std::vector<sf::Vector2f> getPoints();
 
-    vector<Line> getLines();
+    std::vector<Line> getLines();
     float getFarthestVertex();
-    Vector2f getCentroid();
+    sf::Vector2f getCentroid();
 
     // Values that adjust how collisions affect the shape
     void setSolid(bool state);
@@ -177,26 +171,26 @@ public:
     float getMass();
     float getMomentOfInertia();
     
-    Vector2f getCenterOfMass();
+    sf::Vector2f getCenterOfMass();
 
     float getYoungsModulus();
     float getGamma();
     void setGamma(float gamma);
     void setYoungsModulus(float youngsModulus);
 
-    Vector2f getForce();
-    void setForce(Vector2f force);
-    void addForce(Vector2f force);
+    sf::Vector2f getForce();
+    void setForce(sf::Vector2f force);
+    void addForce(sf::Vector2f force);
     /*
     We need to be able to apply a velocity to our shape and iterate it through every frame
     */
-    void setVelocity(Vector2f newVelocity);
-    Vector2f getVelocity();
+    void setVelocity(sf::Vector2f newVelocity);
+    sf::Vector2f getVelocity();
     void setAngularVelocity(float newAngularVelocity);
     float getAngularVelocity();
 
     void update(float elapsedTime);
-    void adjustFromForce(Vector2f resultant, Vector2f collisionPoint, Polygon& shape);
+    void adjustFromForce(sf::Vector2f resultant, sf::Vector2f collisionPoint, Polygon& shape);
 
     /*
     These methods a pseudo-overriden in that they reference their super class
@@ -207,15 +201,15 @@ public:
 
     There is likely a better way to do this, but I'm not aware of it right now
     */
-    void setScale(const Vector2f& scale);
+    void setScale(const sf::Vector2f& scale);
     void setScale(float xScale, float yScale);
-    void scale(const Vector2f& scale);
+    void scale(const sf::Vector2f& scale);
     void scale(float xFactor, float yFactor);
     void setRotation(float angle);
     void rotate(float angle);
-    void setPosition(const Vector2f& position);
+    void setPosition(const sf::Vector2f& position);
     void setPosition(float x, float y);
-    void move(const Vector2f& offset);
+    void move(const sf::Vector2f& offset);
     void move(float xOffset, float yOffset);
 
     /*
@@ -227,18 +221,18 @@ public:
     Intersects.cpp
     */
     bool intersects(Polygon shape);
-    bool intersects(RectangleShape shape);
-    bool intersects(CircleShape shape);
-    bool intersects(ConvexShape shape);
+    bool intersects(sf::RectangleShape shape);
+    bool intersects(sf::CircleShape shape);
+    bool intersects(sf::ConvexShape shape);
 
     /*
     We also may want to know which direction to move the objects after they have collided, so we can do that
     by passing in a reference to a vector
     */
-    bool intersects(Polygon& shape, Vector2f& resultant);
-    bool intersects(RectangleShape shape, Vector2f& resultant);
-    bool intersects(CircleShape shape, Vector2f& resultant);
-    bool intersects(ConvexShape shape, Vector2f& resultant);
+    bool intersects(Polygon& shape, sf::Vector2f& resultant);
+    bool intersects(sf::RectangleShape shape, sf::Vector2f& resultant);
+    bool intersects(sf::CircleShape shape, sf::Vector2f& resultant);
+    bool intersects(sf::ConvexShape shape, sf::Vector2f& resultant);
 
     /*
     Another intersection type utility we want is to check whether another shape is inside of this one.
@@ -248,13 +242,13 @@ public:
     These are also defined in Intersection.cpp
     */
     bool contains(Polygon shape);
-    bool contains(RectangleShape shape);
-    bool contains(CircleShape shape);
-    bool contains(ConvexShape shape);
+    bool contains(sf::RectangleShape shape);
+    bool contains(sf::CircleShape shape);
+    bool contains(sf::ConvexShape shape);
 
     /*
     For finding the area of our polygons given either a set of points or an actual polygon
     */
-    static void getArea(vector<Vector2f> points, float& value);
+    static void getArea(std::vector<sf::Vector2f> points, float& value);
     float getArea();
 };

@@ -27,8 +27,6 @@ SOFTWARE.
 #include <SFML/Graphics.hpp>
 #include <tgmath.h>
 
-using namespace sf;
-
 /**
  * @brief This class contains several different mathematical operations and calculations used
  * to apply transformations, find dot/cross products, and several other use cases. All methods
@@ -37,30 +35,28 @@ using namespace sf;
  * might suggest, but rather that they have to deal with directionality.
  * 
  * Dependencies:
- * <SFML/Graphics.hpp> (Vector2f and Vector3f)
+ * <SFML/Graphics.hpp> (sf::Vector2f and sf::Vector3f)
  * <tgmath.h> (cos and sin)
  * 
- * Namespaces:
- * sf (SFML)
  */
 class VectorMath {
 
 public:
 
-    static float dot(Vector2f v1, Vector2f v2);
-    static float dot(Vector3f v1, Vector3f v2);
+    static float dot(sf::Vector2f v1, sf::Vector2f v2);
+    static float dot(sf::Vector3f v1, sf::Vector3f v2);
 
-    static float cross(Vector2f, Vector2f);
-    static Vector3f cross(Vector3f, Vector3f);
+    static float cross(sf::Vector2f, sf::Vector2f);
+    static sf::Vector3f cross(sf::Vector3f, sf::Vector3f);
 
-    static float angleBetween(Vector2f v1, Vector2f v2);
+    static float angleBetween(sf::Vector2f v1, sf::Vector2f v2);
 
-    static void rotate(Vector2f& p, Vector2f origin, float angle);
+    static void rotate(sf::Vector2f& p, sf::Vector2f origin, float angle);
 
-    static float mag(Vector2f v);
+    static float mag(sf::Vector2f v);
 
-    static void normalize(Vector2f& v, float magnitude = 1);
+    static void normalize(sf::Vector2f& v, float magnitude = 1);
 
-    static int quadrant(Vector2f point, Vector2f origin = Vector2f(0, 0));
+    static int quadrant(sf::Vector2f point, sf::Vector2f origin = sf::Vector2f(0, 0));
 
 };

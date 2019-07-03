@@ -16,7 +16,7 @@ over the points and update a few values.
  * @return true The two shapes are colliding
  * @return false The two shapes aren't colliding
  */
-bool Polygon::intersects(RectangleShape shape) {
+bool Polygon::intersects(sf::RectangleShape shape) {
     Polygon poly(shape);
     return intersects(poly);
 }
@@ -30,7 +30,7 @@ bool Polygon::intersects(RectangleShape shape) {
  * @return true The two shapes are colliding
  * @return false The two shapes aren't colliding
  */
-bool Polygon::intersects(CircleShape shape) {
+bool Polygon::intersects(sf::CircleShape shape) {
     Polygon poly(shape);
     return intersects(poly);
 }
@@ -44,7 +44,7 @@ bool Polygon::intersects(CircleShape shape) {
  * @return true The two shapes are colliding
  * @return false The two shapes aren't colliding
  */
-bool Polygon::intersects(ConvexShape shape) {
+bool Polygon::intersects(sf::ConvexShape shape) {
     Polygon poly(shape);
     return intersects(poly);
 }
@@ -58,7 +58,7 @@ This is the actual intersection method, that is called in all of the above "wrap
 /**
  * @brief Check the intersection between two polygon shapes. Has three levels of detection, to reduce
  * unecessary calculations and resource usage. Returns no information about collision after-effects
- * or resultants. For that, see intersects(Polygon shape, Vector2f& resultant).
+ * or resultants. For that, see intersects(Polygon shape, sf::Vector2f& resultant).
  * 
  * @param shape The shape we are checking to be colliding with the current one
  * @return true The two shapes are colliding
@@ -77,15 +77,15 @@ bool Polygon::intersects(Polygon shape) {
     }
     
     // Next, we check to make sure the two polygons are actually capable of intersecting by checking their rectangular boundary
-    FloatRect overlap;
+    sf::FloatRect overlap;
     if (!getGlobalBounds().intersects(shape.getGlobalBounds(), overlap)) {
         //cout << "Rect bounds" << endl;
         return false;
     }
 
     //The next order of business here is that we need to grab the lines of each shape 
-    vector<Line> l1 = getLines();
-    vector<Line> l2 = shape.getLines();
+    std::vector<Line> l1 = getLines();
+    std::vector<Line> l2 = shape.getLines();
 
     //And now we actually check the intersection between our lines
     for (int i = 0; i < l1.size(); i++) {
@@ -109,7 +109,7 @@ bool Polygon::intersects(Polygon shape) {
  * @return true The two shapes are colliding
  * @return false The two shapes aren't colliding
  */
-bool Polygon::intersects(Polygon& shape, Vector2f& resultant) {
+bool Polygon::intersects(Polygon& shape, sf::Vector2f& resultant) {
     //We first check to make sure the two polygons are actually capable of intersecting by checking their circular boundary
     // This uses the farthest distance of each shape as the radius of a circle,
     
@@ -123,15 +123,15 @@ bool Polygon::intersects(Polygon& shape, Vector2f& resultant) {
     }
     
     // Next, we check to make sure the two polygons are actually capable of intersecting by checking their rectangular boundary
-    FloatRect overlap;
+    sf::FloatRect overlap;
     if (!getGlobalBounds().intersects(shape.getGlobalBounds(), overlap)) {
         //cout << "Rect bounds" << endl;
         return false;
     }
     
     // Now we grab our lines
-    vector<Line> l1 = getLines();
-    vector<Line> l2 = shape.getLines();
+    std::vector<Line> l1 = getLines();
+    std::vector<Line> l2 = shape.getLines();
 
     /*
     And now we actually check the intersection between our lines
@@ -142,12 +142,12 @@ bool Polygon::intersects(Polygon& shape, Vector2f& resultant) {
     are intersecting which ones
     We also record the points at which each pair of lines intersect
     */
-    vector<Line> intersectingLines;
-    vector<Vector2f> intersectingPoints;
+    std::vector<Line> intersectingLines;
+    std::vector<sf::Vector2f> intersectingPoints;
 
     for (int i = 0; i < l1.size(); i++) {
         for (int j = 0; j < l2.size(); j++) {
-            Vector2f p;
+            sf::Vector2f p;
             if (l1[i].intersects(l2[j], p)) {
                 //cout << i << " " << j << endl;
                 intersectingLines.push_back(l2[j]);
@@ -174,7 +174,7 @@ bool Polygon::intersects(Polygon& shape, Vector2f& resultant) {
     //cout << pSlope << endl;
 
     // Now our slope is y/x, so our vector is (1, slope)
-    Vector2f perpendicular(pSlope, 1);
+    sf::Vector2f perpendicular(pSlope, 1);
     
     // And normalize it
     VectorMath::normalize(perpendicular);
@@ -182,8 +182,8 @@ bool Polygon::intersects(Polygon& shape, Vector2f& resultant) {
     //cout << intersectingLines.size() << endl;
 
     // Since there could be more than one collision point, we want to take the average
-    Vector2f averageCollision(0, 0);
-    for (Vector2f p: intersectingPoints) {
+    sf::Vector2f averageCollision(0, 0);
+    for (sf::Vector2f p: intersectingPoints) {
         averageCollision += p;
     }
     averageCollision.x /= intersectingPoints.size();
@@ -205,10 +205,10 @@ after they collide
  * @param resultant The unit vector in the direction of the new motion
  * @param shape The other colliding shape
  */
-void Polygon::adjustFromForce(Vector2f resultant, Vector2f collisionPoint, Polygon& shape) {
+void Polygon::adjustFromForce(sf::Vector2f resultant, sf::Vector2f collisionPoint, Polygon& shape) {
 
-    Vector2f v1f;
-    Vector2f v2f;
+    sf::Vector2f v1f;
+    sf::Vector2f v2f;
     float w1f;
     float w2f;
     float loss = getRigidity() * shape.getRigidity();
@@ -240,16 +240,16 @@ void Polygon::adjustFromForce(Vector2f resultant, Vector2f collisionPoint, Polyg
     float e = getRigidity() * shape.getRigidity();
     float Ia = getMomentOfInertia();
     float Ib = getMomentOfInertia();
-    Vector2f ra = (getPosition() - getOrigin() + getCenterOfMass()) - collisionPoint;
-    Vector2f rb = (shape.getPosition() - shape.getOrigin() + shape.getCenterOfMass()) - collisionPoint;
-    Vector2f v1i = getVelocity();
-    Vector2f v2i = shape.getVelocity();
+    sf::Vector2f ra = (getPosition() - getOrigin() + getCenterOfMass()) - collisionPoint;
+    sf::Vector2f rb = (shape.getPosition() - shape.getOrigin() + shape.getCenterOfMass()) - collisionPoint;
+    sf::Vector2f v1i = getVelocity();
+    sf::Vector2f v2i = shape.getVelocity();
     float w1i = getAngularVelocity();
     float w2i = shape.getAngularVelocity();
 
-    cout << rb.x << " " << rb.y << endl;
+    std::cout << rb.x << " " << rb.y << std::endl;
 
-    Vector2f impulse = 2.0f * (ma*mb)/(ma+mb)*VectorMath::dot((v1i) - (v2i), resultant) * resultant;
+    sf::Vector2f impulse = 2.0f * (ma*mb)/(ma+mb)*VectorMath::dot((v1i) - (v2i), resultant) * resultant;
 
     v1f = v1i - impulse / ma;
     v2f = v2i + impulse / mb;
@@ -291,11 +291,11 @@ void Polygon::adjustFromForce(Vector2f resultant, Vector2f collisionPoint, Polyg
 
     //cout << k << endl;
 
-    Vector2f averageForce = -.5f * k * resultant;
+    sf::Vector2f averageForce = -.5f * k * resultant;
     
     float w = sqrt(k/getMass());
 
-    Vector2f impulse = averageForce * (3.14f)/w;
+    sf::Vector2f impulse = averageForce * (3.14f)/w;
 
     //cout << impulse.x << " " << impulse.y << endl;
 
@@ -332,7 +332,7 @@ void Polygon::adjustFromForce(Vector2f resultant, Vector2f collisionPoint, Polyg
     float w1f = 0;
     float w2f = 0;
 
-    Vector2f initialLinearMomentum = getVelocity() * getMass() + shape.getVelocity() * shape.getMass();
+    sf::Vector2f initialLinearMomentum = getVelocity() * getMass() + shape.getVelocity() * shape.getMass();
 
     float initialAngularMomentum = getAngularVelocity()*getMomentOfInertia() + shape.getAngularVelocity()*shape.getMomentOfInertia();
 
@@ -354,7 +354,7 @@ void Polygon::adjustFromForce(Vector2f resultant, Vector2f collisionPoint, Polyg
     float averageDistance1 = 0;
     float averageDistance2 = 0;
 
-    for (Vector2f v: collisionPoints) {
+    for (sf::Vector2f v: collisionPoints) {
 
         averageDistance1 += VectorMath::mag(getCentroid() + (getPosition() - getOrigin()) - v);
         averageDistance2 += VectorMath::mag(shape.getCentroid() + (shape.getPosition() - shape.getOrigin()) - v);
@@ -401,7 +401,7 @@ void Polygon::adjustFromForce(Vector2f resultant, Vector2f collisionPoint, Polyg
  * @return true 
  * @return false 
  */
-bool Polygon::contains(RectangleShape shape) {
+bool Polygon::contains(sf::RectangleShape shape) {
     Polygon poly(shape);
     return contains(poly);
 }
@@ -413,7 +413,7 @@ bool Polygon::contains(RectangleShape shape) {
  * @return true 
  * @return false 
  */
-bool Polygon::contains(CircleShape shape) {
+bool Polygon::contains(sf::CircleShape shape) {
     Polygon poly(shape);
     return contains(poly);
 }
@@ -425,7 +425,7 @@ bool Polygon::contains(CircleShape shape) {
  * @return true 
  * @return false 
  */
-bool Polygon::contains(ConvexShape shape) {
+bool Polygon::contains(sf::ConvexShape shape) {
     Polygon poly(shape);
     return contains(poly);
 }

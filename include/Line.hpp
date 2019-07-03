@@ -29,9 +29,6 @@ SOFTWARE.
 #include <tgmath.h>
 #include "VectorMath.hpp"
 
-using namespace std; // Standard ns
-using namespace sf; // SFML ns
-
 /*
     SCOPE
 
@@ -52,9 +49,6 @@ This line class will be used for two main purposes:
  * <iostream>
  * <tgmath.h>
  * 
- * Namespaces:
- * sf (SFML)
- * std (Standard)
  */
 class Line {
 
@@ -95,12 +89,12 @@ private:
     /*
     Since we will need points on our line at some point or another, we can add them to a vector
     */
-    Vector2f m_start;
-    Vector2f m_end;
+    sf::Vector2f m_start;
+    sf::Vector2f m_end;
 
-    Vector2f m_offset;
+    sf::Vector2f m_offset;
 
-    float calculateSlope(Vector2f p1, Vector2f p2);
+    float calculateSlope(sf::Vector2f p1, sf::Vector2f p2);
     float calculateIntercept();
     float calculateAngle();
     int calculateQuadrant();
@@ -116,7 +110,7 @@ public:
     We also will have several other constructors that may not be used as much, but could at some point
     be conveinient
     */
-    Line(Vector2f p1, Vector2f p2);
+    Line(sf::Vector2f p1, sf::Vector2f p2);
     Line();
 
     /*
@@ -124,7 +118,7 @@ public:
     */
     float y(float x);
     bool intersects(Line line);
-    bool intersects(Line line, Vector2f& intersectionPoint, bool extendLine = false);
+    bool intersects(Line line, sf::Vector2f& intersectionPoint, bool extendLine = false);
 
     /*
     Some getters
@@ -132,17 +126,17 @@ public:
     float getAngle();
     float getIntercept();
     float getSlope();
-    Vector2f getStart();
-    Vector2f getEnd();
+    sf::Vector2f getStart();
+    sf::Vector2f getEnd();
 
     /*
     This will be used to find the resultant vector of a collision
     */
-    Vector2f getPerpendicular();
+    sf::Vector2f getPerpendicular();
 
-    void offset(Vector2f offset);
+    void offset(sf::Vector2f offset);
 
-    RectangleShape* getDrawable(Color color = Color::Cyan);
+    sf::RectangleShape* getDrawable(sf::Color color = sf::Color::Cyan);
     
-    void rotate(Vector2f center, float angle);
+    void rotate(sf::Vector2f center, float angle);
 };

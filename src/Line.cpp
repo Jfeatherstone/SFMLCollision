@@ -21,7 +21,7 @@ float Line::PARALLEL_LINE_DISTANCE_TOLERANCE = .01f;
  * @param p1 Endpoint 1
  * @param p2 Endpoint 2
  */
-Line::Line(Vector2f p1, Vector2f p2) {
+Line::Line(sf::Vector2f p1, sf::Vector2f p2) {
     // This automatically assigns our slope member variable so we don't need to set it here
 
     if (p1.x == p2.x)
@@ -61,7 +61,7 @@ This is a simple y2-y1/x2-x1 calculation
  * @param p2 The second point
  * @return float The value of the slope
  */
-float Line::calculateSlope(Vector2f p1, Vector2f p2) {
+float Line::calculateSlope(sf::Vector2f p1, sf::Vector2f p2) {
     if (m_horizontal) {
         m_slope == 0;
         return m_slope;
@@ -102,7 +102,7 @@ float Line::calculateIntercept() {
  * @return int A quadrant number (1-4) that means... something?
  */
 int Line::calculateQuadrant() {
-    Vector2f v = m_end - m_start;
+    sf::Vector2f v = m_end - m_start;
     if (v.x > 0 && v.y > 0)
         m_quadrant = 0;
     if (v.x < 0 && v.y > 0)
@@ -170,7 +170,7 @@ float Line::calculateAngle() {
     */
 
     // We first act as though the start point is our origin (0, 0), and calculate what the second points would be
-    Vector2f v = m_end - m_start;
+    sf::Vector2f v = m_end - m_start;
 
     switch (m_quadrant) {
         case 0:
@@ -229,7 +229,7 @@ both values are between 0 and 1, the intersection must occur within both domains
  * @return true The two lines are intersecting
  * @return false The two lines are not intersecting
  */
-bool Line::intersects(Line line, Vector2f& intersectionPoint, bool extendLine) {
+bool Line::intersects(Line line, sf::Vector2f& intersectionPoint, bool extendLine) {
     // We do this to help with naming and keeping our variables organized
     // from the reference linked above (ik, 1 indexing is gross)
     float x[5] = {0, getStart().x, getEnd().x, line.getStart().x, line.getEnd().x};
@@ -241,9 +241,9 @@ bool Line::intersects(Line line, Vector2f& intersectionPoint, bool extendLine) {
     // Check for parallel lines
     if (denominator < PARALLEL_LINE_SLOPE_TOLERANCE) {
         // The only way parallel lines intersect is if they are the same line
-        Vector2f centerA = (getStart() + getEnd()) / 2.0f;
-        Vector2f centerB = (line.getStart() + line.getEnd()) / 2.0f;
-        Vector2f distance = centerA - centerB;
+        sf::Vector2f centerA = (getStart() + getEnd()) / 2.0f;
+        sf::Vector2f centerB = (line.getStart() + line.getEnd()) / 2.0f;
+        sf::Vector2f distance = centerA - centerB;
 
         if (abs(distance.x) < PARALLEL_LINE_DISTANCE_TOLERANCE || abs(distance.y) < PARALLEL_LINE_DISTANCE_TOLERANCE) {
             intersectionPoint = centerA;
@@ -279,7 +279,7 @@ bool Line::intersects(Line line, Vector2f& intersectionPoint, bool extendLine) {
  * @return false The two lines are not intersecting
  */
 bool Line::intersects(Line line) {
-    Vector2f v;
+    sf::Vector2f v;
     return intersects(line, v);
 }
 
@@ -292,10 +292,10 @@ properly store and change the offset.
 We store this value as a member variable, so that if we need to offset again, we don't have to account for the previous offset
 For example:
 
-someLine.offset(Vector2f(10, 10));
+someLine.offset(sf::Vector2f(10, 10));
 // The origin of our coordinate system will be set at (10, 10)
 
-someLine.offset(Vector2f(20, 20));
+someLine.offset(sf::Vector2f(20, 20));
 // The origin of our coordinate system will be set at (20, 20), NOT (30, 30)
 */
 
@@ -305,7 +305,7 @@ someLine.offset(Vector2f(20, 20));
  * 
  * @param offset The amount we want to offset x and y by
  */
-void Line::offset(Vector2f offset) {
+void Line::offset(sf::Vector2f offset) {
     // First we remove the previous offset
     m_start -= m_offset;
     m_end -= m_offset;
@@ -356,9 +356,9 @@ float Line::getSlope() {
  * necessarily need to be before (in either x or y) the second point. Returned point
  * does have any offset effects applied to it.
  * 
- * @return Vector2f The first point (x, y)
+ * @return sf::Vector2f The first point (x, y)
  */
-Vector2f Line::getStart() {
+sf::Vector2f Line::getStart() {
     return m_start;
 }
 
@@ -367,9 +367,9 @@ Vector2f Line::getStart() {
  * necessarily need to be after (in either x or y) the first point. Returned point
  * does have any offset effects applied to it.
  * 
- * @return Vector2f The second point (x, y)
+ * @return sf::Vector2f The second point (x, y)
  */
-Vector2f Line::getEnd() {
+sf::Vector2f Line::getEnd() {
     return m_end;
 }
 
@@ -383,10 +383,10 @@ Vector2f Line::getEnd() {
  * @param color The color to draw the line as
  * @return RectangleShape* A drawable rectangle that represents our line
  */
-RectangleShape* Line::getDrawable(Color color) {
-    RectangleShape* r = new RectangleShape();
+sf::RectangleShape* Line::getDrawable(sf::Color color) {
+    sf::RectangleShape* r = new sf::RectangleShape();
 
-    r->setSize(Vector2f(sqrt(pow(m_start.x - m_end.x, 2) + pow(m_start.y - m_end.y, 2)), 2));
+    r->setSize(sf::Vector2f(sqrt(pow(m_start.x - m_end.x, 2) + pow(m_start.y - m_end.y, 2)), 2));
     r->setOrigin(r->getGlobalBounds().width / 2, r->getGlobalBounds().height / 2 );
     r->setRotation(m_angle);
     r->setFillColor(color);
@@ -399,14 +399,14 @@ RectangleShape* Line::getDrawable(Color color) {
  * @brief Get a vector that represents the perpendicular to the line, always has a
  * magnitude of 1
  * 
- * @return Vector2f A vector in the perpendicular direction to the line, with a magnitude of 1
+ * @return sf::Vector2f A vector in the perpendicular direction to the line, with a magnitude of 1
  */
-Vector2f Line::getPerpendicular() {
+sf::Vector2f Line::getPerpendicular() {
     // Take the negative reciprical of the slope
     float pSlope = -1 / getSlope();
 
     // Now our slope is y/x, so our vector is (1, slope)
-    Vector2f perpendicular(1, pSlope);
+    sf::Vector2f perpendicular(1, pSlope);
     
     // And normalize it
     VectorMath::normalize(perpendicular);
