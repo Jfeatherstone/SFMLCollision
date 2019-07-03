@@ -141,7 +141,7 @@ int main() {
     bin.setFillColor(Color::Blue);
     bin.setScale(14, 16);
     bin.setMovableByCollision(false);
-    bin.setRigidity(.9f);
+    bin.setRigidity(.75f);
 
     cout << bin.getPointCount() << endl;
 
@@ -163,7 +163,11 @@ int main() {
         float elapsed = clock.restart().asSeconds();
         Vector2f res;
         
+        for (int i = 0; i < objects.size(); i++)
+            objects[i].update(elapsed);
+
         for (int i = 0; i < objects.size(); i++) {
+
             // Apply gravity
             bool colliding = false;
 
@@ -180,8 +184,6 @@ int main() {
             if (!colliding)
                 objects[i].setVelocity(objects[i].getVelocity() + gravity * elapsed);
 
-            objects[i].update(elapsed);
-
             //cout << objects[i].getAngularVelocity() << endl;
         }
 
@@ -192,7 +194,7 @@ int main() {
             ball.setOrigin(ball.getCentroid());
             ball.setPosition( (Vector2f)(Mouse::getPosition() - window.getPosition()));
             if (!ball.intersects(bin)) {
-                ball.setRigidity(.90f);
+                ball.setRigidity(1.0f);
                 objects.push_back(ball);
                 stringstream s;
                 s << "Polyon Test (" << objects.size() << ")";

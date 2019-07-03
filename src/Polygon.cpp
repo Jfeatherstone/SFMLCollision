@@ -1103,6 +1103,46 @@ void Polygon::setMovableByCollision(bool value) {
 }
 
 /**
+ * @brief This will return the parameter that describes how the polygon responds to forces
+ * and how it bends and distorts
+ * 
+ * @return float The Young's Modulus of the shape, default is 1
+ */
+float Polygon::getYoungsModulus() {
+    return m_youngsModulus;
+}
+
+/**
+ * @brief Change the parameter that describes how the polygon responds to forces and how it
+ * bends and distorts
+ * 
+ * @param youngsModulus The new value for the young's modulus, default is 1
+ */
+void Polygon::setYoungsModulus(float youngsModulus) {
+    m_youngsModulus = youngsModulus;
+}
+
+float Polygon::getGamma() {
+    return m_gamma;
+}
+
+void Polygon::setGamma(float gamma) {
+    m_gamma = gamma;
+}
+
+Vector2f Polygon::getForce() {
+    return m_force;
+}
+
+void Polygon::addForce(Vector2f force) {
+    m_force += force;
+}
+
+void Polygon::setForce(Vector2f force) {
+    m_force = force;
+}
+
+/**
  * @brief Get whether the shape can be moved by being collided with by another object
  * 
  * @return true The shape can be moved

@@ -7,7 +7,8 @@ The only importance in the value is that no other line should every organically 
 this is an arbitrarily high number, to simulate a vertical line without actually being one
 */
 float Line::VERTICAL_SLOPE = 100000;
-
+float Line::PARALLEL_LINE_SLOPE_TOLERANCE = .01f;
+float Line::PARALLEL_LINE_DISTANCE_TOLERANCE = .01f;
 
 /*
     CONSTRUCTORS
@@ -238,11 +239,16 @@ bool Line::intersects(Line line, Vector2f& intersectionPoint, bool extendLine) {
     float denominator = ((x[4] - x[3])*(y[2] - y[1]) - (x[2] - x[1])*(y[4] - y[3]));
 
     // Check for parallel lines
-    if (denominator == 0) {
+    if (denominator < PARALLEL_LINE_SLOPE_TOLERANCE) {
         // The only way parallel lines intersect is if they are the same line
-        if (line.getIntercept() == getIntercept())
+        Vector2f centerA = (getStart() + getEnd()) / 2.0f;
+        Vector2f centerB = (line.getStart() + line.getEnd()) / 2.0f;
+        Vector2f distance = centerA - centerB;
+
+        if (abs(distance.x) < PARALLEL_LINE_DISTANCE_TOLERANCE || abs(distance.y) < PARALLEL_LINE_DISTANCE_TOLERANCE) {
+            intersectionPoint = centerA;
             return true;
-        else
+        } else
             return false;
     }
 

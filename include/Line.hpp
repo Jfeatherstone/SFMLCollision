@@ -60,6 +60,9 @@ class Line {
 
 private:
 
+    static float PARALLEL_LINE_SLOPE_TOLERANCE;
+    static float PARALLEL_LINE_DISTANCE_TOLERANCE;
+
     /*
     The value of our slope
     */
@@ -115,6 +118,7 @@ public:
     */
     Line(Vector2f p1, Vector2f p2);
     Line();
+
     /*
     For finding the y value at any given x value
     */

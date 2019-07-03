@@ -47,13 +47,13 @@ class VectorMath {
 
 public:
 
-    static void dot(Vector2f v1, Vector2f v2, float& value);
-    static void dot(Vector3f v1, Vector3f v2, float& value);
+    static float dot(Vector2f v1, Vector2f v2);
+    static float dot(Vector3f v1, Vector3f v2);
 
-    static Vector2f cross(Vector2f, Vector2f);
+    static float cross(Vector2f, Vector2f);
     static Vector3f cross(Vector3f, Vector3f);
 
-    static void angleBetween(Vector2f v1, Vector2f v2, float& angle);
+    static float angleBetween(Vector2f v1, Vector2f v2);
 
     static void rotate(Vector2f& p, Vector2f origin, float angle);
 

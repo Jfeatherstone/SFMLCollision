@@ -163,7 +163,7 @@ bool Polygon::intersects(Polygon& shape, Vector2f& resultant) {
     // This actually means we just take the average of their slopes
     float averageSlope = 0;
     for (Line l: intersectingLines) {
-        cout << l.getSlope() << endl;
+        //cout << l.getSlope() << endl;
         averageSlope += l.getSlope();
     }
     averageSlope /= intersectingLines.size();
@@ -171,7 +171,7 @@ bool Polygon::intersects(Polygon& shape, Vector2f& resultant) {
     // Take the negative reciprical of the slope
     float pSlope = -1.0f / averageSlope;
 
-    cout << pSlope << endl;
+    //cout << pSlope << endl;
 
     // Now our slope is y/x, so our vector is (1, slope)
     Vector2f perpendicular(pSlope, 1);
@@ -189,9 +189,9 @@ bool Polygon::intersects(Polygon& shape, Vector2f& resultant) {
     averageCollision.x /= intersectingPoints.size();
     averageCollision.y /= intersectingPoints.size();
 
-    adjustVelocityFromCollision(perpendicular, averageCollision, shape);
+    adjustFromForce(perpendicular, averageCollision, shape);
+    
     return true;
-
 }
 
 /*
@@ -205,15 +205,19 @@ after they collide
  * @param resultant The unit vector in the direction of the new motion
  * @param shape The other colliding shape
  */
-void Polygon::adjustVelocityFromCollision(Vector2f resultant, Vector2f collisionPoint, Polygon& shape) {
+void Polygon::adjustFromForce(Vector2f resultant, Vector2f collisionPoint, Polygon& shape) {
 
     Vector2f v1f;
     Vector2f v2f;
-    
+    float w1f;
+    float w2f;
+    float loss = getRigidity() * shape.getRigidity();
+
+    ///*
+
     // This one's really simple
     if (!isMovableByCollision() && shape.isMovableByCollision()) {
         //cout << "This immovable" << endl;
-        float loss = getRigidity() * shape.getRigidity();
         v1f = getVelocity(); // Doesn't change
         v1f = -1.0f * VectorMath::mag(shape.getVelocity() + getVelocity()) * resultant - getVelocity();
         shape.setVelocity(loss * v2f);
@@ -222,31 +226,53 @@ void Polygon::adjustVelocityFromCollision(Vector2f resultant, Vector2f collision
 
     if (!shape.isMovableByCollision() && isMovableByCollision()) {
         //cout << "Shape immovable" << endl;        
-        float loss = getRigidity() * shape.getRigidity();
         v2f = shape.getVelocity(); // Doesn't change
         v1f = -1.0f * VectorMath::mag(shape.getVelocity() + getVelocity()) * resultant - shape.getVelocity();
         setVelocity(loss * v1f);
         return;
     }
     
+    //*/
+
     // We are going to rename some variables so we can simplify the montrous equations below
     float ma = getMass();
     float mb = shape.getMass();
     float e = getRigidity() * shape.getRigidity();
     float Ia = getMomentOfInertia();
     float Ib = getMomentOfInertia();
-    Vector2f ra = -(getPosition() - getOrigin() + getCenterOfMass()) + collisionPoint;
-    Vector2f rb = -(shape.getPosition() - shape.getOrigin() + shape.getCenterOfMass()) + collisionPoint;
+    Vector2f ra = (getPosition() - getOrigin() + getCenterOfMass()) - collisionPoint;
+    Vector2f rb = (shape.getPosition() - shape.getOrigin() + shape.getCenterOfMass()) - collisionPoint;
     Vector2f v1i = getVelocity();
     Vector2f v2i = shape.getVelocity();
+    float w1i = getAngularVelocity();
+    float w2i = shape.getAngularVelocity();
 
-    v1f = v1i * (ma-mb)/(ma+mb) + v2i * (2*mb)/(ma+mb);
-    v2f = v2i * (ma-mb)/(ma+mb) + v1i * (2*ma)/(ma+mb);
+    cout << rb.x << " " << rb.y << endl;
 
-    //cout << resultant.x << " " << resultant.y << endl;
+    Vector2f impulse = 2.0f * (ma*mb)/(ma+mb)*VectorMath::dot((v1i) - (v2i), resultant) * resultant;
 
-    setVelocity(v1f);
-    shape.setVelocity(v2f);
+    v1f = v1i - impulse / ma;
+    v2f = v2i + impulse / mb;
+
+    w1f = w1i - VectorMath::cross(impulse, ra) / ma;
+    w2f = w2i + VectorMath::cross(impulse, ra) / mb;
+
+    //cout << v2f.x << " " << v2f.y << endl;
+
+    // Make sure we don't get nan
+    if ((v1f.x >= 0 || v1f.x <= 0) && (v1f.y >= 0 || v1f.y <= 0) && (v2f.x >= 0 || v2f.x <= 0) && (v2f.y >= 0 || v2f.y <= 0)) {
+        if (isMovableByCollision())
+            setVelocity(loss*v1f);
+        if (shape.isMovableByCollision())
+            shape.setVelocity(loss*v2f);
+    }
+
+    if ((w1f >= 0 || w1f <= 0) && (w2f >= 0 || w2f <= 0)) {
+        if (isMovableByCollision())
+            setAngularVelocity(loss*w1f);
+        if (shape.isMovableByCollision())
+            shape.setAngularVelocity(loss*w2f);
+    }
 
     /*
     const float MIN_DISPLACEMENT = .01f;

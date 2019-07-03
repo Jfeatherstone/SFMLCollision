@@ -7,8 +7,8 @@
  * @param v2 The second vector
  * @param value The variable in which the value will be stored in
  */
-void VectorMath::dot(Vector2f v1, Vector2f v2, float& value) {
-    value = v1.x * v2.x + v1.y * v2.y;
+float VectorMath::dot(Vector2f v1, Vector2f v2) {
+    return v1.x * v2.x + v1.y * v2.y;
 }
 
 
@@ -19,8 +19,12 @@ void VectorMath::dot(Vector2f v1, Vector2f v2, float& value) {
  * @param v2 The second vector
  * @param value The variable in which the value will be stored in
  */
-void VectorMath::dot(Vector3f v1, Vector3f v2, float& value) {
-    value = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+float VectorMath::dot(Vector3f v1, Vector3f v2) {
+    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+}
+
+float VectorMath::cross(Vector2f v1, Vector2f v2) {
+    return VectorMath::mag(v1) * VectorMath::mag(v2) * sin(VectorMath::angleBetween(v1, v2));
 }
 
 /**
@@ -30,12 +34,11 @@ void VectorMath::dot(Vector3f v1, Vector3f v2, float& value) {
  * @param v2 The second vector
  * @param angle The variable in which the angle will be stored in
  */
-void VectorMath::angleBetween(Vector2f v1, Vector2f v2, float& angle) {
-    float dot;
-    VectorMath::dot(v1, v2, dot);
+float VectorMath::angleBetween(Vector2f v1, Vector2f v2) {
+    float dot = VectorMath::dot(v1, v2);
     float mag1 = sqrt(pow(v1.x, 2) + pow(v1.y, 2));
     float mag2 = sqrt(pow(v2.x, 2) + pow(v2.y, 2));
-    angle = acos(dot / (mag1 * mag2));
+    return acos(dot / (mag1 * mag2));
     
 }
 

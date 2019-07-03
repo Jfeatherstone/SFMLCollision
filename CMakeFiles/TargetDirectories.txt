@@ -1,3 +1,0 @@
-/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/rebuild_cache.dir
-/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/collision.dir
-/home/jack/cpp-workspace/SFMLCollision/CMakeFiles/edit_cache.dir

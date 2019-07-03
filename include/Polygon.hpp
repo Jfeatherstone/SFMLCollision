@@ -103,7 +103,10 @@ private:
     float m_mass; // Mass found from area times density
     float m_momentOfInertia; // How our object rotates about its origin
     Vector2f m_centerOfMass;
-
+    float m_youngsModulus = 1.0f;
+    float m_gamma = 1.0f;
+    Vector2f m_force;
+    
     // Since this is more or a less a lite physics engine, we need to keep track of the object's
     // velocity
     Vector2f m_velocity = Vector2f(0, 0);
@@ -176,6 +179,14 @@ public:
     
     Vector2f getCenterOfMass();
 
+    float getYoungsModulus();
+    float getGamma();
+    void setGamma(float gamma);
+    void setYoungsModulus(float youngsModulus);
+
+    Vector2f getForce();
+    void setForce(Vector2f force);
+    void addForce(Vector2f force);
     /*
     We need to be able to apply a velocity to our shape and iterate it through every frame
     */
@@ -185,7 +196,7 @@ public:
     float getAngularVelocity();
 
     void update(float elapsedTime);
-    void adjustVelocityFromCollision(Vector2f resultant, Vector2f collisionPoint, Polygon& shape);
+    void adjustFromForce(Vector2f resultant, Vector2f collisionPoint, Polygon& shape);
 
     /*
     These methods a pseudo-overriden in that they reference their super class
