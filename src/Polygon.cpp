@@ -95,19 +95,77 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
         i++;
     }
 
-    /*
+    // Now, we want to crop the image properly to remove excess space
+    // We are going to iterate through every vertex and find the farthest right, left, up, down points
+    int left = textureSize.x;
+    int right = 0;
+    int top = textureSize.y;
+    int bottom = 0;
+    
+    for (int i = 0; i < textureSize.y; i++) {
+        for (int j = 0; j < textureSize.x; j++) {
+
+            //std::cout << hitboxInclude[i*textureSize.x + j] << std::endl;
+
+            if (hitboxInclude[i*textureSize.x + j] == 1) {
+
+                // Check each condition and reassign if its true
+                if (j < left)
+                    left = j;
+                if (j > right)
+                    right = j;
+                if (i < top)
+                    top = i;
+                if (i > bottom)
+                    bottom = i;
+            }
+        }
+    }
+
+    //std::cout << left << " " << right << " " << top << " " << bottom << std::endl;
+
+    // There are four regions that need to be erased:
+    // above, below, left, and right
+
+    std::vector<int> newVector;
+
+    
+    for (int i = 0; i < textureSize.y; i++) {
+        for (int j = 0; j < textureSize.x; j++) {
+
+            if (i < top || i > bottom || j < left || j > right) {
+                std::cout << "-";
+                continue;
+            }
+
+            newVector[(i-top)*textureSize.x + j - left] = (hitboxInclude[i*textureSize.y + j]);
+            std::cout << newVector[(i-top)*textureSize.y + (j-left)];
+        }
+
+    std::cout << std::endl;
+    }
+
+    hitboxInclude = newVector;
+
+
+    textureSize.x = right - left;
+    textureSize.y = bottom - top;
+    
+    // Now we crop the texture to remove excess space (pixels)
+
+    ///*
     ///////////////////////////////////////////////
     // Print out our current verticies to help debug
-    cout << endl;
-    for (int i = 0; i < hitboxInclude.size(); i++) {
+    std::cout << std::endl;
+    for (int i = 0; i < newVector.size(); i++) {
         if (i % (int)(textureSize.x) == 0 && i > 0)
-            cout << endl;
-        cout << hitboxInclude[i];
+            std::cout << std::endl;
+        std::cout << newVector[i];
 
     }
-    cout << "\n\n";
+    std::cout << "\n\n";
     ///////////////////////////////////////////////
-    */
+    //*/
 
 
     ///////////////////////////////////////////
@@ -469,9 +527,7 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     }
     m_points.resize(m_numVerticies);
 
-    std::cout << m_numVerticies << std::endl;
-
-    sf::Vector2f previousMovement(0, 0);
+    std::cout << "numVericies before adding: " << m_numVerticies << std::endl;
 
     while (vertexIndex < m_numVerticies) {
         if (hitboxInclude[currPixel.y*textureSize.x + currPixel.x] == 1 || hitboxInclude[currPixel.y*textureSize.x + currPixel.x] == 3) {
@@ -486,27 +542,24 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
             } else {
                 std::cout << std::endl;
             }
+
             // We now look for the next pixel that is marked either as a 3 or a 1
-            /*
-            We check starting at the top and move clockwise 
-            */
+            // We check starting at the top and move clockwise 
+            
             //cout << currPixel.x << " " << currPixel.y << " " << vertexIndex << endl;
             //for (sf::Vector2f v: m_hitboxVertices)
-              //  cout << v.x << " " << v.y << " --- ";
+            //    cout << v.x << " " << v.y << " --- ";
 
-            // First check the direction we moved in last
-            if (previousMovement != sf::Vector2f(0, 0)) {
-                sf::Vector2f newPixel = currPixel + previousMovement;
+            // We now calculate the distance from the center to each of the possible points
+            // so that we can jump to the point that is the farthest from the center
+            // We use a map because it sorts the entries based on the lowest key value when we
+            // use an iterator
+            std::map<float, sf::Vector2f> possibleMovements;
 
-                if ((hitboxInclude[(newPixel.y)*textureSize.x + newPixel.x] == 1 
-                || hitboxInclude[(newPixel.y)*textureSize.x + newPixel.x] == 3)
-                && ((newPixel.x) >= 0 && newPixel.x < textureSize.x && (newPixel.y)*textureSize.x + newPixel.x < hitboxInclude.size())
-                && !contains(hitboxVerticies, newPixel)) {
-                    currPixel = newPixel;
-                    continue;
-                }
-            }
+            //map[distance()];
+            
 
+            /*
             // Top
             if ((hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x] == 1 
             || hitboxInclude[(currPixel.y - 1)*textureSize.x + currPixel.x] == 3)
@@ -596,6 +649,7 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
                 //cout << "Done" << endl;
                 break;
             }
+            */
         } else {
             // Just move horizontally until we get on the path of the first vertex
             currPixel.x += 1;
@@ -608,7 +662,7 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
         }
     }
 
-    std::cout << vertexIndex << std::endl;
+    std::cout << "Final vertex index: " << vertexIndex << std::endl;
 
     ///*
     // 0, 0 has been causing some trouble, so we remove it if it isn't actually there
@@ -740,6 +794,14 @@ bool Polygon::contains(std::vector<sf::Vector2f>& vec, sf::Vector2f point) {
     }
     //cout << "False" << endl;
     return false;
+}
+
+/**
+ * @brief This method is used to determine the farthest point from the centroid of the shape
+ * when adding the points such that they are added in order
+ */
+float distance(sf::Vector2f p1, sf::Vector2f p2) {
+    return std::sqrt(std::pow(p1.x - p2.x, 2) + std::pow(p1.y - p2.y, 2));
 }
 
 /*
