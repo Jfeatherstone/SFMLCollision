@@ -365,13 +365,13 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
                 continue;
 
             // This just checks that both the left and right pixels are either on a different line or are included.
-            if ((includedPixels[i][j - 1] == 1 && i*textureSize.x + j - 1 >= i*textureSize.x)
-            && (includedPixels[i][j + 1] == 1 && i*textureSize.x + j + 1 < (i+1)*textureSize.x))
+            if (((includedPixels[i][j - 1] == 1 || includedPixels[i][j - 1] == 3) && j - 1 >= 0)
+            && ((includedPixels[i][j + 1] == 1 || includedPixels[i][j + 1] == 3) && j + 1 < textureSize.x))
                 includedPixels[i][j] = 3;
             
             // Now we do the same, but vertically
-            if ((includedPixels[i - 1][j] == 1 && i - 1 >= 0)
-            && (includedPixels[i + 1][j] == 1 && i + 1 < textureSize.y))
+            if (((includedPixels[i - 1][j] == 1 || includedPixels[i - 1][j] == 3) && i - 1 >= 0)
+            && ((includedPixels[i + 1][j] == 1 || includedPixels[i + 1][j] == 3) && i + 1 < textureSize.y))
                 includedPixels[i][j] = 3;
 
         }
@@ -532,6 +532,8 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     we should be able to begin at a given pixel and move along in one direction
     */
     sf::Vector2i currPixel;
+    sf::Vector2f centerPoint(textureSize.x / 2.0f, textureSize.y / 2.0f);
+
     int vertexIndex = 0;
     std::vector<sf::Vector2f> polygonVerticies;
     //hitboxVerticies.resize(hitboxInclude.size()); // This is a little overkill, but that's okay
@@ -579,8 +581,51 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
             // use an iterator
             std::map<float, sf::Vector2f> possibleMovements;
 
-            //map[distance()];
-            
+            possibleMovements[distance(centerPoint, sf::Vector2f(currPixel.x, currPixel.y - 1))] = sf::Vector2f(0, -1); // Top
+            possibleMovements[distance(centerPoint, sf::Vector2f(currPixel.x + 1, currPixel.y - 1))] = sf::Vector2f(1, -1); // Top right
+            possibleMovements[distance(centerPoint, sf::Vector2f(currPixel.x + 1, currPixel.y))] = sf::Vector2f(1, 0); // Right
+            possibleMovements[distance(centerPoint, sf::Vector2f(currPixel.x + 1, currPixel.y + 1))] = sf::Vector2f(1, 1); // Bottom right
+            possibleMovements[distance(centerPoint, sf::Vector2f(currPixel.x, currPixel.y + 1))] = sf::Vector2f(0, 1); // Bottom
+            possibleMovements[distance(centerPoint, sf::Vector2f(currPixel.x - 1, currPixel.y + 1))] = sf::Vector2f(-1, 1); // Bottom left
+            possibleMovements[distance(centerPoint, sf::Vector2f(currPixel.x - 1, currPixel.y))] = sf::Vector2f(-1, 0); // Left
+            possibleMovements[distance(centerPoint, sf::Vector2f(currPixel.x - 1, currPixel.y - 1))] = sf::Vector2f(-1, -1); // Top left
+
+            // We now start at the last element in the map (the point furthest away)
+            // and find the first 3 or 1
+            std::cout << "Searching for 1s:" << std::endl;
+            for (std::map<float, sf::Vector2f>::reverse_iterator it = possibleMovements.rbegin(); it != possibleMovements.rend(); it++) {
+
+                sf::Vector2i newPoint(currPixel.x + it->second.x, currPixel.y + it->second.y);
+
+                std::cout << it->first << std::endl;
+                std::cout << newPoint.x << " " << newPoint.y << std::endl;
+
+                if ((includedPixels[newPoint.x][newPoint.y] == 1)
+                && (newPoint.x > 0 && newPoint.y > 0 && newPoint.x < textureSize.x && newPoint.y < textureSize.y)
+                && (!contains(polygonVerticies, sf::Vector2f(newPoint.x, newPoint.y)))) {
+                    currPixel.x = newPoint.x;
+                    currPixel.y = newPoint.y;
+                    break;
+                }
+            }
+
+            std::cout << "Searching for 3s:" << std::endl;
+            for (std::map<float, sf::Vector2f>::reverse_iterator it = possibleMovements.rbegin(); it != possibleMovements.rend(); it++) {
+
+                sf::Vector2i newPoint(currPixel.x + it->second.x, currPixel.y + it->second.y);
+
+                //std::cout << it->first << std::endl;
+                //std::cout << newPoint.x << " " << newPoint.y << std::endl;
+
+                if ((includedPixels[newPoint.x][newPoint.y] == 3)
+                && (newPoint.x > 0 && newPoint.y > 0 && newPoint.x < textureSize.x && newPoint.y < textureSize.y)
+                && (!contains(polygonVerticies, sf::Vector2f(newPoint.x, newPoint.y)))) {
+                    currPixel.x = newPoint.x;
+                    currPixel.y = newPoint.y;
+                    break;
+                }
+            }
+
 
             /*
             // Top
@@ -823,7 +868,7 @@ bool Polygon::contains(std::vector<sf::Vector2f>& vec, sf::Vector2f point) {
  * @brief This method is used to determine the farthest point from the centroid of the shape
  * when adding the points such that they are added in order
  */
-float distance(sf::Vector2f p1, sf::Vector2f p2) {
+float Polygon::distance(sf::Vector2f p1, sf::Vector2f p2) {
     return std::sqrt(std::pow(p1.x - p2.x, 2) + std::pow(p1.y - p2.y, 2));
 }
 
