@@ -73,26 +73,29 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     ///////////////////////////////////////////
     //     Create our first set of verticies
     ///////////////////////////////////////////
-    std::vector<int> hitboxInclude;
-    // Next, we want to go through every color and if it isn't empty or on the ignore list, we
-    // add it to our include for the hitbox calculation
-    hitboxInclude.resize(pixels.size());
-
-    sf::Vector2f textureSize;
+    sf::Vector2i textureSize;
 
     textureSize.x = texture->getSize().x;
     textureSize.y = texture->getSize().y;
 
-    int i = 0;
+    int preCropPixels[textureSize.x][textureSize.y];
 
-    for (sf::Color c: pixels) {
-        if (!contains(ignoredColors, c) && (int) c.a > 0) {
-            //cout << (int)c.r << " " << (int)c.g << " " << (int)c.b << " " << (int)c.a << endl;
-            hitboxInclude[i] = 1;
+
+    // Next, we want to go through every color and if it isn't empty or on the ignore list, we
+    // add it to our include for the hitbox calculation
+    int i = 0, j = 0;
+    for (int i = 0; i < textureSize.y; i++) {
+        for (int j = 0; j < textureSize.x; j++) {
+
+            // Hold onto the color to clean up the code
+            sf::Color c = pixels[i*textureSize.x + j];
+
+            // If the color is not ignored and has a non-zero alpha value, we keep it
+            if (!contains(ignoredColors, c) && (int) c.a > 0)
+                preCropPixels[i][j] = 1;
+            else
+                preCropPixels[i][j] = 0;
         }
-        else
-            hitboxInclude[i] = 0;
-        i++;
     }
 
     // Now, we want to crop the image properly to remove excess space
@@ -107,7 +110,7 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
 
             //std::cout << hitboxInclude[i*textureSize.x + j] << std::endl;
 
-            if (hitboxInclude[i*textureSize.x + j] == 1) {
+            if (preCropPixels[i][j] == 1) {
 
                 // Check each condition and reassign if its true
                 if (j < left)
@@ -127,7 +130,7 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     // There are four regions that need to be erased:
     // above, below, left, and right
 
-    std::vector<int> newVector;
+    int newArr[bottom-top + 1][right-left + 1];
 
     
     for (int i = 0; i < textureSize.y; i++) {
@@ -138,18 +141,26 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
                 continue;
             }
 
-            newVector[(i-top)*textureSize.x + j - left] = (hitboxInclude[i*textureSize.y + j]);
-            std::cout << newVector[(i-top)*textureSize.y + (j-left)];
+            newArr[i - top][j - left] = (preCropPixels[i][j]);
+            std::cout << newArr[i - top][j - left];
         }
 
     std::cout << std::endl;
     }
 
-    hitboxInclude = newVector;
+    // The +1 makes it so that we don't lose the last right and bottom rows
+    // Not sure why they get cut off otherwise, but they do
+    int includedPixels[bottom - top + 1][right - left + 1];
 
+    // And copy the values over (I was having some trouble using std::copy)
+    for (int i = 0; i < textureSize.y; i++) {
+        for (int j = 0; j < textureSize.x; j++) {
+            includedPixels[i][j] = newArr[i][j];
+        }
+    }
 
-    textureSize.x = right - left;
-    textureSize.y = bottom - top;
+    textureSize.x = right - left + 1;
+    textureSize.y = bottom - top + 1;
     
     // Now we crop the texture to remove excess space (pixels)
 
@@ -157,11 +168,11 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     ///////////////////////////////////////////////
     // Print out our current verticies to help debug
     std::cout << std::endl;
-    for (int i = 0; i < newVector.size(); i++) {
-        if (i % (int)(textureSize.x) == 0 && i > 0)
-            std::cout << std::endl;
-        std::cout << newVector[i];
-
+    for (int i = 0; i < textureSize.y; i++) {
+        for (int j = 0; j < textureSize.x; j++) {
+            std::cout << includedPixels[i][j];
+        }
+    std::cout << std::endl;
     }
     std::cout << "\n\n";
     ///////////////////////////////////////////////
@@ -176,33 +187,33 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
         */
     for (int i = 0; i < textureSize.y; i++) {
         for (int j = 0; j < textureSize.x; j++) {
-            if (hitboxInclude[i*textureSize.x + j] == 0) {
+            if (includedPixels[i][j] == 0) {
                 bool right = false, left = false, up = false, down = false; // Our cardinal directions
                 bool upright = false, downright = false, upleft = false, downleft = false; // We also want to check diagonals
                 // Right
                 for (int k = j+1; k < textureSize.x; k++) {
-                    if (hitboxInclude[i*textureSize.x + k] == 1) {
+                    if (includedPixels[i][k] == 1) {
                         right = true;
                         break;
                     }
                 }
                 // Left
                 for (int k = j-1; k >= 0; k--) {
-                    if (hitboxInclude[i*textureSize.x + k] == 1) {
+                    if (includedPixels[i][k] == 1) {
                         left = true;
                         break;
                     }
                 }
                 // Up
                 for (int k = i-1; k >= 0; k--) {
-                    if (hitboxInclude[k*textureSize.x + j] == 1) {
+                    if (includedPixels[k][j] == 1) {
                         up = true;
                         break;
                     }
                 }
                 // Down
                 for (int k = i+1; k < textureSize.y; k++) {
-                    if (hitboxInclude[k*textureSize.x + j] == 1) {
+                    if (includedPixels[k][j] == 1) {
                         down = true;
                         break;
                     }
@@ -218,7 +229,7 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
                     if (i-k < 0 || j + k > textureSize.x)
                         break;
                     
-                    if (hitboxInclude[(i-k)*textureSize.x + j + k] == 1) {
+                    if (includedPixels[i - k][j + k] == 1) {
                         upright = true;
                         break;
                     }
@@ -229,7 +240,7 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
                     if (i+k > textureSize.y || j + k > textureSize.x)
                         break;
                     
-                    if (hitboxInclude[(i+k)*textureSize.x + j + k] == 1) {
+                    if (includedPixels[i + k][j + k] == 1) {
                         downright = true;
                         break;
                     }
@@ -240,7 +251,7 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
                     if (i+k > textureSize.y || j - k < 0)
                         break;
                     
-                    if (hitboxInclude[(i+k)*textureSize.x + j - k] == 1) {
+                    if (includedPixels[i + k][j - k] == 1) {
                         downleft = true;
                         break;
                     }
@@ -251,14 +262,14 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
                     if (i-k < 0 || j - k < 0)
                         break;
                     
-                    if (hitboxInclude[(i-k)*textureSize.x + j - k] == 1) {
+                    if (includedPixels[i - k][j - k] == 1) {
                         upleft = true;
                         break;
                     }
                 }
 
                 if (left && right && up && down && upleft && upright && downleft && downright) {
-                    hitboxInclude[i*textureSize.x + j] = 1;
+                    includedPixels[i][j] = 1;
                 }
             }
         }
@@ -268,11 +279,11 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     ///////////////////////////////////////////////
     // Print out our current verticies to help debug
     std::cout << std::endl;
-    for (int i = 0; i < hitboxInclude.size(); i++) {
-        if (i % (int)(textureSize.x) == 0 && i > 0)
-            std::cout << std::endl;
-        std::cout << hitboxInclude[i];
-
+    for (int i = 0; i < textureSize.y; i++) {
+        for (int j = 0; j < textureSize.x; j++) {
+            std::cout << includedPixels[i][j];
+        }
+    std::cout << std::endl;
     }
     std::cout << "\n\n";
     ///////////////////////////////////////////////
@@ -282,8 +293,7 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     //     Removing the inside
     ///////////////////////////////////////////
     // Now, we go through and remove everything except for the outline
-    std::vector<int> newHitbox;
-    newHitbox.resize(hitboxInclude.size());
+    int newPixels[textureSize.y][textureSize.x];
 
     for (int i = 0; i < textureSize.y; i++) {
         for (int j = 0; j < textureSize.x; j++) {
@@ -301,76 +311,86 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
             Next, the line checks that both above and below the pixel are included, which don't need weird
             cases like left and right since they are just up and down
 
-            Lastly, we make sure that we aren't at the bottom line. This was causing an error where some
+            On the fourth line, we make sure that we aren't at the bottom line. This was causing an error where some
             on the last line weren't included and I have no idea why, but this seemed like a good way
             to fix it :)
-            */
-            newHitbox[i*textureSize.x + j] = hitboxInclude[i*textureSize.x + j];
 
-            if ((hitboxInclude[i*textureSize.x + j - 1] == 1 && i*textureSize.x + j - 1 >= i*textureSize.x)
-            && (hitboxInclude[i*textureSize.x + j + 1] == 1 && i*textureSize.x + j + 1 < (i+1)*textureSize.x)
-            && (hitboxInclude[(i-1)*textureSize.x + j] == 1) && (hitboxInclude[(i+1)*textureSize.x + j] == 1)
-            && ((i+1)*textureSize.x + j < hitboxInclude.size() && (i-1) >= 0)
-            && (hitboxInclude[(i-1)*textureSize.x + j - 1] == 1) && (hitboxInclude[(i-1)*textureSize.x + j + 1] == 1)
-            && (hitboxInclude[(i+1)*textureSize.x + j - 1] == 1) && (hitboxInclude[(i+1)*textureSize.x + j + 1] == 1))            
-                newHitbox[i*textureSize.x + j] = 2;
+            The last two lines look at the diagonals
+            */
+            newPixels[i][j] = includedPixels[i][j];
+
+            if ((includedPixels[i][j - 1] == 1 && i*textureSize.x + j - 1 >= i*textureSize.x)
+            && (includedPixels[i][j + 1] == 1 && i*textureSize.x + j + 1 < (i+1)*textureSize.x)
+            && (includedPixels[i - 1][j] == 1) && (includedPixels[i + 1][j] == 1)
+            && (i + 1 < textureSize.y && i - 1 >= 0)
+            && (includedPixels[i - 1][j - 1] == 1) && (includedPixels[i - 1][j + 1] == 1)
+            && (includedPixels[i + 1][j - 1] == 1) && (includedPixels[i + 1][j + 1] == 1))            
+                newPixels[i][j] = 2;
         }
     }
-    hitboxInclude = newHitbox;
+
+    // And copy the values over (I was having some trouble using std::copy)
+    for (int i = 0; i < textureSize.y; i++) {
+        for (int j = 0; j < textureSize.x; j++) {
+            includedPixels[i][j] = newPixels[i][j];
+        }
+    }
 
     ///*
     ///////////////////////////////////////////////
     // Print out our current verticies to help debug
     std::cout << std::endl;
-    for (int i = 0; i < hitboxInclude.size(); i++) {
-        if (i % (int)(textureSize.x) == 0 && i > 0)
-            std::cout << std::endl;
-        std::cout << hitboxInclude[i];
-
+    for (int i = 0; i < textureSize.y; i++) {
+        for (int j = 0; j < textureSize.x; j++) {
+            std::cout << includedPixels[i][j];
+        }
+    std::cout << std::endl;
     }
     std::cout << "\n\n";
     ///////////////////////////////////////////////
     //*/
+
 
     /*****************************************
      *      Remove excess verticies
      * ******************************************/
     // The final process is to remove points in between straight sections, which would cause
     // uneccessary points on our hitbox
+
     for (int i = 0; i < textureSize.y; i++) {
         for (int j = 0; j < textureSize.x; j++) {
             
             // We don't change inside points
-            if (hitboxInclude[i*textureSize.x + j] == 2)
+            if (includedPixels[i][j] == 2)
                 continue;
 
             // This just checks that both the left and right pixels are either on a different line or are included.
-            if ((hitboxInclude[i*textureSize.x + j - 1] == 1 && i*textureSize.x + j - 1 >= i*textureSize.x)
-            && (hitboxInclude[i*textureSize.x + j + 1] == 1 && i*textureSize.x + j + 1 < (i+1)*textureSize.x))
-                newHitbox[i*textureSize.x + j] = 3;
+            if ((includedPixels[i][j - 1] == 1 && i*textureSize.x + j - 1 >= i*textureSize.x)
+            && (includedPixels[i][j + 1] == 1 && i*textureSize.x + j + 1 < (i+1)*textureSize.x))
+                includedPixels[i][j] = 3;
             
             // Now we do the same, but vertically
-            if ((hitboxInclude[(i-1)*textureSize.x + j] == 1 && (i-1) >= 0)
-            && (hitboxInclude[(i+1)*textureSize.x + j] == 1 && (i+1) < textureSize.y))
-                newHitbox[i*textureSize.x + j] = 3;
+            if ((includedPixels[i - 1][j] == 1 && i - 1 >= 0)
+            && (includedPixels[i + 1][j] == 1 && i + 1 < textureSize.y))
+                includedPixels[i][j] = 3;
 
         }
     }
-    hitboxInclude = newHitbox;
 
     ///*
     ///////////////////////////////////////////////
     // Print out our current verticies to help debug
     std::cout << std::endl;
-    for (int i = 0; i < hitboxInclude.size(); i++) {
-        if (i % (int)(textureSize.x) == 0 && i > 0)
-            std::cout << std::endl;
-        std::cout << hitboxInclude[i];
-
+    for (int i = 0; i < textureSize.y; i++) {
+        for (int j = 0; j < textureSize.x; j++) {
+            std::cout << includedPixels[i][j];
+        }
+    std::cout << std::endl;
     }
     std::cout << "\n\n";
     ///////////////////////////////////////////////
     //*/
+
 
     /*
     Remove diagonal verticies
@@ -387,47 +407,47 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
         for (int j = 0; j < textureSize.x; j++) {
 
             // Top right diagonal
-            if (hitboxInclude[i*textureSize.x + j] == 1 // The current point is a vertex
-            && hitboxInclude[(i-1)*textureSize.x + j + 1] == 1 // The top right point is a vertex and in our std::vector
-            && (i-1) >= 0 && j + 1 < textureSize.x) { // Make sure we are within bounds
+            if (includedPixels[i][j] == 1 // The current point is a vertex
+            && includedPixels[i - 1][j + 1] == 1 // The top right point is a vertex
+            && i - 1 >= 0 && j + 1 < textureSize.x) { // Make sure we are within bounds
             // We want to make sure that the vertex was actually a point before (might be unnecessary)
-                if (hitboxInclude[i*textureSize.x + j + 1] == 1)
-                    hitboxInclude[i*textureSize.x + j + 1] = 0; // right
-                if (hitboxInclude[(i-1)*textureSize.x + j] == 1) 
-                    hitboxInclude[(i-1)*textureSize.x + j] = 0; // above
+                if (includedPixels[i][j + 1] == 1)
+                    includedPixels[i][j + 1] = 0; // right
+                if (includedPixels[i - 1][j] == 1) 
+                    includedPixels[i - 1][j] = 0; // above
             }
 
             // Bottom right diagonal
-            if (hitboxInclude[i*textureSize.x + j] == 1 // The current point is a vertex
-            && hitboxInclude[(i+1)*textureSize.x + j + 1] == 1 // The bottom right point is a vertex
-            && (i+1)*textureSize.x + j < hitboxInclude.size() && j + 1 < textureSize.x) { // Make sure we are within bounds
+            if (includedPixels[i][j] == 1 // The current point is a vertex
+            && includedPixels[i + 1][j + 1] == 1 // The bottom right point is a vertex
+            && i + 1 < textureSize.y && j + 1 < textureSize.x) { // Make sure we are within bounds
             // We want to make sure that the vertex was actually a point before (might be unnecessary)
-                if (hitboxInclude[i*textureSize.x + j + 1] == 1)
-                    hitboxInclude[i*textureSize.x + j + 1] = 0; // right
-                if (hitboxInclude[(i+1)*textureSize.x + j] == 1) 
-                    hitboxInclude[(i+1)*textureSize.x + j] = 0; // below
+                if (includedPixels[i][j + 1] == 1)
+                    includedPixels[i][j + 1] = 0; // right
+                if (includedPixels[i + 1][j] == 1) 
+                    includedPixels[i + 1][j] = 0; // below
             }
 
             // Bottom left diagonal
-            if (hitboxInclude[i*textureSize.x + j] == 1 // The current point is a vertex
-            && hitboxInclude[(i+1)*textureSize.x + j - 1] == 1 // The bottom left point is a vertex
-            && (i+1)*textureSize.x + j < hitboxInclude.size() && j - 1 >= 0) { // Make sure we are within bounds
+            if (includedPixels[i][j] == 1 // The current point is a vertex
+            && includedPixels[i + 1][j - 1] == 1 // The bottom left point is a vertex
+            && i + 1 < textureSize.y  && j - 1 >= 0) { // Make sure we are within bounds
             // We want to make sure that the vertex was actually a point before (might be unnecessary)
-                if (hitboxInclude[i*textureSize.x + j - 1] == 1)
-                    hitboxInclude[i*textureSize.x + j - 1] = 0; // left
-                if (hitboxInclude[(i+1)*textureSize.x + j] == 1) 
-                    hitboxInclude[(i+1)*textureSize.x + j] = 0; // below
+                if (includedPixels[i][j - 1] == 1)
+                    includedPixels[i][j - 1] = 0; // left
+                if (includedPixels[i + 1][j] == 1) 
+                    includedPixels[i + 1][j] = 0; // below
             }
 
             // Top left diagonal
-            if (hitboxInclude[i*textureSize.x + j] == 1 // The current point is a vertex
-            && hitboxInclude[(i-1)*textureSize.x + j - 1] == 1 // The top right point is a vertex
-            && (i-1)*textureSize.x > 0 && j + 1 < textureSize.x) { // Make sure we are within bounds
+            if (includedPixels[i][j] == 1 // The current point is a vertex
+            && includedPixels[i - 1][j - 1] == 1 // The top right point is a vertex
+            && i - 1 >= 0 && j + 1 < textureSize.x) { // Make sure we are within bounds
             // We want to make sure that the vertex was actually a point before (might be unnecessary)
-                if (hitboxInclude[i*textureSize.x + j - 1] == 1)
-                    hitboxInclude[i*textureSize.x + j - 1] = 0; // left
-                if (hitboxInclude[(i-1)*textureSize.x + j] == 1) 
-                    hitboxInclude[(i-1)*textureSize.x + j] = 0; // above
+                if (includedPixels[i][j - 1] == 1)
+                    includedPixels[i][j - 1] = 0; // left
+                if (includedPixels[i - 1][j] == 1) 
+                    includedPixels[i - 1][j] = 0; // above
             }
 
         }
@@ -437,11 +457,11 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     ///////////////////////////////////////////////
     // Print out our current verticies to help debug
     std::cout << std::endl;
-    for (int i = 0; i < hitboxInclude.size(); i++) {
-        if (i % (int)(textureSize.x) == 0 && i > 0)
-            std::cout << std::endl;
-        std::cout << hitboxInclude[i];
-
+    for (int i = 0; i < textureSize.y; i++) {
+        for (int j = 0; j < textureSize.x; j++) {
+            std::cout << includedPixels[i][j];
+        }
+    std::cout << std::endl;
     }
     std::cout << "\n\n";
     ///////////////////////////////////////////////
@@ -463,19 +483,19 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
             What we are doing here is the same as we did for straight lines before
             We want to remove any intermediate points from the line and only leave the endpoints
             */
-            if (hitboxInclude[i*textureSize.x + j] == 1
-            && (hitboxInclude[(i-1)*textureSize.x + j - 1] == 1 || hitboxInclude[(i-1)*textureSize.x + j - 1] == 3)
-            && (hitboxInclude[(i+1)*textureSize.x + j + 1] == 1 || hitboxInclude[(i+1)*textureSize.x + j + 1] == 3)
-            && (hitboxInclude[(i)*textureSize.x + j + 1] != 1 && hitboxInclude[(i)*textureSize.x + j - 1] != 1
-            && hitboxInclude[(i+1)*textureSize.x + j] != 1 && hitboxInclude[(i-1)*textureSize.x + j] != 1))
-                hitboxInclude[i*textureSize.x + j] = 3;
+            if (includedPixels[i][j] == 1
+            && (includedPixels[i - 1][j - 1] == 1 || includedPixels[i - 1][j - 1] == 3)
+            && (includedPixels[i + 1][j + 1] == 1 || includedPixels[i + 1][j + 1] == 3)
+            && includedPixels[i][j + 1] != 1 && includedPixels[i][j - 1] != 1
+            && includedPixels[i + 1][j] != 1 && includedPixels[i - 1][j] != 1)
+                includedPixels[i][j] = 3;
 
-            if (hitboxInclude[i*textureSize.x + j] == 1
-            && (hitboxInclude[(i+1)*textureSize.x + j - 1] == 1 || hitboxInclude[(i+1)*textureSize.x + j - 1] == 3)
-            && (hitboxInclude[(i-1)*textureSize.x + j + 1] == 1 || hitboxInclude[(i-1)*textureSize.x + j + 1] == 3)
-            && (hitboxInclude[(i)*textureSize.x + j + 1] != 1 && hitboxInclude[(i)*textureSize.x + j - 1] != 1
-            && hitboxInclude[(i+1)*textureSize.x + j] != 1 && hitboxInclude[(i-1)*textureSize.x + j] != 1))
-                hitboxInclude[i*textureSize.x + j] = 3;
+            if (includedPixels[i][j] == 1
+            && (includedPixels[i + 1][j - 1] == 1 || includedPixels[i + 1][j - 1] == 3)
+            && (includedPixels[i - 1][j + 1] == 1 || includedPixels[i - 1][j + 1] == 3)
+            && includedPixels[i][j + 1] != 1 && includedPixels[i][j - 1] != 1
+            && includedPixels[i + 1][j] != 1 && includedPixels[i - 1][j] != 1)
+                includedPixels[i][j] = 3;
 
         }
     }
@@ -484,11 +504,11 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     ///////////////////////////////////////////////
     // Print out our current verticies to help debug
     std::cout << std::endl;
-    for (int i = 0; i < hitboxInclude.size(); i++) {
-        if (i % (int)(textureSize.x) == 0 && i > 0)
-            std::cout << std::endl;
-        std::cout << hitboxInclude[i];
-
+    for (int i = 0; i < textureSize.y; i++) {
+        for (int j = 0; j < textureSize.x; j++) {
+            std::cout << includedPixels[i][j];
+        }
+    std::cout << std::endl;
     }
     std::cout << "\n\n";
     ///////////////////////////////////////////////
@@ -508,37 +528,40 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     We need to find a way to assign each pixel in the outline by following the path around our
     shape.
 
-    Since we have an outline of the sprite (where the lines should go) indicated by a 3 in our std::vector,
+    Since we have an outline of the sprite (where the lines should go) indicated by a 3 in our array,
     we should be able to begin at a given pixel and move along in one direction
     */
-    sf::Vector2f currPixel;
+    sf::Vector2i currPixel;
     int vertexIndex = 0;
-    std::vector<sf::Vector2f> hitboxVerticies;
-    hitboxVerticies.resize(hitboxInclude.size()); // This is a little overkill, but that's okay
+    std::vector<sf::Vector2f> polygonVerticies;
+    //hitboxVerticies.resize(hitboxInclude.size()); // This is a little overkill, but that's okay
 
     // Setup our polygon
 
     // We need to know how many verticies we have
     m_numVerticies = 0;
-    for (int i: hitboxInclude) {
-        if (i == 1)
-            m_numVerticies++;
+    for (int i = 0; i < textureSize.y; i++) {
+        for (int j = 0; j < textureSize.x; j++) {
+            if (includedPixels[i][j] == 1)
+                m_numVerticies++;
 
+        }
     }
+    
     m_points.resize(m_numVerticies);
 
     std::cout << "numVericies before adding: " << m_numVerticies << std::endl;
 
     while (vertexIndex < m_numVerticies) {
-        if (hitboxInclude[currPixel.y*textureSize.x + currPixel.x] == 1 || hitboxInclude[currPixel.y*textureSize.x + currPixel.x] == 3) {
+        if (includedPixels[currPixel.y][currPixel.x] == 1 || includedPixels[currPixel.y][currPixel.x] == 3) {
             // Even if it isn't an actual vertex, we record it in our other std::vector
-            hitboxVerticies.push_back(currPixel);
+            polygonVerticies.push_back(sf::Vector2f(currPixel.x, currPixel.y));
             std::cout << currPixel.x << " " << currPixel.y;
 
-            if (hitboxInclude[currPixel.y*textureSize.x + currPixel.x] == 1) {
+            if (includedPixels[currPixel.y][currPixel.x] == 1) {
                 // We record the vertex in our polygon
                 std::cout << " - Added " << vertexIndex << std::endl;
-                m_points[vertexIndex++] = currPixel;
+                m_points[vertexIndex++] = sf::Vector2f(currPixel.x, currPixel.y);
             } else {
                 std::cout << std::endl;
             }
@@ -666,7 +689,7 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
 
     ///*
     // 0, 0 has been causing some trouble, so we remove it if it isn't actually there
-    if (hitboxInclude[0] != 1) {
+    if (includedPixels[0][0] != 1) {
         //cout << "Excess zero present" << endl;
         for (int i = 0; i < m_points.size(); i++) {
             if (m_points[i] == sf::Vector2f(0, 0)) {
