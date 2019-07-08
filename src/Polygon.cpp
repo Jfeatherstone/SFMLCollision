@@ -353,6 +353,17 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
 
     /*****************************************
      *      Remove excess verticies
+     * 
+     * 311 -> 331
+     * 
+     * 111 -> 131
+     * 
+     * 113 -> 133
+     * 
+     * 1    1
+     * 1 -> 3
+     * 1    1
+     * 
      * ******************************************/
     // The final process is to remove points in between straight sections, which would cause
     // uneccessary points on our hitbox
@@ -552,6 +563,19 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     
     m_points.resize(m_numVerticies);
 
+
+    sf::Vector2f directions[8] = {
+        sf::Vector2f(0, -1), // Top
+        sf::Vector2f(1, 0), // Right
+        sf::Vector2f(0, 1), // Bottom
+        sf::Vector2f(-1, 0), // Left
+        sf::Vector2f(1, -1), // Top right
+        sf::Vector2f(1, 1), // Bottom right
+        sf::Vector2f(-1, 1), // Bottom left
+        sf::Vector2f(-1, -1), // Top left
+    };
+
+
     std::cout << "numVericies before adding: " << m_numVerticies << std::endl;
 
     while (vertexIndex < m_numVerticies) {
@@ -575,57 +599,28 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
             //for (sf::Vector2f v: m_hitboxVertices)
             //    cout << v.x << " " << v.y << " --- ";
 
-            // We now calculate the distance from the center to each of the possible points
-            // so that we can jump to the point that is the farthest from the center
-            // We use a map because it sorts the entries based on the lowest key value when we
-            // use an iterator
-            std::map<float, sf::Vector2f> possibleMovements;
+            bool foundPoint = false;
 
-            possibleMovements[distance(centerPoint, sf::Vector2f(currPixel.x, currPixel.y - 1))] = sf::Vector2f(0, -1); // Top
-            possibleMovements[distance(centerPoint, sf::Vector2f(currPixel.x + 1, currPixel.y - 1))] = sf::Vector2f(1, -1); // Top right
-            possibleMovements[distance(centerPoint, sf::Vector2f(currPixel.x + 1, currPixel.y))] = sf::Vector2f(1, 0); // Right
-            possibleMovements[distance(centerPoint, sf::Vector2f(currPixel.x + 1, currPixel.y + 1))] = sf::Vector2f(1, 1); // Bottom right
-            possibleMovements[distance(centerPoint, sf::Vector2f(currPixel.x, currPixel.y + 1))] = sf::Vector2f(0, 1); // Bottom
-            possibleMovements[distance(centerPoint, sf::Vector2f(currPixel.x - 1, currPixel.y + 1))] = sf::Vector2f(-1, 1); // Bottom left
-            possibleMovements[distance(centerPoint, sf::Vector2f(currPixel.x - 1, currPixel.y))] = sf::Vector2f(-1, 0); // Left
-            possibleMovements[distance(centerPoint, sf::Vector2f(currPixel.x - 1, currPixel.y - 1))] = sf::Vector2f(-1, -1); // Top left
+            // Iterate over every direction (in clockwise direction)
+            for (sf::Vector2f vec: directions) {
 
-            // We now start at the last element in the map (the point furthest away)
-            // and find the first 3 or 1
-            std::cout << "Searching for 1s:" << std::endl;
-            for (std::map<float, sf::Vector2f>::reverse_iterator it = possibleMovements.rbegin(); it != possibleMovements.rend(); it++) {
+                //std::cout << vec.x << " " << vec.y << std::endl;
 
-                sf::Vector2i newPoint(currPixel.x + it->second.x, currPixel.y + it->second.y);
+                if ((includedPixels[int(currPixel.y + vec.y)][int(currPixel.x + vec.x)] == 1 // The new pixel is either a 1
+                ||   includedPixels[int(currPixel.y + vec.y)][int(currPixel.x + vec.x)] == 3) // or a 3
+                && (currPixel.x + vec.x >= 0 && currPixel.x + vec.x < textureSize.x) // The x coordinate is within [0, width)
+                && (currPixel.y + vec.y >= 0 && currPixel.y + vec.y < textureSize.y) // The y coordinate is within [0, height)
+                && (!contains(polygonVerticies, sf::Vector2f(currPixel.x + vec.x, currPixel.y + vec.y)))) { // And the pixel hasn't already been added
 
-                std::cout << it->first << std::endl;
-                std::cout << newPoint.x << " " << newPoint.y << std::endl;
-
-                if ((includedPixels[newPoint.x][newPoint.y] == 1)
-                && (newPoint.x > 0 && newPoint.y > 0 && newPoint.x < textureSize.x && newPoint.y < textureSize.y)
-                && (!contains(polygonVerticies, sf::Vector2f(newPoint.x, newPoint.y)))) {
-                    currPixel.x = newPoint.x;
-                    currPixel.y = newPoint.y;
+                    currPixel.x += vec.x;
+                    currPixel.y += vec.y;
+                    foundPoint = true;
                     break;
                 }
             }
 
-            std::cout << "Searching for 3s:" << std::endl;
-            for (std::map<float, sf::Vector2f>::reverse_iterator it = possibleMovements.rbegin(); it != possibleMovements.rend(); it++) {
-
-                sf::Vector2i newPoint(currPixel.x + it->second.x, currPixel.y + it->second.y);
-
-                //std::cout << it->first << std::endl;
-                //std::cout << newPoint.x << " " << newPoint.y << std::endl;
-
-                if ((includedPixels[newPoint.x][newPoint.y] == 3)
-                && (newPoint.x > 0 && newPoint.y > 0 && newPoint.x < textureSize.x && newPoint.y < textureSize.y)
-                && (!contains(polygonVerticies, sf::Vector2f(newPoint.x, newPoint.y)))) {
-                    currPixel.x = newPoint.x;
-                    currPixel.y = newPoint.y;
-                    break;
-                }
-            }
-
+            if (!foundPoint)
+                break;
 
             /*
             // Top
@@ -661,6 +656,7 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
                 continue;
             } else
             // Bottom right
+
             if ((hitboxInclude[(currPixel.y + 1)*textureSize.x + currPixel.x + 1] == 1 
             || hitboxInclude[(currPixel.y + 1)*textureSize.x + currPixel.x + 1] == 3)
             && ((currPixel.y + 1)*textureSize.x + currPixel.x + 1 >= 0 && (currPixel.y + 1)*textureSize.x + currPixel.x + 1 < hitboxInclude.size())

@@ -240,7 +240,7 @@ int main() {
     Clock clock;
 
     Texture* t = new Texture();
-    t->loadFromFile("Images/test2.png");
+    t->loadFromFile("Images/test.png");
     
     CircleShape c;
     c.setRadius(50);
@@ -252,7 +252,7 @@ int main() {
     poly.setOrigin(poly.getCentroid());
     poly.setPosition(100, 120);
 
-    Polygon poly2(t, Detail::Exact);
+    Polygon poly2(t, Detail::Less);
     //poly2.setPosition(poly.getGlobalBounds().width + 40, 30);
     poly2.setPosition(200, 50);
     poly2.setScale(Vector2f(5, 5));
@@ -322,8 +322,8 @@ int main() {
         
         ///*
         // INTERSECTION TESTING
-        //window.draw(poly);
-        //window.draw(poly2);
+        window.draw(poly);
+        window.draw(poly2);
         //window.draw(poly3);
         window.setTitle((poly2.intersects(poly)) ? "Colliding" : "Not colliding!");
         //
