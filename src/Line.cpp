@@ -146,18 +146,18 @@ float Line::calculateAngle() {
     */
     if (m_horizontal) {
         if (m_start.x > m_end.x)
-            m_angle = 180;
+            m_angle = 180.0f;
         else
-            m_angle = 0;
+            m_angle = 0.0f;
 
         return m_angle;
     }
 
     if (m_vertical) {
         if (m_start.y > m_end.y)
-            m_angle = 90;
+            m_angle = 90.0f;
         else
-            m_angle = 270;
+            m_angle = 270.0f;
         
         return m_angle;
     }
@@ -174,16 +174,16 @@ float Line::calculateAngle() {
 
     switch (m_quadrant) {
         case 0:
-            m_angle = atan(abs(v.y/v.x)) * 180 /M_PI;
+            m_angle = atan(abs(v.y/v.x)) * 180.0f /M_PI;
             break;
         case 1:
-            m_angle = 180 - atan(abs(v.y/v.x)) * 180 /M_PI;
+            m_angle = 180.0f - atan(abs(v.y/v.x)) * 180.0f /M_PI;
             break;
         case 2:
-            m_angle = 180 + atan(abs(v.y/v.x)) * 180 /M_PI;
+            m_angle = 180.0f + atan(abs(v.y/v.x)) * 180.0f /M_PI;
             break;
         case 3:
-            m_angle = 360 - atan(abs(v.y/v.x)) * 180 /M_PI;
+            m_angle = 360.0f - atan(abs(v.y/v.x)) * 180.0f /M_PI;
             break;
     }
 
@@ -388,6 +388,7 @@ sf::RectangleShape* Line::getDrawable(sf::Color color) {
 
     r->setSize(sf::Vector2f(sqrt(pow(m_start.x - m_end.x, 2) + pow(m_start.y - m_end.y, 2)), 2));
     r->setOrigin(r->getGlobalBounds().width / 2, r->getGlobalBounds().height / 2 );
+    std::cout << m_angle << std::endl;
     r->setRotation(m_angle);
     r->setFillColor(color);
     r->setPosition((m_start + m_end) / 2.0f);

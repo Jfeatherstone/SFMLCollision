@@ -113,7 +113,6 @@ private:
 	void getPixels();
 	bool contains(std::vector<sf::Color>& vec, sf::Color c);
 	bool contains(std::vector<sf::Vector2f>& hitboxVerticies, sf::Vector2f point);
-    float distance(sf::Vector2f p1, sf::Vector2f p2);
     void findCentroid();
 
     void createLines();

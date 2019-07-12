@@ -78,26 +78,33 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     textureSize.x = texture->getSize().x;
     textureSize.y = texture->getSize().y;
 
+    std::cout << textureSize.x << " " << textureSize.y << std::endl;
+
     int preCropPixels[textureSize.x][textureSize.y];
 
+    std::cout << "Pre crop\n";
 
     // Next, we want to go through every color and if it isn't empty or on the ignore list, we
     // add it to our include for the hitbox calculation
-    int i = 0, j = 0;
+
     for (int i = 0; i < textureSize.y; i++) {
         for (int j = 0; j < textureSize.x; j++) {
 
             // Hold onto the color to clean up the code
             sf::Color c = pixels[i*textureSize.x + j];
 
+            std::cout << i << " " << j << " - " << int(c.r) << " " << int(c.g) << " " << int(c.b) << " " << int(c.a) << std::endl;
+
             // If the color is not ignored and has a non-zero alpha value, we keep it
-            if (!contains(ignoredColors, c) && (int) c.a > 0)
+            if (!contains(ignoredColors, c) && c.a > 0)
                 preCropPixels[i][j] = 1;
             else
                 preCropPixels[i][j] = 0;
         }
     }
 
+    std::cout << "Post crop\n";
+    
     // Now, we want to crop the image properly to remove excess space
     // We are going to iterate through every vertex and find the farthest right, left, up, down points
     int left = textureSize.x;
@@ -763,6 +770,10 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     // I sincerely apologize for that mess
     //////////////////////////////////////////
     
+    //for (sf::Vector2f v: m_points) {
+    //    std::cout << v.x << " " << v.y << std::endl;
+    //}
+
     /*
     Area optimization
     TODO: Make this better
@@ -828,15 +839,20 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
  * @return false If vec doesn't contain c
  */
 bool Polygon::contains(std::vector<sf::Color>& vec, sf::Color c) {
+    std::cout << "Before vec call\n";
+    std::cout << vec.size();
+    std::cout << "After vec call\n";
     /*
     We use this method in determining whether a list of colors to be ignored was provided
     As we read every pixel from an image, we check whether the ignoredsf::Colors std::vector
     contains the rgba value
     */
     for (sf::Color col: vec) {
+        std::cout << "Loop";
         if (col == c)
             return true;
     }
+    std::cout << std::endl;
     return false;
 }
 
@@ -858,14 +874,6 @@ bool Polygon::contains(std::vector<sf::Vector2f>& vec, sf::Vector2f point) {
     }
     //cout << "False" << endl;
     return false;
-}
-
-/**
- * @brief This method is used to determine the farthest point from the centroid of the shape
- * when adding the points such that they are added in order
- */
-float Polygon::distance(sf::Vector2f p1, sf::Vector2f p2) {
-    return std::sqrt(std::pow(p1.x - p2.x, 2) + std::pow(p1.y - p2.y, 2));
 }
 
 /*
@@ -899,13 +907,10 @@ Polygon::Polygon(std::vector<sf::Vector2f> points) {
  * @param shape The CircleShape object whose points we will use
  */
 Polygon::Polygon(sf::CircleShape shape) {
-    std::vector<sf::Vector2f> points;
-    points.resize(shape.getPointCount());
+    m_points.resize(shape.getPointCount());
     for (int i = 0; i < shape.getPointCount(); i++) {
-        points[i] = shape.getPoint(i);
+        m_points[i] = shape.getPoint(i);
     }
-
-    m_points = points;
 
     m_numVerticies = m_points.size();
 
@@ -921,13 +926,10 @@ Polygon::Polygon(sf::CircleShape shape) {
  * @param shape The RectangleShape object whose points we will use
  */
 Polygon::Polygon(sf::RectangleShape shape) {
-    std::vector<sf::Vector2f> points;
-    points.resize(shape.getPointCount());
+    m_points.resize(shape.getPointCount());
     for (int i = 0; i < shape.getPointCount(); i++) {
-        points[i] = shape.getPoint(i);
+        m_points[i] = shape.getPoint(i);
     }
-
-    m_points = points;
 
     m_numVerticies = m_points.size();
 
@@ -943,13 +945,10 @@ Polygon::Polygon(sf::RectangleShape shape) {
  * @param shape The ConvexShape object who points we will use
  */
 Polygon::Polygon(sf::ConvexShape shape) {
-    std::vector<sf::Vector2f> points;
-    points.resize(shape.getPointCount());
+    m_points.resize(shape.getPointCount());
     for (int i = 0; i < shape.getPointCount(); i++) {
-        points[i] = shape.getPoint(i);
+        m_points[i] = shape.getPoint(i);
     }
-
-    m_points = points;
 
     m_numVerticies = m_points.size();
 
@@ -965,7 +964,8 @@ Polygon::Polygon(sf::ConvexShape shape) {
  * 
  */
 void Polygon::createLines() {
-    //cout << "Creating Lines" << endl;
+    std::cout << "Creating Lines" << std::flush;
+
     /*
     This method is mostly linear algebra and (more or less) simple transformations on our std::vector of points.
     First, we rotate our points, around the origin of the shape, followed by scaling them up, and finally

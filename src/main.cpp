@@ -240,42 +240,24 @@ int main() {
     Clock clock;
 
     Texture* t = new Texture();
-    t->loadFromFile("Images/test.png");
+    t->loadFromFile("Images/test2.png");
     
     CircleShape c;
     c.setRadius(50);
 
-    Polygon poly(t, Detail::Optimal);
-    //Polygon poly(c);
+    //Polygon poly(t, Detail::Exact);
+    Polygon poly(c);
     poly.setScale(4, 4);
     poly.setFillColor(Color::Green);
     poly.setOrigin(poly.getCentroid());
     poly.setPosition(100, 120);
 
-    Polygon poly2(t, Detail::Less);
+    Polygon poly2(t, Detail::Exact);
     //poly2.setPosition(poly.getGlobalBounds().width + 40, 30);
     poly2.setPosition(200, 50);
     poly2.setScale(Vector2f(5, 5));
     poly2.setFillColor(Color::Magenta);
     
-    /*
-    // VERTEX DEBUGGING
-    cout << "Less: " << poly.getPointCount() << endl;
-    cout << "More: " << poly2.getPointCount() << endl;
-    cout << "Perfect: " << poly3.getPointCount() << endl;
-    //*/
-    
-    /*
-    // LINE DEBUGGING
-
-    // Testing line intersection
-    Line l1(Vector2f(0, 0), Vector2f(100, 0));
-    l1.offset(Vector2f(80, 120));
-    Line l2(Vector2f(0, 0), Vector2f(0, 100));
-    l2.offset(Vector2f(100, 100));
-    cout << "L1 angle: " << l1.getAngle() / (M_PI / 180.0f) << endl;
-    //*/
-
     // SETUP THE WINDOW
     RenderWindow window;
     window.create(VideoMode(poly2.getGlobalBounds().width * 6 + 150, poly2.getGlobalBounds().height*5 + 50), "Polygon Test", Style::Default);
@@ -322,13 +304,13 @@ int main() {
         
         ///*
         // INTERSECTION TESTING
-        window.draw(poly);
-        window.draw(poly2);
+        //window.draw(poly);
+        //window.draw(poly2);
         //window.draw(poly3);
         window.setTitle((poly2.intersects(poly)) ? "Colliding" : "Not colliding!");
-        //
+        
 
-        ///*
+        /*
         // LINE ALIGNMENT TESTING
         
         //window.draw(poly);
@@ -348,7 +330,11 @@ int main() {
             if (i > 4)
                 i = 0;
         }
-        //
+        //*/
+
+        window.draw(*poly.getLines()[0].getDrawable());
+        std::cout << poly.getLines()[0].getStart().x << " " << poly.getLines()[0].getStart().y << " - " << poly.getLines()[0].getEnd().x << " " << poly.getLines()[0].getEnd().y << endl;
+
 
         // SHOW 
         window.display();
