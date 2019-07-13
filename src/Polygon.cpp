@@ -819,10 +819,9 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
 
     m_numVerticies = m_points.size();
 
-    std::cout << "Final Verticies:\n";
-    for (sf::Vector2f v: m_points) {
-        std::cout << v.x << " " << v.y << std::endl;
-    }
+    //std::cout << "Final Verticies:\n";
+    //for (sf::Vector2f v: m_points)
+    //    std::cout << v.x << " " << v.y << std::endl;
 
     findCentroid();
     createLines();
@@ -968,7 +967,7 @@ Polygon::Polygon(sf::ConvexShape shape) {
  * 
  */
 void Polygon::createLines() {
-    std::cout << "Creating Lines" << std::flush;
+    //std::cout << "Creating Lines" << std::flush;
 
     /*
     This method is mostly linear algebra and (more or less) simple transformations on our std::vector of points.
@@ -1031,6 +1030,8 @@ void Polygon::createLines() {
     m_lines[m_numVerticies - 1] = Line(m_points[m_numVerticies - 1], m_points[0]);
 
     m_points = pointsCopy;
+
+    m_lineUpdateRequired = false;
 }
 
 /**
@@ -1039,7 +1040,9 @@ void Polygon::createLines() {
  * @return std::vector<Line> A std::vector of lines that represent the outline
  */
 std::vector<Line> Polygon::getLines() {
-    //createLines();
+    if (m_lineUpdateRequired)
+        createLines();
+
     return m_lines;
 }
 
@@ -1379,7 +1382,7 @@ bound the outside
 void Polygon::setScale(const sf::Vector2f& scale) {
     Transformable::setScale(scale.x, scale.y);
 
-    createLines();
+    m_lineUpdateRequired = true;
 }
 
 /**
@@ -1392,7 +1395,7 @@ void Polygon::setScale(const sf::Vector2f& scale) {
 void Polygon::setScale(float xFactor, float yFactor) {
     Transformable::setScale(xFactor, yFactor);
 
-    createLines();
+    m_lineUpdateRequired = true;
 }
 
 /**
@@ -1404,7 +1407,7 @@ void Polygon::setScale(float xFactor, float yFactor) {
 void Polygon::scale(const sf::Vector2f& scale) {
     Transformable::scale(scale.x, scale.y);
 
-    createLines();
+    m_lineUpdateRequired = true;
 }
 
 /**
@@ -1417,7 +1420,7 @@ void Polygon::scale(const sf::Vector2f& scale) {
 void Polygon::scale(float xFactor, float yFactor) {
     Transformable::scale(xFactor, yFactor);
 
-    createLines();
+    m_lineUpdateRequired = true;
 }
 
 /**
@@ -1429,7 +1432,7 @@ void Polygon::scale(float xFactor, float yFactor) {
 void Polygon::setRotation(float angle) {
     Transformable::setRotation(angle);
 
-    createLines();
+    m_lineUpdateRequired = true;
 }
 
 /**
@@ -1441,7 +1444,7 @@ void Polygon::setRotation(float angle) {
 void Polygon::rotate(float angle) {
     Transformable::rotate(angle);
 
-    createLines();
+    m_lineUpdateRequired = true;
 }
 
 /**
@@ -1453,7 +1456,7 @@ void Polygon::rotate(float angle) {
 void Polygon::setPosition(const sf::Vector2f& position) {
     Transformable::setPosition(position.x, position.y);
 
-    createLines();
+    m_lineUpdateRequired = true;
 }
 
 /**
@@ -1466,7 +1469,7 @@ void Polygon::setPosition(const sf::Vector2f& position) {
 void Polygon::setPosition(float x, float y) {
     Transformable::setPosition(x, y);
 
-    createLines();
+    m_lineUpdateRequired = true;
 }
 
 /**
@@ -1478,7 +1481,7 @@ void Polygon::setPosition(float x, float y) {
 void Polygon::move(const sf::Vector2f& d) {
     Transformable::move(d.x, d.y);
 
-    createLines();
+    m_lineUpdateRequired = true;
 }
 
 /**
@@ -1491,7 +1494,7 @@ void Polygon::move(const sf::Vector2f& d) {
 void Polygon::move(float dx, float dy) {
     Transformable::move(dx, dy);
 
-    createLines();
+    m_lineUpdateRequired = true;
 }
 
 

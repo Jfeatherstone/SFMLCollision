@@ -34,7 +34,6 @@ Line::Line(sf::Vector2f p1, sf::Vector2f p2) {
     m_start = p1;
     m_end = p2;
 
-    calculateQuadrant();
     calculateIntercept();
     calculateAngle();
 }
@@ -91,29 +90,6 @@ float Line::calculateIntercept() {
     return m_intercept;
 }
 
-/*
-    QUADRANT
-*/
-
-/**
- * @brief Find which quadrant the line is in? I honestly don't remember coding this and I'm not
- * sure it is used or not
- * 
- * @return int A quadrant number (1-4) that means... something?
- */
-int Line::calculateQuadrant() {
-    sf::Vector2f v = m_end - m_start;
-    if (v.x > 0 && v.y > 0)
-        m_quadrant = 0;
-    if (v.x < 0 && v.y > 0)
-        m_quadrant = 1;
-    if (v.x < 0 && v.y < 0)
-        m_quadrant = 2;
-    if (v.x > 0 && v.y < 0)
-        m_quadrant = 3;
-    
-    return m_quadrant;
-}
 /*
     ANGLE
 

@@ -77,8 +77,7 @@ bool Polygon::intersects(Polygon shape) {
     }
     
     // Next, we check to make sure the two polygons are actually capable of intersecting by checking their rectangular boundary
-    sf::FloatRect overlap;
-    if (!getGlobalBounds().intersects(shape.getGlobalBounds(), overlap)) {
+    if (!getGlobalBounds().intersects(shape.getGlobalBounds())) {
         //cout << "Rect bounds" << endl;
         return false;
     }
@@ -91,7 +90,7 @@ bool Polygon::intersects(Polygon shape) {
     for (int i = 0; i < l1.size(); i++) {
         for (int j = 0; j < l2.size(); j++) {
             if (l1[i].intersects(l2[j])) {
-                //cout << i << " " << j << endl;
+                std::cout << i << " " << j << std::endl;
                 // We only care about the fact that something intersects here, so we end right after
                 return true;
             }

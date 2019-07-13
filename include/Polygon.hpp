@@ -88,6 +88,7 @@ private:
     not have to repeat it ever again
     */
     std::vector<Line> m_lines;
+    bool m_lineUpdateRequired = false;
     std::vector<float> m_triangleHeights;
     
     // Whether our shape is solid or not

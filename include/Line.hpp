@@ -83,9 +83,6 @@ private:
     bool m_horizontal = false;
     static float VERTICAL_SLOPE;
 
-    // This is the quadrant the second point would be if the first is at 0,0
-    int m_quadrant;
-
     /*
     Since we will need points on our line at some point or another, we can add them to a vector
     */
@@ -97,7 +94,6 @@ private:
     float calculateSlope(sf::Vector2f p1, sf::Vector2f p2);
     float calculateIntercept();
     float calculateAngle();
-    int calculateQuadrant();
     
 public:
 

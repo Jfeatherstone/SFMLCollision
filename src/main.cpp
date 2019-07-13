@@ -3,7 +3,11 @@
 #include <sstream>
 
 // This main method creates a polygon test
-/*
+///*
+
+using namespace sf;
+using namespace std;
+
 Color colors[] = {Color::Red, Color::Yellow, Color::Green, Color::Blue, Color::Magenta};
 
 int main() {
@@ -34,7 +38,7 @@ int main() {
     cout << "Less: " << poly.getPointCount() << endl;test
     cout << "More: " << poly2.getPointCount() << endl;
     cout << "Perfect: " << poly3.getPointCount() << endl;
-    */
+    ///
     
     /*
     // LINE DEBUGGING
@@ -45,7 +49,7 @@ int main() {
     Line l2(Vector2f(0, 0), Vector2f(0, 100));
     l2.offset(Vector2f(100, 100));
     cout << "L1 angle: " << l1.getAngle() / (M_PI / 180.0f) << endl;
-    ///
+    //*/
 
     // SETUP THE WINDOW
     RenderWindow window;
@@ -99,7 +103,7 @@ int main() {
         window.setTitle((poly2.intersects(poly)) ? "Colliding" : "Not colliding!");
         //
 
-        ///*
+        /*
         // LINE ALIGNMENT TESTING
         
         //window.draw(poly);
@@ -119,7 +123,7 @@ int main() {
             if (i > 4)
                 i = 0;
         }
-        //
+        //*/
 
         // SHOW 
         window.display();
@@ -127,7 +131,7 @@ int main() {
     
     return 0;
 }
-*/
+//*/
 
 
 // This main method creates a ball pit style simulation
