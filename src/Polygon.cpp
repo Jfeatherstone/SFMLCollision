@@ -819,6 +819,11 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
 
     m_numVerticies = m_points.size();
 
+    std::cout << "Final Verticies:\n";
+    for (sf::Vector2f v: m_points) {
+        std::cout << v.x << " " << v.y << std::endl;
+    }
+
     findCentroid();
     createLines();
     calculateMass();

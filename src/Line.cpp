@@ -134,61 +134,11 @@ the angle value in degrees.
  */
 float Line::calculateAngle() {
 
-    /*
-    The first thing we want to deal with are the edge cases for lines: horizontal and vertical
-
-    These have to be handled separately because the slope of a vertical line would be nan if allowed
-    to be calculated the other way, and these calculations would make no sense. 
-
-    One other thing to not is that even though we treat 180 and 0 as different values, they actually represent the
-    same exact line/rotation. This may not be true in reality, but for our limited scope -- since a line is symmetric --
-    the differentiation is for the sake of clarity only. Same deal with 270 and 90 below.
-    */
-    if (m_horizontal) {
-        if (m_start.x > m_end.x)
-            m_angle = 180.0f;
-        else
-            m_angle = 0.0f;
-
-        return m_angle;
-    }
-
-    if (m_vertical) {
-        if (m_start.y > m_end.y)
-            m_angle = 90.0f;
-        else
-            m_angle = 270.0f;
-        
-        return m_angle;
-    }
-    
-    /*
-    This next part accounts for any angle that isn't an integer multiple of PI/2.
-
-    Depending on what quadrant our line is in, we have to do a few adjustments to the actual angle, since we are
-    setting 0 degrees to be on the x-axis in a cartesian plane.
-    */
-
-    // We first act as though the start point is our origin (0, 0), and calculate what the second points would be
+    // We act as though the start point is our origin (0, 0) by subtracting it from the first
     sf::Vector2f v = m_end - m_start;
 
-    switch (m_quadrant) {
-        case 0:
-            m_angle = atan(abs(v.y/v.x)) * 180.0f /M_PI;
-            break;
-        case 1:
-            m_angle = 180.0f - atan(abs(v.y/v.x)) * 180.0f /M_PI;
-            break;
-        case 2:
-            m_angle = 180.0f + atan(abs(v.y/v.x)) * 180.0f /M_PI;
-            break;
-        case 3:
-            m_angle = 360.0f - atan(abs(v.y/v.x)) * 180.0f /M_PI;
-            break;
-    }   
-
-    // NOTE: we longer want our answer in radians
-    //m_angle *= M_PI / 180; // Convert back to radians
+    // And now we calculate the angle, be sure to note that it is converted to degrees
+    m_angle = atan(v.y / v.x) * 180.0f /M_PI;
     
     return m_angle;
 }
@@ -388,7 +338,6 @@ sf::RectangleShape* Line::getDrawable(sf::Color color) {
 
     r->setSize(sf::Vector2f(sqrt(pow(m_start.x - m_end.x, 2) + pow(m_start.y - m_end.y, 2)), 2));
     r->setOrigin(r->getGlobalBounds().width / 2, r->getGlobalBounds().height / 2 );
-    //std::cout << m_angle << std::endl;
     r->setRotation(m_angle);
     r->setFillColor(color);
     r->setPosition((m_start + m_end) / 2.0f);

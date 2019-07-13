@@ -230,10 +230,11 @@ int main() {
 }
 */
 
+/*
 using namespace sf;
 using namespace std;
 
-Color colors[] = {Color::Red, Color::Yellow, Color::Green, Color::Blue, Color::Magenta};
+Color colors[] = {Color::Red, Color::White, Color::Green, Color::Blue, Color::Magenta};
 
 int main() {
 
@@ -243,26 +244,29 @@ int main() {
     t->loadFromFile("Images/test.png");
     
     CircleShape c;
-    c.setRadius(50);
+    c.setRadius(10);
 
-    Polygon poly(t, Detail::Less);
+    sf::Vector2f windowSize(800, 600);
+
+    Polygon poly(t, Detail::Exact);
     //Polygon poly(c);
-    poly.setScale(4, 4);
+    poly.setScale(8, 8);
     poly.setFillColor(Color::Green);
     poly.setOrigin(poly.getCentroid());
-    poly.setPosition(100, 120);
+    poly.setPosition(windowSize.x / 2, windowSize.y / 2);
 
-    Polygon poly2(t, Detail::Exact);
-    //poly2.setPosition(poly.getGlobalBounds().width + 40, 30);
-    poly2.setPosition(200, 50);
-    poly2.setScale(Vector2f(5, 5));
-    poly2.setFillColor(Color::Magenta);
-    
+    // Show each point on the shape
+    sf::CircleShape vertices[poly.getPointCount()];
+
     // SETUP THE WINDOW
     RenderWindow window;
-    window.create(VideoMode(poly2.getGlobalBounds().width * 6 + 150, poly2.getGlobalBounds().height*5 + 50), "Polygon Test", Style::Default);
+    window.create(VideoMode(windowSize.x, windowSize.y), "Polygon Test", Style::Default);
     window.setFramerateLimit(60);
     
+    for (Line l: poly.getLines()) {
+        std::cout << l.getStart().x << " " << l.getStart().y << " - " << l.getEnd().x << " " << l.getEnd().y << std::endl;
+    }
+
     Clock time;
     
     while (window.isOpen()) {
@@ -297,23 +301,24 @@ int main() {
             poly.setScale(poly.getScale() - Vector2f(.03, .03));
         }
 
+        // Update the vertices
+        for (int i = 0; i < poly.getPointCount(); i++) {
+            vertices[i].setRadius(3);
+            vertices[i].setFillColor(colors[i % 5]);
+            vertices[i].setOrigin(vertices[i].getLocalBounds().width / 2, vertices[i].getLocalBounds().height / 2);
+            vertices[i].setPosition(poly.getPosition() - 
+                (sf::Vector2f(poly.getOrigin().x * poly.getScale().x, poly.getOrigin().y * poly.getScale().y)) +
+                (sf::Vector2f(poly.getPoint(i).x * poly.getScale().x, poly.getPoint(i).y * poly.getScale().y)));
+        }
+
         ///////////////////////////////////////
         //          DRAWING
         ///////////////////////////////////////
         window.clear(); // CLEAR
         
-        ///*
-        // INTERSECTION TESTING
         //window.draw(poly);
-        //window.draw(poly2);
-        //window.draw(poly3);
-        window.setTitle((poly2.intersects(poly)) ? "Colliding" : "Not colliding!");
 
-        ///*
-        // LINE ALIGNMENT TESTING
-        
-        //window.draw(poly);
-        //window.draw(poly2);
+        ///*        
         int i = 0;
         for (Line l: poly.getLines()) {
             window.draw(*l.getDrawable(colors[i]));
@@ -321,17 +326,13 @@ int main() {
             if (i > 4)
                 i = 0;
         }
-        
-        i = 0;
-        for (Line l: poly2.getLines()) {
-            window.draw(*l.getDrawable(colors[i]));
-            i++;
-            if (i > 4)
-                i = 0;
-        }
-        //*/
+        //*
+
+        for (sf::CircleShape s: vertices)
+            window.draw(s);
 
         //window.draw(*poly.getLines()[0].getDrawable());
+        //window.draw(*poly.getLines()[1].getDrawable());
         //std::cout << poly.getLines()[0].getStart().x << " " << poly.getLines()[0].getStart().y << " - " << poly.getLines()[0].getEnd().x << " " << poly.getLines()[0].getEnd().y << endl;
 
 
@@ -342,3 +343,4 @@ int main() {
 
     return 0;
 }
+*/
