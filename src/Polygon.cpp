@@ -80,7 +80,7 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
 
     std::cout << textureSize.x << " " << textureSize.y << std::endl;
 
-    int preCropPixels[textureSize.x][textureSize.y];
+    int preCropPixels[textureSize.y][textureSize.x];
 
     std::cout << "Pre crop\n";
 
@@ -93,7 +93,7 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
             // Hold onto the color to clean up the code
             sf::Color c = pixels[i*textureSize.x + j];
 
-            std::cout << i << " " << j << " - " << int(c.r) << " " << int(c.g) << " " << int(c.b) << " " << int(c.a) << std::endl;
+            //std::cout << i << " " << j << " - " << int(c.r) << " " << int(c.g) << " " << int(c.b) << " " << int(c.a) << std::endl;
 
             // If the color is not ignored and has a non-zero alpha value, we keep it
             if (!contains(ignoredColors, c) && c.a > 0)
@@ -137,22 +137,21 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     // There are four regions that need to be erased:
     // above, below, left, and right
 
-    int newArr[bottom-top + 1][right-left + 1];
-
+    int newArr[bottom - top + 1][right - left + 1];
     
     for (int i = 0; i < textureSize.y; i++) {
         for (int j = 0; j < textureSize.x; j++) {
 
             if (i < top || i > bottom || j < left || j > right) {
-                std::cout << "-";
+                //std::cout << "-";
                 continue;
             }
 
             newArr[i - top][j - left] = (preCropPixels[i][j]);
-            std::cout << newArr[i - top][j - left];
+            //std::cout << newArr[i - top][j - left];
         }
 
-    std::cout << std::endl;
+    //std::cout << std::endl;
     }
 
     // The +1 makes it so that we don't lose the last right and bottom rows
@@ -839,9 +838,9 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
  * @return false If vec doesn't contain c
  */
 bool Polygon::contains(std::vector<sf::Color>& vec, sf::Color c) {
-    std::cout << "Before vec call\n";
-    std::cout << vec.size();
-    std::cout << "After vec call\n";
+    //std::cout << "Before vec call\n";
+    //std::cout << vec.size();
+    //std::cout << "After vec call\n";
     /*
     We use this method in determining whether a list of colors to be ignored was provided
     As we read every pixel from an image, we check whether the ignoredsf::Colors std::vector
@@ -852,7 +851,7 @@ bool Polygon::contains(std::vector<sf::Color>& vec, sf::Color c) {
         if (col == c)
             return true;
     }
-    std::cout << std::endl;
+    //std::cout << std::endl;
     return false;
 }
 

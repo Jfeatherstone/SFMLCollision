@@ -185,7 +185,7 @@ float Line::calculateAngle() {
         case 3:
             m_angle = 360.0f - atan(abs(v.y/v.x)) * 180.0f /M_PI;
             break;
-    }
+    }   
 
     // NOTE: we longer want our answer in radians
     //m_angle *= M_PI / 180; // Convert back to radians
@@ -388,7 +388,7 @@ sf::RectangleShape* Line::getDrawable(sf::Color color) {
 
     r->setSize(sf::Vector2f(sqrt(pow(m_start.x - m_end.x, 2) + pow(m_start.y - m_end.y, 2)), 2));
     r->setOrigin(r->getGlobalBounds().width / 2, r->getGlobalBounds().height / 2 );
-    std::cout << m_angle << std::endl;
+    //std::cout << m_angle << std::endl;
     r->setRotation(m_angle);
     r->setFillColor(color);
     r->setPosition((m_start + m_end) / 2.0f);

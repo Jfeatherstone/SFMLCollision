@@ -240,13 +240,13 @@ int main() {
     Clock clock;
 
     Texture* t = new Texture();
-    t->loadFromFile("Images/test2.png");
+    t->loadFromFile("Images/test.png");
     
     CircleShape c;
     c.setRadius(50);
 
-    //Polygon poly(t, Detail::Exact);
-    Polygon poly(c);
+    Polygon poly(t, Detail::Less);
+    //Polygon poly(c);
     poly.setScale(4, 4);
     poly.setFillColor(Color::Green);
     poly.setOrigin(poly.getCentroid());
@@ -308,9 +308,8 @@ int main() {
         //window.draw(poly2);
         //window.draw(poly3);
         window.setTitle((poly2.intersects(poly)) ? "Colliding" : "Not colliding!");
-        
 
-        /*
+        ///*
         // LINE ALIGNMENT TESTING
         
         //window.draw(poly);
@@ -332,8 +331,8 @@ int main() {
         }
         //*/
 
-        window.draw(*poly.getLines()[0].getDrawable());
-        std::cout << poly.getLines()[0].getStart().x << " " << poly.getLines()[0].getStart().y << " - " << poly.getLines()[0].getEnd().x << " " << poly.getLines()[0].getEnd().y << endl;
+        //window.draw(*poly.getLines()[0].getDrawable());
+        //std::cout << poly.getLines()[0].getStart().x << " " << poly.getLines()[0].getStart().y << " - " << poly.getLines()[0].getEnd().x << " " << poly.getLines()[0].getEnd().y << endl;
 
 
         // SHOW 
