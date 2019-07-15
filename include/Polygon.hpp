@@ -80,16 +80,13 @@ private:
     */
     int m_numVerticies;
     sf::Vector2f m_centroid;
-    sf::Vector2f m_farthestVertex;
     float m_area;
 
     /*
-    To detect collision, we will also want to divide our shape into triangles, so we can do that once on creation as to
-    not have to repeat it ever again
+    To detect collision, we will divide out shape into lines
     */
     std::vector<Line> m_lines;
     bool m_lineUpdateRequired = false;
-    std::vector<float> m_triangleHeights;
     
     // Whether our shape is solid or not
     bool m_isSolid = true; // True by default
@@ -153,7 +150,6 @@ public:
     std::vector<sf::Vector2f> getPoints();
 
     std::vector<Line> getLines();
-    float getFarthestVertex();
     sf::Vector2f getCentroid();
 
     // Values that adjust how collisions affect the shape

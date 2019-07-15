@@ -15,7 +15,7 @@ int main() {
     Clock clock;
 
     Texture* t = new Texture();
-    t->loadFromFile("Images/test4.png");
+    t->loadFromFile("Images/test.png");
     
     CircleShape c;
     c.setRadius(50);
@@ -33,12 +33,11 @@ int main() {
     poly2.setScale(Vector2f(5, 5));
     poly2.setFillColor(Color::Magenta);
     
-    /*
+    ///*
     // VERTEX DEBUGGING
-    cout << "Less: " << poly.getPointCount() << endl;test
+    cout << "Less: " << poly.getPointCount() << endl;
     cout << "More: " << poly2.getPointCount() << endl;
-    cout << "Perfect: " << poly3.getPointCount() << endl;
-    ///
+    //*/
     
     /*
     // LINE DEBUGGING

@@ -1050,7 +1050,7 @@ std::vector<Line> Polygon::getLines() {
 /**
  * @brief Calculate the centroid of our object by finding the rightmost, leftmost, topmost, etc. points
  * and taking the average of them all. Should give about the same as taking half of each getGlobalBounds()
- * width and height (for setting the origin). Also calculates the farthest vertex distance from the centroid
+ * width and height (for setting the origin).
  */
 void Polygon::findCentroid() {
     /*
@@ -1083,18 +1083,6 @@ void Polygon::findCentroid() {
     // Now we just take the center of our rectangle
     m_centroid.x = left + (right - left) / 2;
     m_centroid.y = top + (bottom - top) / 2;
-
-    float previousFarthest = 0;
-
-    // Now, we record the farthest vertex from the centroid
-    for (int i = 0; i < m_numVerticies; i++) {
-        float d = sqrt(pow(m_centroid.x - m_points[i].x , 2) + pow(m_centroid.y - m_points[i].y, 2));
-        if (d > previousFarthest) {
-            previousFarthest = d;
-            m_farthestVertex.x = m_centroid.x - m_points[i].x;
-            m_farthestVertex.y = m_centroid.y - m_points[i].y;
-        }
-    }
 }
 
 /**
@@ -1343,19 +1331,6 @@ void Polygon::getArea(std::vector<sf::Vector2f> points, float& value) {
     value += ((points[points.size()-1].y + points[0].x) / 2) * (points[0].x - points[points.size()-1].y);
     value *= -1;
     //cout << value << endl;
-}
-
-/**
- * @brief Returns the distance of the farthest vertex from the centroid. Calculated in findCentroid()
- * 
- * @return float The farthest distance of the shape
- */
-float Polygon::getFarthestVertex() {
-    /*
-    Since we use this method to detect collisions, we also want to update the lines before we do calculations
-    with them. This is done through the createLines() method, which accounts for rotation and scale.
-    */
-    return sqrt(pow(m_farthestVertex.x * getScale().x, 2) + pow(m_farthestVertex.y * getScale().y, 2));
 }
 
 /**

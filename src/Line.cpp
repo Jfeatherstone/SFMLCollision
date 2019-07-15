@@ -1,16 +1,6 @@
 #include "Line.hpp"
 
 /*
-    This value is to denote a vertical line, which would otherwise have a slope of nan, or infinity
-
-The only importance in the value is that no other line should every organically have this slope, and that
-this is an arbitrarily high number, to simulate a vertical line without actually being one
-*/
-float Line::VERTICAL_SLOPE = 100000;
-float Line::PARALLEL_LINE_SLOPE_TOLERANCE = .01f;
-float Line::PARALLEL_LINE_DISTANCE_TOLERANCE = .01f;
-
-/*
     CONSTRUCTORS
 */
 
@@ -23,11 +13,6 @@ float Line::PARALLEL_LINE_DISTANCE_TOLERANCE = .01f;
  */
 Line::Line(sf::Vector2f p1, sf::Vector2f p2) {
     // This automatically assigns our slope member variable so we don't need to set it here
-
-    if (p1.x == p2.x)
-        m_vertical = true;
-    if (p1.y == p2.y)
-        m_horizontal = true;
 
     calculateSlope(p1, p2);
 
@@ -61,15 +46,6 @@ This is a simple y2-y1/x2-x1 calculation
  * @return float The value of the slope
  */
 float Line::calculateSlope(sf::Vector2f p1, sf::Vector2f p2) {
-    if (m_horizontal) {
-        m_slope == 0;
-        return m_slope;
-    }
-    if (m_vertical) {
-        m_slope = VERTICAL_SLOPE;
-        return m_slope;
-    }
-
     m_slope = (p2.y-p1.y)/(p2.x-p1.x);
     return m_slope;
 }
@@ -212,43 +188,6 @@ bool Line::intersects(Line line) {
 }
 
 /*
-    OFFSET
-
-Since we will likely need to offset our lines because our lines will not always be at (0, 0), we have a method to 
-properly store and change the offset.
-
-We store this value as a member variable, so that if we need to offset again, we don't have to account for the previous offset
-For example:
-
-someLine.offset(sf::Vector2f(10, 10));
-// The origin of our coordinate system will be set at (10, 10)
-
-someLine.offset(sf::Vector2f(20, 20));
-// The origin of our coordinate system will be set at (20, 20), NOT (30, 30)
-*/
-
-/**
- * @brief Offset the endpoints of our line (and recalculate the intercept) in a way that does NOT stack with previous offsets
- * (See source for more info)
- * 
- * @param offset The amount we want to offset x and y by
- */
-void Line::offset(sf::Vector2f offset) {
-    // First we remove the previous offset
-    m_start -= m_offset;
-    m_end -= m_offset;
-
-    // Now we store the new offset and add it to the points
-    m_offset = offset;
-
-    m_start += m_offset;
-    m_end += m_offset;
-
-    // And recalculate the intercept
-    calculateIntercept();
-}
-
-/*
     GETTERS
 */
 
@@ -281,8 +220,7 @@ float Line::getSlope() {
 
 /**
  * @brief Return the first point used in the creation of the line object. Does not
- * necessarily need to be before (in either x or y) the second point. Returned point
- * does have any offset effects applied to it.
+ * necessarily need to be before (in either x or y) the second point.
  * 
  * @return sf::Vector2f The first point (x, y)
  */
@@ -292,8 +230,7 @@ sf::Vector2f Line::getStart() {
 
 /**
  * @brief Return the second point used in the creation of the line object. Does not
- * necessarily need to be after (in either x or y) the first point. Returned point
- * does have any offset effects applied to it.
+ * necessarily need to be after (in either x or y) the first point.
  * 
  * @return sf::Vector2f The second point (x, y)
  */

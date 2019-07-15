@@ -74,22 +74,11 @@ private:
     */
     float m_angle;
     
-
-
-    /*
-    Special cases for our lines
-    */
-    bool m_vertical = false;
-    bool m_horizontal = false;
-    static float VERTICAL_SLOPE;
-
     /*
     Since we will need points on our line at some point or another, we can add them to a vector
     */
     sf::Vector2f m_start;
     sf::Vector2f m_end;
-
-    sf::Vector2f m_offset;
 
     float calculateSlope(sf::Vector2f p1, sf::Vector2f p2);
     float calculateIntercept();
@@ -129,8 +118,6 @@ public:
     This will be used to find the resultant vector of a collision
     */
     sf::Vector2f getPerpendicular();
-
-    void offset(sf::Vector2f offset);
 
     sf::RectangleShape* getDrawable(sf::Color color = sf::Color::Cyan);
     
