@@ -2,156 +2,61 @@
 #include <SFML/Graphics.hpp>
 #include <sstream>
 
-// This main method creates a polygon test
-///*
-
-using namespace sf;
 using namespace std;
-
-Color colors[] = {Color::Red, Color::Yellow, Color::Green, Color::Blue, Color::Magenta};
+using namespace sf;
 
 int main() {
-
-    Clock clock;
 
     Texture* t = new Texture();
     t->loadFromFile("Images/test.png");
     
-    CircleShape c;
-    c.setRadius(50);
+    // Create all four polygons for each level of detail
+    Polygon polygons[4] = {Polygon(t, Detail::Less),
+                         Polygon(t, Detail::Optimal),
+                         Polygon(t, Detail::More),
+                         Polygon(t, Detail::Exact)};
 
-    Polygon poly(t, Detail::Less);
-    //Polygon poly(c);
-    poly.setScale(5, 5);
-    poly.setFillColor(Color::Green);
-    poly.setOrigin(poly.getCentroid());
-    poly.setPosition(100, 150);
+    for (int i = 0; i < 4; i++) {
+        polygons[i].setOrigin(polygons[i].getCentroid());
+        polygons[i].setScale(5, 5);
+        polygons[i].setPosition(100 + 200*i, 130);
+    }
 
-    Polygon poly2(t, Detail::Optimal);
-    poly2.setOrigin(poly2.getCentroid());
-    poly2.setPosition(300, 150);
-    poly2.setScale(Vector2f(5, 5));
-    poly2.setFillColor(Color::Magenta);
-    
-    Polygon poly3(t, Detail::More);
-    poly3.setOrigin(poly3.getCentroid());
-    poly3.setPosition(500, 150);
-    poly3.setScale(Vector2f(5, 5));
-    poly3.setFillColor(Color::Magenta);
+    // Print out the number of vertices on each level of detail
+    cout << "Less: " << polygons[0].getPointCount() << endl;
+    cout << "Optimal: " << polygons[1].getPointCount() << endl;
+    cout << "More: " << polygons[2].getPointCount() << endl;
+    cout << "Exact: " << polygons[3].getPointCount() << endl;
 
-    Polygon poly4(t, Detail::Exact);
-    poly4.setOrigin(poly4.getCentroid());
-    poly4.setPosition(700, 150);
-    poly4.setScale(Vector2f(5, 5));
-    poly4.setFillColor(Color::Magenta);
-
-    ///*
-    // VERTEX DEBUGGING
-    cout << "Less: " << poly.getPointCount() << endl;
-    cout << "Optimal: " << poly2.getPointCount() << endl;
-    cout << "More: " << poly3.getPointCount() << endl;
-    cout << "Exact: " << poly4.getPointCount() << endl;
-    //*/
-    
-    /*
-    // LINE DEBUGGING
-
-    // Testing line intersection
-    Line l1(Vector2f(0, 0), Vector2f(100, 0));
-    l1.offset(Vector2f(80, 120));
-    Line l2(Vector2f(0, 0), Vector2f(0, 100));
-    l2.offset(Vector2f(100, 100));
-    cout << "L1 angle: " << l1.getAngle() / (M_PI / 180.0f) << endl;
-    //*/
-
-    // SETUP THE WINDOW
+    // Setup the window
     RenderWindow window;
-    window.create(VideoMode(900, 400), "Polygon Test", Style::Default);
-    window.setFramerateLimit(60);
-    
-    Clock time;
-    
+    window.create(VideoMode(800, 300), "Detail Comparison", Style::Default);
+    window.setFramerateLimit(30);
+        
     while (window.isOpen()) {
-        Time dt = time.restart();
-
-        ///////////////////////////////////////
-        //          INPUT
-        ///////////////////////////////////////
-
-        if (Keyboard::isKeyPressed(Keyboard::Right)) {
-            poly.setPosition(poly.getPosition() + Vector2f(1, 0));
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Left)) {
-            poly.setPosition(poly.getPosition() + Vector2f(-1, 0));
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Up)) {
-            poly.setPosition(poly.getPosition() + Vector2f(0, -1));
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Down)) {
-            poly.setPosition(poly.getPosition() + Vector2f(0, 1));
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Q)) {
-            poly.rotate(1);
-        }
-        if (Keyboard::isKeyPressed(Keyboard::E)) {
-            poly.rotate(-1);
-        }
-        if (Keyboard::isKeyPressed(Keyboard::W)) {
-            poly.setScale(poly.getScale() + Vector2f(.03, .03));
-        }
-        if (Keyboard::isKeyPressed(Keyboard::S)) {
-            poly.setScale(poly.getScale() - Vector2f(.03, .03));
-        }
 
         ///////////////////////////////////////
         //          DRAWING
         ///////////////////////////////////////
-        window.clear(); // CLEAR
+        window.clear();
         
-        ///*
-        // INTERSECTION TESTING
-        //window.draw(poly);
-        //window.draw(poly2);
-        //window.draw(poly3);
-        std::vector<sf::Vector2u> intersectingLines = poly.intersects(poly2);
-        window.setTitle((intersectingLines.size() > 0) ? "Colliding" : "Not colliding!");
-        //
+        // We could also just draw each shape here, but drawing the lines makes it a bit easier to
+        // see the difference between the levels of detail (see below)
 
-        ///*
-        // LINE ALIGNMENT TESTING
-        
-        //window.draw(poly);
-        //window.draw(poly2);
-        for (Line l: poly.getLines()) {
-            window.draw(*l.getDrawable(sf::Color::White));
-        }
-        
-        for (Line l: poly2.getLines()) {
-            window.draw(*l.getDrawable(sf::Color::White));
+        for (Polygon p: polygons) {
+            for (Line l: p.getLines())
+                window.draw(*l.getDrawable());
         }
 
-        for (Line l: poly3.getLines()) {
-            window.draw(*l.getDrawable(sf::Color::White));
-        }
+        // If you prefer the actual shapes
+        //for (Polygon p: polygons)
+        //    window.draw(p);
 
-        for (Line l: poly4.getLines()) {
-            window.draw(*l.getDrawable(sf::Color::White));
-        }
-
-        for (sf::Vector2u v: intersectingLines) {
-            window.draw(*poly.getLines()[v.x].getDrawable(sf::Color::Red));
-            window.draw(*poly2.getLines()[v.y].getDrawable(sf::Color::Red));
-        }
-        //*/
-
-        // SHOW 
         window.display();
     }
     
     return 0;
 }
-//*/
-
 
 // This main method creates a ball pit style simulation
 /*
