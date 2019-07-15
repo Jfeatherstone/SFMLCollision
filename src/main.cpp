@@ -17,16 +17,23 @@ int main() {
     for (int i = 0; i < 2; i++) {
         polygons[i].setOrigin(polygons[i].getCentroid());
         polygons[i].setScale(5, 5);
-        polygons[i].setPosition(100 + 200*i, 130);
+        polygons[i].setPosition(100 + 200*i, 130 + i*90);
     }
+
+    polygons[0].setVelocity(sf::Vector2f(30, 0));
 
     // Setup the window
     RenderWindow window;
-    window.create(VideoMode(400, 300), "Collision test", Style::Default);
+    window.create(VideoMode(500, 400), "Collision test", Style::Default);
     window.setFramerateLimit(60);
         
+    Clock time;
+    
     while (window.isOpen()) {
         
+        Time dt = time.restart();
+
+        /*
         ///////////////////////////////////////
         //          INPUT
         ///////////////////////////////////////
@@ -55,25 +62,21 @@ int main() {
         if (Keyboard::isKeyPressed(Keyboard::S)) {
             polygons[0].setScale(polygons[0].getScale() - Vector2f(.03, .03));
         }
+        */
 
         ///////////////////////////////////////
         //          DRAWING
         ///////////////////////////////////////
         window.clear();
 
-        // At this point, the intersects method only returns this vector of points
-        // as a debuggin tool. This will later be changed to simply a bool, and
-        // so this example may not longer work because of that.
-        vector<Vector2u> intersectingLines = polygons[0].intersects(polygons[1]);
+        polygons[0].intersectAndResolve(polygons[1]);
+
+        polygons[0].update(dt.asSeconds());
+        polygons[1].update(dt.asSeconds());
 
         for (Polygon p: polygons) {
             for (Line l: p.getLines())
                 window.draw(*l.getDrawable());
-        }
-
-        for (Vector2u v: intersectingLines) {
-            window.draw(*polygons[0].getLines()[v.x].getDrawable(Color::Red));
-            window.draw(*polygons[1].getLines()[v.y].getDrawable(Color::Blue));
         }
 
         window.display();

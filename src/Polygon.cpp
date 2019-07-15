@@ -829,6 +829,7 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     //    std::cout << v.x << " " << v.y << std::endl;
 
     findCentroid();
+    calculateMomentOfInertia();
     createLines();
     calculateMass();
     Shape::update(); // This makes the shape actually drawable
@@ -883,6 +884,7 @@ Polygon::Polygon(std::vector<sf::Vector2f> points) {
     m_numVertices = m_points.size();
 
     findCentroid();
+    calculateMomentOfInertia();
     createLines();
     calculateMass();
     Shape::update(); // This makes the shape actually drawable
@@ -897,6 +899,7 @@ Polygon::Polygon(sf::CircleShape shape) {
     m_numVertices = m_points.size();
 
     findCentroid();
+    calculateMomentOfInertia();
     createLines();
     calculateMass();
     Shape::update(); // This makes the shape actually drawable
@@ -911,6 +914,7 @@ Polygon::Polygon(sf::RectangleShape shape) {
     m_numVertices = m_points.size();
 
     findCentroid();
+    calculateMomentOfInertia();
     createLines();
     calculateMass();
     Shape::update(); // This makes the shape actually drawable
@@ -925,6 +929,7 @@ Polygon::Polygon(sf::ConvexShape shape) {
     m_numVertices = m_points.size();
 
     findCentroid();
+    calculateMomentOfInertia();
     createLines();
     calculateMass();
     Shape::update(); // This makes the shape actually drawable
@@ -1065,6 +1070,8 @@ void Polygon::calculateMomentOfInertia() {
 
     m_momentOfInertia /= getPointCount();
     m_momentOfInertia *= m_momentOfInertia * getMass();
+
+    //std::cout << m_momentOfInertia << std::endl;
 
 }
 

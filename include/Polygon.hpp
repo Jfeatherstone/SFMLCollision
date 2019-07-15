@@ -602,7 +602,7 @@ public:
     We also may want to know which direction to move the objects after they have collided, so we can do that
     by passing in a reference to a vector
     */
-    bool intersects(Polygon& shape, sf::Vector2f& resultant);
+    bool intersectAndResolve(Polygon& shape);
     bool intersects(sf::RectangleShape shape, sf::Vector2f& resultant);
     bool intersects(sf::CircleShape shape, sf::Vector2f& resultant);
     bool intersects(sf::ConvexShape shape, sf::Vector2f& resultant);

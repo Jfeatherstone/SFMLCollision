@@ -34,11 +34,7 @@ SFML/Graphics.hpp
 tgmath.h
 -
 
-/home/jack/cpp-workspace/SFMLCollision/src/main.cpp
+/home/jack/cpp-workspace/SFMLCollision/src/Intersects.cpp
 Polygon.hpp
 /home/jack/cpp-workspace/SFMLCollision/src/Polygon.hpp
-SFML/Graphics.hpp
--
-sstream
--
 
