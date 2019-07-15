@@ -20,23 +20,37 @@ int main() {
     CircleShape c;
     c.setRadius(50);
 
-    Polygon poly(t, Detail::More);
+    Polygon poly(t, Detail::Less);
     //Polygon poly(c);
-    poly.setScale(4, 4);
+    poly.setScale(5, 5);
     poly.setFillColor(Color::Green);
     poly.setOrigin(poly.getCentroid());
-    poly.setPosition(100, 120);
+    poly.setPosition(100, 150);
 
-    Polygon poly2(t, Detail::Exact);
-    //poly2.setPosition(poly.getGlobalBounds().width + 40, 30);
-    poly2.setPosition(200, 50);
+    Polygon poly2(t, Detail::Optimal);
+    poly2.setOrigin(poly2.getCentroid());
+    poly2.setPosition(300, 150);
     poly2.setScale(Vector2f(5, 5));
     poly2.setFillColor(Color::Magenta);
     
+    Polygon poly3(t, Detail::More);
+    poly3.setOrigin(poly3.getCentroid());
+    poly3.setPosition(500, 150);
+    poly3.setScale(Vector2f(5, 5));
+    poly3.setFillColor(Color::Magenta);
+
+    Polygon poly4(t, Detail::Exact);
+    poly4.setOrigin(poly4.getCentroid());
+    poly4.setPosition(700, 150);
+    poly4.setScale(Vector2f(5, 5));
+    poly4.setFillColor(Color::Magenta);
+
     ///*
     // VERTEX DEBUGGING
     cout << "Less: " << poly.getPointCount() << endl;
-    cout << "More: " << poly2.getPointCount() << endl;
+    cout << "Optimal: " << poly2.getPointCount() << endl;
+    cout << "More: " << poly3.getPointCount() << endl;
+    cout << "Exact: " << poly4.getPointCount() << endl;
     //*/
     
     /*
@@ -52,7 +66,7 @@ int main() {
 
     // SETUP THE WINDOW
     RenderWindow window;
-    window.create(VideoMode(600, 400), "Polygon Test", Style::Default);
+    window.create(VideoMode(900, 400), "Polygon Test", Style::Default);
     window.setFramerateLimit(60);
     
     Clock time;
@@ -113,6 +127,14 @@ int main() {
         }
         
         for (Line l: poly2.getLines()) {
+            window.draw(*l.getDrawable(sf::Color::White));
+        }
+
+        for (Line l: poly3.getLines()) {
+            window.draw(*l.getDrawable(sf::Color::White));
+        }
+
+        for (Line l: poly4.getLines()) {
             window.draw(*l.getDrawable(sf::Color::White));
         }
 

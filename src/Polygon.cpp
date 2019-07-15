@@ -786,7 +786,7 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     if (detail != Detail::Exact) {
         // Depending on our level of detail, we have a higher or lower tolerance
         // for the change in the area when removing points
-        float diff = .05f;
+        float diff = .03f;
         if (detail == Detail::Less)
             diff = .1f;
         if (detail == Detail::More)
