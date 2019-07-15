@@ -35,7 +35,7 @@ SOFTWARE.
  * might suggest, but rather that they have to deal with directionality.
  * 
  * Dependencies:
- * <SFML/Graphics.hpp> (sf::Vector2f and sf::Vector3f)
+ * <SFML/Graphics.hpp> (sf::Vector2f)
  * <tgmath.h> (cos and sin)
  * 
  */
@@ -43,20 +43,60 @@ class VectorMath {
 
 public:
 
+
+    /**
+     * @brief Compute the dot product between two vectors (sf::Vector2f). The order of the
+     * vectors given doesn't matter.
+     * 
+     * @param v1 The first vector
+     * @param v2 The second vector
+     * @param value The variable in which the value will be stored in
+     */
     static float dot(sf::Vector2f v1, sf::Vector2f v2);
-    static float dot(sf::Vector3f v1, sf::Vector3f v2);
 
-    static float cross(sf::Vector2f, sf::Vector2f);
-    static sf::Vector3f cross(sf::Vector3f, sf::Vector3f);
+    /**
+     * @brief Gives the magnitude of the crossed vector between two 2d vectors (sf::Vector2f).
+     * The order of the vectors given doesn't matter, as we are only looking at magnitude.
+     * 
+     * @param v1 The first vector
+     * @param v2 The second vector
+     * @return float 
+     */
+    static float cross(sf::Vector2f v1, sf::Vector2f v2);
 
+    /**
+     * @brief Find the angle between two vectors (sf::Vector2f) in 2D
+     * 
+     * @param v1 The first vector
+     * @param v2 The second vector
+     * @param angle The variable in which the angle will be stored in
+     */
     static float angleBetween(sf::Vector2f v1, sf::Vector2f v2);
 
+    /**
+     * @brief Apply a rotation transformation to a point about some origin
+     * 
+     * @param p The point we want to rotate. Rotated value will overwrite previous value
+     * @param origin The point we are rotating p about
+     * @param angleInDegrees The amount we are rotating, in degrees
+     */
     static void rotate(sf::Vector2f& p, sf::Vector2f origin, float angle);
 
+    /**
+     * @brief Find the magnitude of a vector (sf::Vector2f)
+     * 
+     * @param v The vector
+     * @return float The magnitude of the given vector
+     */
     static float mag(sf::Vector2f v);
 
+    /**
+     * @brief Adjust a vector (sf::Vector2f) such that its total magnitude is equal to the
+     * parameter provided
+     * 
+     * @param v The vector. The normalized value will overwrite the old value
+     * @param magnitude The magnitude we want to the vector to have, defualt is 1
+     */
     static void normalize(sf::Vector2f& v, float magnitude = 1);
-
-    static int quadrant(sf::Vector2f point, sf::Vector2f origin = sf::Vector2f(0, 0));
 
 };

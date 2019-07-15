@@ -46,6 +46,10 @@ Line.hpp
 Polygon.hpp
 /home/jack/cpp-workspace/SFMLCollision/src/Polygon.hpp
 
+/home/jack/cpp-workspace/SFMLCollision/src/VectorMath.cpp
+VectorMath.hpp
+/home/jack/cpp-workspace/SFMLCollision/src/VectorMath.hpp
+
 /home/jack/cpp-workspace/SFMLCollision/src/main.cpp
 Polygon.hpp
 /home/jack/cpp-workspace/SFMLCollision/src/Polygon.hpp
