@@ -90,13 +90,16 @@ bool Polygon::intersects(sf::ConvexShape shape) {
  * @return true The two shapes are colliding
  * @return false The two shapes aren't colliding
  */
-bool Polygon::intersectAndResolve(Polygon& shape) {
+std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
     
+    std::vector<sf::Shape*> vec;
+
     // Next, we check to make sure the two polygons are actually capable of intersecting by checking their rectangular boundary
     sf::FloatRect overlap;
     if (!getGlobalBounds().intersects(shape.getGlobalBounds(), overlap)) {
         //cout << "Rect bounds" << endl;
-        return false;
+        //return false;
+        return vec;
     }
     
     // Now we grab our lines
@@ -127,7 +130,8 @@ bool Polygon::intersectAndResolve(Polygon& shape) {
     }
 
     if (intersectingLines.size() == 0)
-        return false;
+        //return false;
+        return vec;
 
     // We now take the "average of all of our lines"
     // This actually means we just take the average of their slopes
@@ -138,8 +142,6 @@ bool Polygon::intersectAndResolve(Polygon& shape) {
     }
     averageSlope /= intersectingLines.size();
 
-    std::cout << averageSlope << std::endl;
-
     // Take the negative reciprical of the slope
     float pSlope = -1.0f / averageSlope;
 
@@ -149,62 +151,78 @@ bool Polygon::intersectAndResolve(Polygon& shape) {
     sf::Vector2f normal(pSlope, abs(pSlope)/pSlope);
     
     // And normalize it
-    VectorMath::normalize(normal);
-
-    //cout << intersectingLines.size() << endl;
+    VectorMath::normalize(normal, 30);
 
     // Since there could be more than one collision point, we want to take the average
     sf::Vector2f averageCollision(0, 0);
     for (sf::Vector2f p: intersectingPoints) {
         averageCollision += p;
     }
+
     averageCollision.x /= intersectingPoints.size();
     averageCollision.y /= intersectingPoints.size();
 
-    std::cout << normal.x << " " << normal.y << std::endl;
+    Line l(averageCollision, averageCollision + normal);
+
+    sf::CircleShape* c = new sf::CircleShape();
+    c->setRadius(5);
+    c->setPosition(averageCollision);
+    c->setOrigin(Polygon(*c).getCentroid());
+    //return c;
+
+    //return l.getDrawable();
+
+    vec.push_back(Line((getPosition() - sf::Vector2f(getOrigin().x * getScale().x, getOrigin().y * getScale().y) 
+            + sf::Vector2f(getCenterOfMass().x * getScale().x, getCenterOfMass().y * getScale().y)), averageCollision).getDrawable());
+
+    vec.push_back(Line((shape.getPosition() - sf::Vector2f(shape.getOrigin().x * shape.getScale().x, shape.getOrigin().y * shape.getScale().y) 
+            + sf::Vector2f(shape.getCenterOfMass().x * shape.getScale().x, shape.getCenterOfMass().y * shape.getScale().y)), averageCollision).getDrawable());
+
+    vec.push_back(c);
+    vec.push_back(l.getDrawable(sf::Color::Red));
 
     sf::Vector2f poly1MomentVector = 
         getMomentOfInertia() * ((getPosition() - sf::Vector2f(getOrigin().x * getScale().x, getOrigin().y * getScale().y) 
             + sf::Vector2f(getCenterOfMass().x * getScale().x, getCenterOfMass().y * getScale().y))
             - averageCollision);
     
-    std::cout << getMass() << std::endl;
+    //std::cout << poly1MomentVector.x << " " << poly1MomentVector.y << std::endl;
 
     sf::Vector2f poly2MomentVector = 
         shape.getMomentOfInertia() * ((shape.getPosition() - sf::Vector2f(shape.getOrigin().x * shape.getScale().x, shape.getOrigin().y * shape.getScale().y) 
             + sf::Vector2f(shape.getCenterOfMass().x * shape.getScale().x, shape.getCenterOfMass().y * shape.getScale().y))
             - averageCollision);
 
-    float coeffOfRestitution = getYoungsModulus() + shape.getYoungsModulus();
+    //std::cout << poly2MomentVector.x << " " << poly2MomentVector.y << std::endl;
 
-    std::cout << coeffOfRestitution << std::endl;
+    float coeffOfRestitution = getYoungsModulus() + shape.getYoungsModulus();
 
     float numerator = coeffOfRestitution * 
         VectorMath::dot(shape.getVelocity() - getVelocity() + shape.getAngularVelocity() * poly2MomentVector - getAngularVelocity() * poly1MomentVector, normal);
 
-    std::cout << numerator << std::endl;
-
-    float denominator = (1 / getMass() + 1 / shape.getMass());
+    float denominator = (1 / getMass() + 1 / shape.getMass())
          + (1 / getMomentOfInertia() * pow(VectorMath::dot(poly1MomentVector, normal), 2)) + (1 / shape.getMomentOfInertia() * pow(VectorMath::dot(poly2MomentVector, normal), 2));
-
-    std::cout << denominator << std::endl;
 
     float impulse = numerator / denominator;
 
-    sf::Vector2f poly1Vf = getVelocity() + impulse * normal / getMass();
-    sf::Vector2f poly2Vf = shape.getVelocity() - impulse * normal / shape.getMass();
+    //std::cout << impulse << std::endl;
+
+    sf::Vector2f poly1Vf = getVelocity() - impulse * normal / getMass();
+    sf::Vector2f poly2Vf = shape.getVelocity() + impulse * normal / shape.getMass();
 
     std::cout << poly1Vf.x << " " << poly1Vf.y << std::endl;
+    std::cout << poly2Vf.x << " " << poly2Vf.y << std::endl;
 
-    float poly1Wf = getAngularVelocity() + impulse * VectorMath::dot(poly1MomentVector, normal) / getMomentOfInertia();
-    float poly2Wf = shape.getAngularVelocity() + impulse * VectorMath::dot(poly2MomentVector, normal) / shape.getMomentOfInertia();
+    float poly1Wf = getAngularVelocity() - impulse * VectorMath::dot(poly1MomentVector, normal) / getMomentOfInertia();
+    float poly2Wf = shape.getAngularVelocity() - impulse * VectorMath::dot(poly2MomentVector, normal) / shape.getMomentOfInertia();
 
     setVelocity(poly1Vf);
     shape.setVelocity(poly2Vf);
     setAngularVelocity(poly1Wf);
     shape.setAngularVelocity(poly2Wf);
 
-    return true;
+    return vec;
+    //return true;
 }
 
 /*

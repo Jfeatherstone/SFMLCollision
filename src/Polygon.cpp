@@ -829,9 +829,9 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     //    std::cout << v.x << " " << v.y << std::endl;
 
     findCentroid();
-    calculateMomentOfInertia();
     createLines();
     calculateMass();
+    calculateMomentOfInertia();
     Shape::update(); // This makes the shape actually drawable
 }
 
@@ -884,9 +884,9 @@ Polygon::Polygon(std::vector<sf::Vector2f> points) {
     m_numVertices = m_points.size();
 
     findCentroid();
-    calculateMomentOfInertia();
     createLines();
     calculateMass();
+    calculateMomentOfInertia();
     Shape::update(); // This makes the shape actually drawable
 }
 
@@ -899,9 +899,9 @@ Polygon::Polygon(sf::CircleShape shape) {
     m_numVertices = m_points.size();
 
     findCentroid();
-    calculateMomentOfInertia();
     createLines();
     calculateMass();
+    calculateMomentOfInertia();
     Shape::update(); // This makes the shape actually drawable
 }
 
@@ -914,9 +914,9 @@ Polygon::Polygon(sf::RectangleShape shape) {
     m_numVertices = m_points.size();
 
     findCentroid();
-    calculateMomentOfInertia();
     createLines();
     calculateMass();
+    calculateMomentOfInertia();
     Shape::update(); // This makes the shape actually drawable
 }
 
@@ -1053,15 +1053,16 @@ void Polygon::calculateMomentOfInertia() {
 
     This makes the calculation super easy, as we just add up the distance from the origin to the points\
     */
-    m_centerOfMass = sf::Vector2f(0, 0);
+    m_centerOfMass.x = 0;
+    m_centerOfMass.y = 0;
     m_momentOfInertia = 0;
 
     for (sf::Vector2f p: m_points) {
         m_centerOfMass += p;
     }
 
-    m_centerOfMass.x /= getPointCount();
-    m_centerOfMass.y /= getPointCount();
+    m_centerOfMass.x /= m_numVertices;
+    m_centerOfMass.y /= m_numVertices;
 
     // Now find the average distance from the center of mass to the points
     for (sf::Vector2f p: m_points) {
@@ -1069,7 +1070,7 @@ void Polygon::calculateMomentOfInertia() {
     }
 
     m_momentOfInertia /= getPointCount();
-    m_momentOfInertia *= m_momentOfInertia * getMass();
+    m_momentOfInertia *= getMass();
 
     //std::cout << m_momentOfInertia << std::endl;
 

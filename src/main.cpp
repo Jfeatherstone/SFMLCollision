@@ -8,11 +8,14 @@ using namespace sf;
 int main() {
 
     Texture* t = new Texture();
-    t->loadFromFile("Images/test.png");
+    t->loadFromFile("Images/test2.png");
     
     // Create both polygons (the level of detail is that important here)
     Polygon polygons[2] = {Polygon(t, Detail::More),
                          Polygon(t, Detail::More)};
+
+    //CircleShape c(10);
+    //Polygon polygons[2] = {Polygon(c), Polygon(c)};
 
     for (int i = 0; i < 2; i++) {
         polygons[i].setOrigin(polygons[i].getCentroid());
@@ -20,7 +23,7 @@ int main() {
         polygons[i].setPosition(100 + 200*i, 130 + i*90);
     }
 
-    polygons[0].setVelocity(sf::Vector2f(30, 0));
+    polygons[0].setVelocity(sf::Vector2f(50, 0));
 
     // Setup the window
     RenderWindow window;
@@ -29,6 +32,8 @@ int main() {
         
     Clock time;
     
+    bool paused = false;
+
     while (window.isOpen()) {
         
         Time dt = time.restart();
@@ -64,22 +69,32 @@ int main() {
         }
         */
 
-        ///////////////////////////////////////
-        //          DRAWING
-        ///////////////////////////////////////
-        window.clear();
-
-        polygons[0].intersectAndResolve(polygons[1]);
-
-        polygons[0].update(dt.asSeconds());
-        polygons[1].update(dt.asSeconds());
-
-        for (Polygon p: polygons) {
-            for (Line l: p.getLines())
-                window.draw(*l.getDrawable());
+        Event event;
+        while(window.pollEvent(event)) {
+            if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {
+                paused = !paused;
+            }
         }
 
-        window.display();
+        if (!paused) {
+            ///////////////////////////////////////
+            //          DRAWING
+            ///////////////////////////////////////
+            window.clear();
+
+            for (sf::Shape* s: polygons[0].intersectAndResolve(polygons[1]))
+                window.draw(*s);
+
+            polygons[0].update(dt.asSeconds());
+            polygons[1].update(dt.asSeconds());
+
+            for (Polygon p: polygons) {
+                for (Line l: p.getLines())
+                    window.draw(*l.getDrawable());
+            }
+
+            window.display();
+        }
     }
     
     return 0;
