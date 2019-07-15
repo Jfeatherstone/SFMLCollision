@@ -164,6 +164,7 @@ bool Line::intersects(Line line, sf::Vector2f& intersectionPoint, bool extendLin
     // We precompute the denominator to detect parallel lines and to save on resources
     float denominator = ((x[4] - x[3])*(y[2] - y[1]) - (x[2] - x[1])*(y[4] - y[3]));
 
+    /*
     // Check for parallel lines
     if (denominator < PARALLEL_LINE_SLOPE_TOLERANCE) {
         // The only way parallel lines intersect is if they are the same line
@@ -177,7 +178,8 @@ bool Line::intersects(Line line, sf::Vector2f& intersectionPoint, bool extendLin
         } else
             return false;
     }
-
+    */
+   
     float s = ((x[4]-x[3])*(y[3]-y[1]) - (x[3]-x[1])*(y[4] - y[3])) / denominator;
 
     float t = ((x[2]-x[1])*(y[3]-y[1]) - (x[3]-x[1])*(y[2] - y[1])) / denominator;

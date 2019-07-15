@@ -15,7 +15,7 @@ int main() {
     Clock clock;
 
     Texture* t = new Texture();
-    t->loadFromFile("Images/test.png");
+    t->loadFromFile("Images/test4.png");
     
     CircleShape c;
     c.setRadius(50);
@@ -53,7 +53,7 @@ int main() {
 
     // SETUP THE WINDOW
     RenderWindow window;
-    window.create(VideoMode(poly2.getGlobalBounds().width * 6 + 150, poly2.getGlobalBounds().height*5 + 50), "Polygon Test", Style::Default);
+    window.create(VideoMode(800, 600), "Polygon Test", Style::Default);
     window.setFramerateLimit(60);
     
     Clock time;
@@ -97,13 +97,13 @@ int main() {
         
         ///*
         // INTERSECTION TESTING
-        window.draw(poly);
-        window.draw(poly2);
+        //window.draw(poly);
+        //window.draw(poly2);
         //window.draw(poly3);
         window.setTitle((poly2.intersects(poly)) ? "Colliding" : "Not colliding!");
         //
 
-        /*
+        ///*
         // LINE ALIGNMENT TESTING
         
         //window.draw(poly);
