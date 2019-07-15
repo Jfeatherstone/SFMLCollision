@@ -5,15 +5,15 @@ This project is an extension of a previous repo ([SFMLHitbox](https://github.com
 
 The user will be able to create a Polygon shape in two different ways:
 
-1. By providing a texture to the constructor which will identify important pixels to be included as verticies and create the shape based on these. This will also allow for the user to define the level of accuracy as either pixel perfect or approximate.
-2. By proving a vector of pre assembled verticies, possibly from some other SFML class by using the getPoints() method.
+1. By providing a texture to the constructor which will identify important pixels to be included as vertices and create the shape based on these. This will also allow for the user to define the level of accuracy as either pixel perfect or approximate.
+2. By proving a vector of pre assembled vertices, possibly from some other SFML class by using the getPoints() method.
 3. By directly passing in any of the SFML shape objects (CircleShape, RectangleShape, ConvexShape)
 
 ![Collision](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/collision_test.gif)
 
 What it can do so far:
 
-1. Create a set of verticies from an image file with a varying level of detail to optimize the number of verticies (given by the user)
+1. Create a set of vertices from an image file with a varying level of detail to optimize the number of vertices (given by the user)
 2. Draw the object and use common SFML transformations (rotate, scale, move)
 3. Detect intersection between Polygon type and any other SFML shape regardless of concavity (without providing resultant vector)
 
@@ -50,20 +50,20 @@ The first operation that is performed isolates the important colors in the image
 
 Now that we have a vertex of 1s representing parts to be included and 0s that represent empty space, we begin removing excess points. The most obvious part to remove here is the inside of the shape. To properly represent our image, we really only need to identify the outline, so we remove anything that isn't accessible to an outside shape. In this stage, we also fill in any inside details such that they are removed. This is done by drawing eight lines in all of the cardinal directions and diagonals, and seeing if they encounter a point that is included. If all eight do, the point must be inside the outline of the object. This can be seen in Images/test6.png and Images/test7.png which will produce the exact same polygon.
 
-The next group of verticies to be removed are those that are in a straight line, of which we really only need to two endpoints of said line. This is really just checking above and below and left and right of a point and removing the intermediate verticies.
+The next group of vertices to be removed are those that are in a straight line, of which we really only need to two endpoints of said line. This is really just checking above and below and left and right of a point and removing the intermediate vertices.
 
 ![step4](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step4.jpg) ![step5](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step5.jpg)
 
-The next step of identify verticies is very similar to the previous one, but instead works with diagonal lines.
+The next step of identify vertices is very similar to the previous one, but instead works with diagonal lines.
 
 Finally, we remove any intermediate points along the horizontals, similar to what we did earlier with verticle and horizontal lines.
 
 
-These steps remove just about all of the excess verticies we have, and provide a rather good, just-about pixel-perfect representation of our texture.
+These steps remove just about all of the excess vertices we have, and provide a rather good, just-about pixel-perfect representation of our texture.
 
-The next step is arguably the hardest, and involves adding our verticies in the proper order. This seems like it should be an easy step, just iterate through our vector and add any points that have a value of 1, but alas. If we were to do this, the order of our verticies would be incorrect, and shape would zig-zag back and forth, and be a terrible representation of the actual shape. Instead, we have to follow one direction, clockwise or counter-clockwise, consistently, which is easier said than done.
+The next step is arguably the hardest, and involves adding our vertices in the proper order. This seems like it should be an easy step, just iterate through our vector and add any points that have a value of 1, but alas. If we were to do this, the order of our vertices would be incorrect, and shape would zig-zag back and forth, and be a terrible representation of the actual shape. Instead, we have to follow one direction, clockwise or counter-clockwise, consistently, which is easier said than done.
 
-One of the saving graces of this process is that due to our vertex reduction, just about every vertex should only be connected to either one two verticies (1), or a place that used to be a vertex (3). The case where this is not true is exmplified in the last image above, where at the top of the shape we have a 2x2 square of all verticies.
+One of the saving graces of this process is that due to our vertex reduction, just about every vertex should only be connected to either one two vertices (1), or a place that used to be a vertex (3). The case where this is not true is exmplified in the last image above, where at the top of the shape we have a 2x2 square of all vertices.
 
 We can then keep track of which places (1s or 3s) we have visited, so we don't repeat any values, and each location will only have one other location to go to.
 
@@ -89,12 +89,12 @@ Before we get to the main intersection method described below, we want to do a s
 
 ### Iterating Each Line
 
-The main way we detect collisions between two polygons is by taking the vector of lines contained within each polygon class, and iterating through every line with every other line. This may seem to be a rather inefficient method, but since our line intersection method is so simple, the O(n^2) complexity doesn't spiral out of control. Since we also optimize the number of verticies, we rarely have a shape with more than 50 lines, normally we have between 10 and 20.
+The main way we detect collisions between two polygons is by taking the vector of lines contained within each polygon class, and iterating through every line with every other line. This may seem to be a rather inefficient method, but since our line intersection method is so simple, the O(n^2) complexity doesn't spiral out of control. Since we also optimize the number of vertices, we rarely have a shape with more than 50 lines, normally we have between 10 and 20.
 In the future, I would like to optimize this somehow, but as of now, it works and there are more pressing issues to deal with
 
 ### Finding the Resultant
 
-Not quite sure how to do this just yet, but so far my thoughts are as follows. If we can take the point of intersection for each line (which we can easily find) along with the vertex end of the segment that is inside of the shape (this is the harder part). We can take the vector between these two, as a resultant, and average it with any other resultant vectors, and place them at the average of the verticies found inside the other shape. This is a highly theoretical process and I and have no way to test it as of now, but hopefully a more concrete solution (either this or another one) will stick.
+Not quite sure how to do this just yet, but so far my thoughts are as follows. If we can take the point of intersection for each line (which we can easily find) along with the vertex end of the segment that is inside of the shape (this is the harder part). We can take the vector between these two, as a resultant, and average it with any other resultant vectors, and place them at the average of the vertices found inside the other shape. This is a highly theoretical process and I and have no way to test it as of now, but hopefully a more concrete solution (either this or another one) will stick.
 
 ## References / More Information
 

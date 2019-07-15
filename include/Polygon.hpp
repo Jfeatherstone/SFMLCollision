@@ -39,7 +39,7 @@ SOFTWARE.
  * a certain degree on its creation.
  * 
  * Note: This option is only present and important in the creation of polygons through a texture.
- * If instead a vector of verticies is provided, this enum is irrelevant, which is why our class
+ * If instead a vector of vertices is provided, this enum is irrelevant, which is why our class
  * doesn't have a member variable to store the level of detail,  since it is only used in the
  * constructor.
  */
@@ -66,58 +66,166 @@ class Polygon: public sf::Shape {
 
 private:
 
-    const float DEFAULT_DENSITY = 1.f;
+    /**
+     * @brief The default density of a given polygon. To change the density from this value,
+     * see setDensity(). Value is 1.0f
+     */
+    const static float DEFAULT_DENSITY;
 
-    const float VELOCITY_THRESHOLD = 1.0f;
+    /**
+     * @brief The default minimum value for the velocity, below which, it will be set to 0. This
+     * is done to prevent wandering of polygons very slowly when they should be stopped.
+     */
+    const static float VELOCITY_THRESHOLD;
 
-    /*
-    An array of points that define our shape
-    */
+    /**
+     * @brief The std::vector of points that describe our shape, ordered in either a clockwise or
+     * counter-clockwise fashion (no difference betweent the two, but the order must be one or the
+     * other, otherwise the shape will look zig-zaggy).
+     */
     std::vector<sf::Vector2f> m_points;
 
-    /*
-    How many verticies our shape has
-    */
-    int m_numVerticies;
+    /**
+     * @brief The number of vertices the shape has
+     */
+    int m_numvertices;
+
+    /**
+     * @brief The local coordinates of the centroid of the shape. This is calculated by taking the bounding
+     * rectangle and taking its center.
+     */
     sf::Vector2f m_centroid;
+
+    /**
+     * @brief The area of the shape, used in finding the moment of inertia and other such physical properties
+     */
     float m_area;
 
-    /*
-    To detect collision, we will divide out shape into lines
-    */
+    /**
+     * @brief A std::vector of lines that represent the outside of the shape, used to detect collisions between shapes
+     */
     std::vector<Line> m_lines;
+
+    /**
+     * @brief Whether or not the lines need to be updated to account for a transformation, including rotation,
+     * translation, scale adjustment, etc.
+     */
     bool m_lineUpdateRequired = false;
     
-    // Whether our shape is solid or not
-    bool m_isSolid = true; // True by default
-    bool m_moveableByCollision = true; // If our shape can be moved by another hitting it
+    /**
+     * @brief Whether the shape is considered to be solid or not used to determine whether a shape
+     * inside of another counts as intersecting. Default is true.
+     */
+    bool m_isSolid = true;
+
+    /**
+     * @brief Whether the shape can be moved by collisions with other polygons. Doesn't affect movement
+     * by setting the velocity of the shape. Default is true.
+     */
+    bool m_moveableByCollision = true;
+
+    /**
+     * @brief The density of the shape, used in calculating the moment of inertia and mass of the shape.
+     * For default value, see DEFAULT_DENSITY.
+     */
     float m_density = DEFAULT_DENSITY;
-    float m_mass; // Mass found from area times density
-    float m_momentOfInertia; // How our object rotates about its origin
+
+    /**
+     * @brief The mass of the shape, found by multiplying the density times the area.
+     */
+    float m_mass;
+
+    /**
+     * @brief The momemt of inertia of the shape about its center of mass; describes how the object rotates.
+     */
+    float m_momentOfInertia;
+
+    /**
+     * @brief The center of mass of the object found by averaging the points of the shape.
+     */
     sf::Vector2f m_centerOfMass;
+    
+    /**
+     * @brief The young's modulus of the shape; describes the elasticity of collisions
+     */
     float m_youngsModulus = 1.0f;
+
+    /**
+     * @brief No idea what this does, but it describes some physical property of the shape
+     */
     float m_gamma = 1.0f;
+
+    /**
+     * @brief WIP
+     */
     sf::Vector2f m_force;
     
     // Since this is more or a less a lite physics engine, we need to keep track of the object's
     // velocity
-    sf::Vector2f m_velocity = sf::Vector2f(0, 0);
+
+    /**
+     * @brief The velocity of the shape, used in moving the object (see update()) and detecting collisions
+     */
+    sf::Vector2f m_velocity;
+
+    /**
+     * @brief The angular velocity of the shape, ie. its rotational velocity. Positive means clockwise rotation,
+     * negative means counter-clockwise rotation.
+     */
     float m_angularVelocity = 0;
 
-    // The rigidity is how velocity is conserved when an object bounces off
-    // 1 means it loses no velocity (elastic), 0 means it sticks (inelastic)
+    /**
+     * @brief The rigidity of the shape. 1 means it loses no energy (elastic), 0 means it sticks (inelastic).
+     * @deprecated Replaced by m_youngsModulus
+     */
     float m_rigidity = 1;
 
-	void getPixels();
+    /**
+     * @brief Checks whether a color is contained within a std::vector of colors
+     * 
+     * @param vec A std::vector of colors
+     * @param c A specific color
+     * @return true If vec contains c
+     * @return false If vec doesn't contain c
+     */
 	bool contains(std::vector<sf::Color>& vec, sf::Color c);
-	bool contains(std::vector<sf::Vector2f>& hitboxVerticies, sf::Vector2f point);
+
+    /**
+     * @brief Checks whether a point is contained within a std::vector of points
+     * 
+     * @param vec A std::vector of points
+     * @param point A specific point
+     * @return true If vec contains point
+     * @return false If vec doesn't contain point
+     */
+	bool contains(std::vector<sf::Vector2f>& hitboxvertices, sf::Vector2f point);
+
+    /**
+     * @brief Calculate the centroid of our object by finding the rightmost, leftmost, topmost, etc. points
+     * and taking the average of them all. Should give about the same as taking half of each getGlobalBounds()
+     * width and height (for setting the origin).
+     */
     void findCentroid();
 
+    /**
+     * @brief Using our current m_points, we recreate the lines that represent the boundary of our
+     * shape. This is called whenever our shape is transformed (moved, rotated, scaled), and assigns the
+     * new set of lines to m_lines.
+     */
     void createLines();
 
-    // When dealing with collision resultants, we need to know how to move the object
+    /**
+     * @brief Calculate the mass of the polygon using the area and density
+     */
     void calculateMass();
+
+    /**
+     * @brief Calculate the (relative) moment of inertia of the object by using the distance from the
+     * centroid to every vertex on the boundary. Only has value when comparing moment of inertia's between
+     * shapes, doesn't give the actual moment of inertia of a real object.
+     */
     void calculateMomentOfInertia();
+
 public:
 
     /*

@@ -43,7 +43,6 @@ class VectorMath {
 
 public:
 
-
     /**
      * @brief Compute the dot product between two vectors (sf::Vector2f). The order of the
      * vectors given doesn't matter.
