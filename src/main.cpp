@@ -20,7 +20,7 @@ int main() {
     CircleShape c;
     c.setRadius(50);
 
-    Polygon poly(t, Detail::Optimal);
+    Polygon poly(t, Detail::More);
     //Polygon poly(c);
     poly.setScale(4, 4);
     poly.setFillColor(Color::Green);
@@ -53,7 +53,7 @@ int main() {
 
     // SETUP THE WINDOW
     RenderWindow window;
-    window.create(VideoMode(800, 600), "Polygon Test", Style::Default);
+    window.create(VideoMode(600, 400), "Polygon Test", Style::Default);
     window.setFramerateLimit(60);
     
     Clock time;
