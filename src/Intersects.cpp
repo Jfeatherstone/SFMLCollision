@@ -18,7 +18,8 @@ over the points and update a few values.
  */
 bool Polygon::intersects(sf::RectangleShape shape) {
     Polygon poly(shape);
-    return intersects(poly);
+    //return intersects(poly);
+    return false;
 }
 
 /**
@@ -32,7 +33,8 @@ bool Polygon::intersects(sf::RectangleShape shape) {
  */
 bool Polygon::intersects(sf::CircleShape shape) {
     Polygon poly(shape);
-    return intersects(poly);
+    //return intersects(poly);
+    return false;
 }
 
 /**
@@ -46,7 +48,8 @@ bool Polygon::intersects(sf::CircleShape shape) {
  */
 bool Polygon::intersects(sf::ConvexShape shape) {
     Polygon poly(shape);
-    return intersects(poly);
+    //return intersects(poly);
+    return false;
 }
 
 /*
@@ -64,22 +67,36 @@ This is the actual intersection method, that is called in all of the above "wrap
  * @return true The two shapes are colliding
  * @return false The two shapes aren't colliding
  */
-bool Polygon::intersects(Polygon shape) {
+std::vector<sf::Vector2u> Polygon::intersects(Polygon shape) {
     
-    // We first creating a circle around our objects with the radius equal to the farthest vertex distance and see if they intersect
-    float centroidDistance = sqrt(pow((getPosition().x + getCentroid().x - getOrigin().x) - (shape.getPosition().x + shape.getCentroid().x - shape.getOrigin().x), 2)\
-     + pow((getPosition().y - getOrigin().y + getCentroid().y) - (shape.getPosition().y - shape.getOrigin().y) + shape.getCentroid().y, 2));
+    std::vector<sf::Vector2u> intersectingLines;
 
-    if (centroidDistance > getFarthestVertex() + shape.getFarthestVertex()) {
+    // We first creating a circle around our objects with the radius equal to the farthest vertex distance and see if they intersect
+    /*
+    sf::Vector2f poly1CentroidPosition(getPosition().x + (getCentroid().x - getOrigin().x) * getScale().x,
+                                        getPosition().y + (getCentroid().y - getOrigin().y) * getScale().y);
+
+    sf::Vector2f poly2CentroidPosition(shape.getPosition().x + (shape.getCentroid().x - shape.getOrigin().x) * shape.getScale().x,
+                                        shape.getPosition().y + (shape.getCentroid().y - shape.getOrigin().y) * shape.getScale().y);
+
+    float centroidDistance = sqrt(pow(poly2CentroidPosition.x - poly1CentroidPosition.x, 2) + pow(poly2CentroidPosition.y - poly1CentroidPosition.y, 2));
+
+    float poly1Diagonal = sqrt(getLocalBounds().width * getLocalBounds().width / 4 + 
+                                getLocalBounds().height * getLocalBounds().height / 4);
+    float poly2Diagonal = sqrt(shape.getLocalBounds().width * shape.getLocalBounds().width / 4 + 
+                                shape.getLocalBounds().height * shape.getLocalBounds().height / 4);
+    
+    if (centroidDistance > poly1Diagonal + poly2Diagonal) {
         //cout << "Rect bounds" << endl;
         //cout << "Vertex elim" << endl;
-        return false;
+        return intersectingLines;
     }
-    
+    */
+
     // Next, we check to make sure the two polygons are actually capable of intersecting by checking their rectangular boundary
     if (!getGlobalBounds().intersects(shape.getGlobalBounds())) {
         //cout << "Rect bounds" << endl;
-        return false;
+        return intersectingLines;
     }
 
     //The next order of business here is that we need to grab the lines of each shape 
@@ -92,12 +109,12 @@ bool Polygon::intersects(Polygon shape) {
             if (l1[i].intersects(l2[j])) {
                 std::cout << i << " " << j << std::endl;
                 // We only care about the fact that something intersects here, so we end right after
-                return true;
+                intersectingLines.push_back(sf::Vector2u(i, j));
             }
         }
     }
     
-    return false;
+    return intersectingLines;
 }
 
 /**
@@ -109,17 +126,6 @@ bool Polygon::intersects(Polygon shape) {
  * @return false The two shapes aren't colliding
  */
 bool Polygon::intersects(Polygon& shape, sf::Vector2f& resultant) {
-    //We first check to make sure the two polygons are actually capable of intersecting by checking their circular boundary
-    // This uses the farthest distance of each shape as the radius of a circle,
-    
-    float centroidDistance = sqrt(pow((getPosition().x + getCentroid().x - getOrigin().x) - (shape.getPosition().x + shape.getCentroid().x - shape.getOrigin().x), 2)\
-     + pow((getPosition().y - getOrigin().y + getCentroid().y) - (shape.getPosition().y - shape.getOrigin().y) + shape.getCentroid().y, 2));
-
-    if (centroidDistance > getFarthestVertex() + shape.getFarthestVertex()) {
-        //cout << "Rect bounds" << endl;
-        //cout << "Vertex elim" << endl;
-        return false;
-    }
     
     // Next, we check to make sure the two polygons are actually capable of intersecting by checking their rectangular boundary
     sf::FloatRect overlap;

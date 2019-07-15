@@ -15,12 +15,12 @@ int main() {
     Clock clock;
 
     Texture* t = new Texture();
-    t->loadFromFile("Images/test4.png");
+    t->loadFromFile("Images/test.png");
     
     CircleShape c;
     c.setRadius(50);
 
-    Polygon poly(t, Detail::Optimal);
+    Polygon poly(t, Detail::More);
     //Polygon poly(c);
     poly.setScale(4, 4);
     poly.setFillColor(Color::Green);
@@ -33,12 +33,11 @@ int main() {
     poly2.setScale(Vector2f(5, 5));
     poly2.setFillColor(Color::Magenta);
     
-    /*
+    ///*
     // VERTEX DEBUGGING
-    cout << "Less: " << poly.getPointCount() << endl;test
+    cout << "Less: " << poly.getPointCount() << endl;
     cout << "More: " << poly2.getPointCount() << endl;
-    cout << "Perfect: " << poly3.getPointCount() << endl;
-    ///
+    //*/
     
     /*
     // LINE DEBUGGING
@@ -53,7 +52,7 @@ int main() {
 
     // SETUP THE WINDOW
     RenderWindow window;
-    window.create(VideoMode(800, 600), "Polygon Test", Style::Default);
+    window.create(VideoMode(600, 400), "Polygon Test", Style::Default);
     window.setFramerateLimit(60);
     
     Clock time;
@@ -100,7 +99,8 @@ int main() {
         //window.draw(poly);
         //window.draw(poly2);
         //window.draw(poly3);
-        window.setTitle((poly2.intersects(poly)) ? "Colliding" : "Not colliding!");
+        std::vector<sf::Vector2u> intersectingLines = poly.intersects(poly2);
+        window.setTitle((intersectingLines.size() > 0) ? "Colliding" : "Not colliding!");
         //
 
         ///*
@@ -108,20 +108,17 @@ int main() {
         
         //window.draw(poly);
         //window.draw(poly2);
-        int i = 0;
         for (Line l: poly.getLines()) {
-            window.draw(*l.getDrawable(colors[i]));
-            i++;
-            if (i > 4)
-                i = 0;
+            window.draw(*l.getDrawable(sf::Color::White));
         }
         
-        i = 0;
         for (Line l: poly2.getLines()) {
-            window.draw(*l.getDrawable(colors[i]));
-            i++;
-            if (i > 4)
-                i = 0;
+            window.draw(*l.getDrawable(sf::Color::White));
+        }
+
+        for (sf::Vector2u v: intersectingLines) {
+            window.draw(*poly.getLines()[v.x].getDrawable(sf::Color::Red));
+            window.draw(*poly2.getLines()[v.y].getDrawable(sf::Color::Red));
         }
         //*/
 
