@@ -100,7 +100,8 @@ int main() {
         //window.draw(poly);
         //window.draw(poly2);
         //window.draw(poly3);
-        window.setTitle((poly2.intersects(poly)) ? "Colliding" : "Not colliding!");
+        std::vector<sf::Vector2u> intersectingLines = poly.intersects(poly2);
+        window.setTitle((intersectingLines.size() > 0) ? "Colliding" : "Not colliding!");
         //
 
         ///*
@@ -108,20 +109,17 @@ int main() {
         
         //window.draw(poly);
         //window.draw(poly2);
-        int i = 0;
         for (Line l: poly.getLines()) {
-            window.draw(*l.getDrawable(colors[i]));
-            i++;
-            if (i > 4)
-                i = 0;
+            window.draw(*l.getDrawable(sf::Color::White));
         }
         
-        i = 0;
         for (Line l: poly2.getLines()) {
-            window.draw(*l.getDrawable(colors[i]));
-            i++;
-            if (i > 4)
-                i = 0;
+            window.draw(*l.getDrawable(sf::Color::White));
+        }
+
+        for (sf::Vector2u v: intersectingLines) {
+            window.draw(*poly.getLines()[v.x].getDrawable(sf::Color::Red));
+            window.draw(*poly2.getLines()[v.y].getDrawable(sf::Color::Red));
         }
         //*/
 

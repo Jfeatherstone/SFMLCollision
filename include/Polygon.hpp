@@ -221,7 +221,7 @@ public:
     It is also important to note that these (due to their scope) are not defined within Polygon.cpp but rather
     Intersects.cpp
     */
-    bool intersects(Polygon shape);
+    std::vector<sf::Vector2u> intersects(Polygon shape);
     bool intersects(sf::RectangleShape shape);
     bool intersects(sf::CircleShape shape);
     bool intersects(sf::ConvexShape shape);

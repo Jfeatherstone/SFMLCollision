@@ -18,7 +18,8 @@ over the points and update a few values.
  */
 bool Polygon::intersects(sf::RectangleShape shape) {
     Polygon poly(shape);
-    return intersects(poly);
+    //return intersects(poly);
+    return false;
 }
 
 /**
@@ -32,7 +33,8 @@ bool Polygon::intersects(sf::RectangleShape shape) {
  */
 bool Polygon::intersects(sf::CircleShape shape) {
     Polygon poly(shape);
-    return intersects(poly);
+    //return intersects(poly);
+    return false;
 }
 
 /**
@@ -46,7 +48,8 @@ bool Polygon::intersects(sf::CircleShape shape) {
  */
 bool Polygon::intersects(sf::ConvexShape shape) {
     Polygon poly(shape);
-    return intersects(poly);
+    //return intersects(poly);
+    return false;
 }
 
 /*
@@ -64,22 +67,26 @@ This is the actual intersection method, that is called in all of the above "wrap
  * @return true The two shapes are colliding
  * @return false The two shapes aren't colliding
  */
-bool Polygon::intersects(Polygon shape) {
+std::vector<sf::Vector2u> Polygon::intersects(Polygon shape) {
     
+    std::vector<sf::Vector2u> intersectingLines;
+
     // We first creating a circle around our objects with the radius equal to the farthest vertex distance and see if they intersect
     float centroidDistance = sqrt(pow((getPosition().x + getCentroid().x - getOrigin().x) - (shape.getPosition().x + shape.getCentroid().x - shape.getOrigin().x), 2)\
      + pow((getPosition().y - getOrigin().y + getCentroid().y) - (shape.getPosition().y - shape.getOrigin().y) + shape.getCentroid().y, 2));
 
+    /*
     if (centroidDistance > getFarthestVertex() + shape.getFarthestVertex()) {
         //cout << "Rect bounds" << endl;
         //cout << "Vertex elim" << endl;
-        return false;
+        return intersectingLines;
     }
-    
+    */
+   
     // Next, we check to make sure the two polygons are actually capable of intersecting by checking their rectangular boundary
     if (!getGlobalBounds().intersects(shape.getGlobalBounds())) {
         //cout << "Rect bounds" << endl;
-        return false;
+        return intersectingLines;
     }
 
     //The next order of business here is that we need to grab the lines of each shape 
@@ -92,12 +99,12 @@ bool Polygon::intersects(Polygon shape) {
             if (l1[i].intersects(l2[j])) {
                 std::cout << i << " " << j << std::endl;
                 // We only care about the fact that something intersects here, so we end right after
-                return true;
+                intersectingLines.push_back(sf::Vector2u(i, j));
             }
         }
     }
     
-    return false;
+    return intersectingLines;
 }
 
 /**
