@@ -47,20 +47,24 @@ The following images are generated from this source image:
 
 ![source](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/test.png)
 
-1. The first step takes all pixels that have a non-zero alpha value (or are not explicitely excluded through the ignored colors parameter) and places a 1 in a 2D array. Any pixels that were removed have a value of 0. ![step1](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step1.jpg)
+1. The first step takes all pixels that have a non-zero alpha value (or are not explicitely excluded through the ignored colors parameter) and places a 1 in a 2D array. Any pixels that were removed have a value of 0. 
 
     1. If the image has extra white space (ie. there is padding on the image), it is cropped out during this step.
 
     2. During this step, any internal pixels that were not previously included are also filled in. For an example of this, see Images/test6.png and Images/test7.png, both of which will produce the exact same set of vertices.
 
-2. The next step is to remove the internal pixels of the shape, as only the boundary is needed to detect collisions and draw the object. This is done by checking, for each pixel, if it is surrounded on all sides (including diagonals). If a pixel satisfies this condition, its value is changed to 2. ![step2](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step2.jpg)
+2. The next step is to remove the internal pixels of the shape, as only the boundary is needed to detect collisions and draw the object. This is done by checking, for each pixel, if it is surrounded on all sides (including diagonals). If a pixel satisfies this condition, its value is changed to 2. 
 
-3. Now that a rough boundary has been acquired, it is time to reduce the number of vertices that provide no information to the final shape. The next group of vertices to be removed are those that are in a straight line, of which we really only need to two endpoints of said line. This is really just checking above and below and left and right of a point and removing the intermediate vertices. Removed vertices are replaced with a 3. ![step3](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step3.jpg)
+3. Now that a rough boundary has been acquired, it is time to reduce the number of vertices that provide no information to the final shape. The next group of vertices to be removed are those that are in a straight line, of which we really only need to two endpoints of said line. This is really just checking above and below and left and right of a point and removing the intermediate vertices. Removed vertices are replaced with a 3. 
 
 4. During this step, "stair-like" patterns of vertices are reduced to straight lines, reducing the blockiness of the shape.
 
-5. Similar to the step 3, any diagonal straight lines are identified and removed now, there value being replaced with a 3. ![step4](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step4.jpg)
+5. Similar to the step 3, any diagonal straight lines are identified and removed now, there value being replaced with a 3. 
 
+![step1](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step1.jpg)
+![step2](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step2.jpg)
+![step3](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step3.jpg)
+![step4](https://raw.githubusercontent.com/Jfeatherstone/SFMLCollision/master/Images/step4.jpg)
 
 The next process is arguably the hardest, and involves adding our vertices in the proper order. This seems like it should be an easy step, just iterate through the array and add any points that have a value of 1, but alas. If we were to do this, the order of our vertices would be incorrect, and shape would zig-zag back and forth, and be a terrible representation of the actual shape. Instead, we have to follow one direction, clockwise or counter-clockwise, consistently, which is easier said than done.
 
