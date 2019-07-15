@@ -14,11 +14,10 @@
 Line::Line(sf::Vector2f p1, sf::Vector2f p2) {
     // This automatically assigns our slope member variable so we don't need to set it here
 
-    calculateSlope(p1, p2);
-
     m_start = p1;
     m_end = p2;
 
+    calculateSlope();
     calculateIntercept();
     calculateAngle();
 }
@@ -45,9 +44,8 @@ This is a simple y2-y1/x2-x1 calculation
  * @param p2 The second point
  * @return float The value of the slope
  */
-float Line::calculateSlope(sf::Vector2f p1, sf::Vector2f p2) {
-    m_slope = (p2.y-p1.y)/(p2.x-p1.x);
-    return m_slope;
+void Line::calculateSlope() {
+    m_slope = (m_end.y - m_start.y) / (m_end.x - m_start.x);
 }
 
 /*
@@ -61,9 +59,8 @@ This will use y = mx + b to find the intercept
  * 
  * @return float The intercept of our object
  */
-float Line::calculateIntercept() {
+void Line::calculateIntercept() {
     m_intercept = m_start.y - m_slope*m_start.x;
-    return m_intercept;
 }
 
 /*
@@ -84,15 +81,11 @@ the angle value in degrees.
  * 
  * @return float The angle
  */
-float Line::calculateAngle() {
-
+void Line::calculateAngle() {
     // We act as though the start point is our origin (0, 0) by subtracting it from the first
     sf::Vector2f v = m_end - m_start;
-
     // And now we calculate the angle, be sure to note that it is converted to degrees
     m_angle = atan(v.y / v.x) * 180.0f /M_PI;
-    
-    return m_angle;
 }
 
 
@@ -139,22 +132,6 @@ bool Line::intersects(Line line, sf::Vector2f& intersectionPoint, bool extendLin
 
     // We precompute the denominator to detect parallel lines and to save on resources
     float denominator = ((x[4] - x[3])*(y[2] - y[1]) - (x[2] - x[1])*(y[4] - y[3]));
-
-    /*
-    // Check for parallel lines
-    if (denominator < PARALLEL_LINE_SLOPE_TOLERANCE) {
-        // The only way parallel lines intersect is if they are the same line
-        sf::Vector2f centerA = (getStart() + getEnd()) / 2.0f;
-        sf::Vector2f centerB = (line.getStart() + line.getEnd()) / 2.0f;
-        sf::Vector2f distance = centerA - centerB;
-
-        if (abs(distance.x) < PARALLEL_LINE_DISTANCE_TOLERANCE || abs(distance.y) < PARALLEL_LINE_DISTANCE_TOLERANCE) {
-            intersectionPoint = centerA;
-            return true;
-        } else
-            return false;
-    }
-    */
    
     float s = ((x[4]-x[3])*(y[3]-y[1]) - (x[3]-x[1])*(y[4] - y[3])) / denominator;
 
