@@ -88,7 +88,7 @@ private:
     /**
      * @brief The number of vertices the shape has
      */
-    int m_numvertices;
+    int m_numVertices;
 
     /**
      * @brief The local coordinates of the centroid of the shape. This is calculated by taking the bounding
@@ -175,12 +175,6 @@ private:
     float m_angularVelocity = 0;
 
     /**
-     * @brief The rigidity of the shape. 1 means it loses no energy (elastic), 0 means it sticks (inelastic).
-     * @deprecated Replaced by m_youngsModulus
-     */
-    float m_rigidity = 1;
-
-    /**
      * @brief Checks whether a color is contained within a std::vector of colors
      * 
      * @param vec A std::vector of colors
@@ -228,67 +222,217 @@ private:
 
 public:
 
-    /*
-    The constructor that will parse our shape from a texture
-
-    We have two optional parameters here:
-
-    Detail: This could can be either Less or More (enum is defined above, see there for info) which will define either
-    approximate accuracy (less) or pixel perfect accuracy (more)
-
-    vector<Color>: In case we want to ignore certain parts of a sprite, we can provide their rgb values
-    and the parser will pass over them
-    */
+    /**
+     * @brief Construct a new Polygon object from a given texture (image).
+     * 
+     * @param texture The texture for the shape/sprite we want to model
+     * @param detail The level of detail to keep in the shape, from least to most: Less, More, Optimal, Exact
+     * @param ignoredsf::Colors By default, all pixels that arent (0, 0, 0, 0) will be included, any colors specified here will also be ignored
+     */
     Polygon(sf::Texture* texture, Detail detail = Detail::Optimal, std::vector<sf::Color> ignoredColors = {});
 
-    /*
-    Converting other SFML objects into a Polygon type
-    */
+    /**
+     * @brief Construct a new Polygon object from a std::vector of points
+     * 
+     * @param points The points that constitute our shape
+     */
     Polygon(std::vector<sf::Vector2f> points);
+
+    /**
+     * @brief Construct a new Polygon object from a sf::CircleShape object
+     * 
+     * @param shape The CircleShape object whose points will be used
+     */
     Polygon(sf::CircleShape shape);
+
+    /**
+     * @brief Construct a new Polygon object from a sf::RectangleShape object
+     * 
+     * @param shape The RectangleShape object whose points will be used
+     */
     Polygon(sf::RectangleShape shape);
+
+    /**
+     * @brief Construct a new Polygon object from a sf::ConvexShape object
+     * 
+     * @param shape The ConvexShape object who points will be used
+     */
     Polygon(sf::ConvexShape shape);
 
-    /*
-    The following two methods are overridden from Shape
-    */
+
+
+    ///////////////////////////////////////
+    //        VERTEX INFO
+    ///////////////////////////////////////
+
+    /**
+     * @brief Get the number of vertices on our polygon. Overridden from sf::Shape
+     * 
+     * @return size_t The number of vertices
+     */
     virtual size_t getPointCount() const;
+
+    /**
+     * @brief Get the vertex at index in the std::vector m_points. Overridden from sf::Shape
+     * 
+     * @param index The index of the point we are looking for
+     * @return sf::Vector2f The point at index in m_points
+     */
     virtual sf::Vector2f getPoint(size_t index) const;
 
+
+    /**
+     * @brief Returns the entire std::vector of points that represent the shape, without any modifications from
+     * transformations (rotate, move, scale)
+     * 
+     * @return std::vector<sf::Vector2f> Our shape's std::vector of vertices
+     */
     std::vector<sf::Vector2f> getPoints();
 
+    /**
+     * @brief Return the lines that represent the polygon's outline/border
+     * 
+     * @return std::vector<Line> A std::vector of lines that represent the outline
+     */
     std::vector<Line> getLines();
+
+    /**
+     * @brief Returns the centroid of the shape (does not recalculate it)
+     * 
+     * @return sf::Vector2f The centroid of the shape
+     */
     sf::Vector2f getCentroid();
 
-    // Values that adjust how collisions affect the shape
+    ///////////////////////////////////////
+    //        PHYSICAL PROPERTIES
+    ///////////////////////////////////////
+
+    /**
+     * @brief Set whether the shape is solid (can collide with other shapes)
+     * 
+     * @param state Whether or not the shape is solid
+     */
     void setSolid(bool state);
+
+    /**
+     * @brief Check whether or not the shape can collide with other shapes
+     * 
+     * @return true Can collide
+     * @return false Cannot collide
+     */
     bool isSolid();
 
-    void setRigidity(float value);
-    float getRigidity();
-
+    /**
+     * @brief Set whether the shape can be moved by being collided with by another object
+     * 
+     * @param value Whether or not the shape can be moved by another polygon
+     */
     void setMovableByCollision(bool value);
+
+    /**
+     * @brief Get whether the shape can be moved by being collided with by another object
+     * 
+     * @return true The shape can be moved
+     * @return false The shape cannot be moved
+     */
     bool isMovableByCollision();
 
+    /**
+     * @brief Set the density of the object, used in calculate its mass and moment of inertia (default is 1)
+     * and recalculate both values
+     * 
+     * @param newDensity The density of the object (default is 1)
+     */
     void setDensity(float newDensity);
+
+    /**
+     * @brief Get the relative density of the polygon
+     * 
+     * @return float The density of the polygon
+     */
     float getDensity();
 
+    /**
+     * @brief Return the mass of the polygon, using the density and area to calculate
+     * 
+     * @return float The mass of the shape
+     */
     float getMass();
+
+    /**
+     * @brief Return the moment of inertia of the polygon, using the density and vertex distribution
+     * 
+     * @return float The moment of inertia of the shape
+     */    
     float getMomentOfInertia();
     
+    /**
+     * @brief Get the Center Of Mass object
+     * 
+     * @return sf::Vector2f The local coordinates of the center of mass of the object
+     */
     sf::Vector2f getCenterOfMass();
 
+    /**
+     * @brief This will return the parameter that describes how the polygon responds to forces
+     * and how it bends and distorts
+     * 
+     * @return float The Young's Modulus of the shape, default is 1
+     */
     float getYoungsModulus();
-    float getGamma();
-    void setGamma(float gamma);
+
+    /**
+     * @brief Change the parameter that describes how the polygon responds to forces and how it
+     * bends and distorts
+     * 
+     * @param youngsModulus The new value for the young's modulus, default is 1
+     */
     void setYoungsModulus(float youngsModulus);
 
+    /**
+     * @brief Get the Gamma object
+     * 
+     * @return float Return the gamma physical property of the object
+     */
+    float getGamma();
+
+    /**
+     * @brief Set the Gamma physical property
+     * 
+     * @param gamma The new gamma physical property value
+     */
+    void setGamma(float gamma);
+
+    /**
+     * @brief This is a static method that finds the area of any given shape (std::vector of points)
+     * Ngl, I don't remember where I found this method for finding the area of a polygon, but 
+     * will post when I find it. 
+     * 
+     * @param points A Vector of points the represent our shape. See Polygon::getPoints()
+     * @param value A referenced float that our area will be stored in
+     */
+    static void calculateArea(std::vector<sf::Vector2f> points, float& value);
+
+    /**
+     * @brief Get the Area object
+     * 
+     * @return float The area of the polygon
+     */
+    float getArea();
+
+    ///////////////////////////////////////
+    //              MOTION
+    ///////////////////////////////////////
+
+    /**
+     * @brief Get the Force object WIP
+     * 
+     * @return sf::Vector2f The current force on the object
+     */
     sf::Vector2f getForce();
     void setForce(sf::Vector2f force);
     void addForce(sf::Vector2f force);
-    /*
-    We need to be able to apply a velocity to our shape and iterate it through every frame
-    */
+
     void setVelocity(sf::Vector2f newVelocity);
     sf::Vector2f getVelocity();
     void setAngularVelocity(float newAngularVelocity);
@@ -296,6 +440,11 @@ public:
 
     void update(float elapsedTime);
     void adjustFromForce(sf::Vector2f resultant, sf::Vector2f collisionPoint, Polygon& shape);
+
+
+    ///////////////////////////////////////
+    //          TRANSFORMATIONS
+    ///////////////////////////////////////
 
     /*
     These methods a pseudo-overriden in that they reference their super class
@@ -306,28 +455,147 @@ public:
 
     There is likely a better way to do this, but I'm not aware of it right now
     */
+
+    /**
+     * @brief An overriden method from sf::Shape that changes the scale like its super-counterpart
+     * and also recreates the lines that represent the shape.
+     * 
+     * @param scale The scaling factors for our polygon
+     */
     void setScale(const sf::Vector2f& scale);
+
+    /**
+     * @brief An overriden method from sf::Shape that changes the scale like its super-counterpart
+     * and also recreates the lines that represent the shape.
+     * 
+     * @param xFactor The x scaling factor
+     * @param yFactor The y scaling factor
+     */
     void setScale(float xScale, float yScale);
+
+    /**
+     * @brief An overriden method from sf::Shape that changes the scale like its super-counterpart
+     * and also recreates the lines that represent the shape.
+     * 
+     * @param scale The scaling factors for our polygon
+     */
     void scale(const sf::Vector2f& scale);
+
+    /**
+     * @brief An overriden method from sf::Shape that changes the scale like its super-counterpart
+     * and also recreates the lines that represent the shape.
+     * 
+     * @param xFactor The x scaling factor
+     * @param yFactor The y scaling factor
+     */
     void scale(float xFactor, float yFactor);
+
+    /**
+     * @brief An overriden method from sf::Shape that changes the rotation like its super-counterpart
+     * and also recreates the lines that represent the shape.
+     * 
+     * @param angle The angle we are setting the rotation to (default is 0)
+     */
     void setRotation(float angle);
+
+    /**
+     * @brief An overriden method from sf::Shape that changes the rotation like its super-counterpart
+     * and also recreates the lines that represent the shape.
+     * 
+     * @param angle The angle we are rotating the shape by
+     */
     void rotate(float angle);
+
+    /**
+     * @brief An overriden method from sf::Shape that changes the position like its super-counterpart
+     * and also recreates the lines that represent the shape.
+     * 
+     * @param position The new x and y coordinates of the shape
+     */
     void setPosition(const sf::Vector2f& position);
+
+    /**
+     * @brief An overriden method from sf::Shape that changes the position like its super-counterpart
+     * and also recreates the lines that represent the shape.
+     * 
+     * @param x New x coordinate
+     * @param y New y coordinate
+     */
     void setPosition(float x, float y);
-    void move(const sf::Vector2f& offset);
-    void move(float xOffset, float yOffset);
+
+    /**
+     * @brief An overriden method from sf::Shape that changes the position like its super-counterpart
+     * and also recreates the lines that represent the shape.
+     * 
+     * @param d The amount to change x and y by 
+     */
+    void move(const sf::Vector2f& d);
+
+    /**
+     * @brief An overriden method from sf::Shape that changes the position like its super-counterpart
+     * and also recreates the lines that represent the shape.
+     * 
+     * @param dx Amount to change the x coordinate by
+     * @param dy Amount to change the y coordinate by
+     */
+    void move(float dx, float dy);
+
+
+    ///////////////////////////////////////
+    //          INTERSECTION
+    ///////////////////////////////////////
 
     /*
-    The big boys
+    The big boys - 
     The latter three will actually just convert each respective shape into a polygon type and call the first
     intersection function
 
     It is also important to note that these (due to their scope) are not defined within Polygon.cpp but rather
     Intersects.cpp
     */
+
+    /**
+     * @brief Check the intersection between two polygon shapes. Has three levels of detection, to reduce
+     * unecessary calculations and resource usage. Returns no information about collision after-effects
+     * or resultants. For that, see intersects(Polygon shape, sf::Vector2f& resultant).
+     * 
+     * @param shape The shape we are checking to be colliding with the current one
+     * @return true The two shapes are colliding
+     * @return false The two shapes aren't colliding
+     */
     std::vector<sf::Vector2u> intersects(Polygon shape);
+
+    /**
+     * @brief A wrapper method to check the intersection between a Polygon shape and a RectangleShape
+     * by converting it to a polygon and then using our full intersection method
+     * See intersects(Polygon shape) for the full intersection method
+     * 
+     * @param shape The shape we are checking to be colliding with the current one
+     * @return true The two shapes are colliding
+     * @return false The two shapes aren't colliding
+     */
     bool intersects(sf::RectangleShape shape);
+
+    /**
+     * @brief A wrapper method to check the intersection between a Polygon shape and a CircleShape
+     * by converting it to a polygon and then using our full intersection method
+     * See intersects(Polygon shape) for the full intersection method
+
+    * @param shape The shape we are checking to be colliding with the current one
+    * @return true The two shapes are colliding
+    * @return false The two shapes aren't colliding
+    */
     bool intersects(sf::CircleShape shape);
+
+    /**
+     * @brief A wrapper method to check the intersection between a Polygon shape and a ConvexShape
+     * by converting it to a polygon and then using our full intersection method
+     * See intersects(Polygon shape) for the full intersection method
+     * 
+     * @param shape The shape we are checking to be colliding with the current one
+     * @return true The two shapes are colliding
+     * @return false The two shapes aren't colliding
+     */
     bool intersects(sf::ConvexShape shape);
 
     /*
@@ -338,6 +606,11 @@ public:
     bool intersects(sf::RectangleShape shape, sf::Vector2f& resultant);
     bool intersects(sf::CircleShape shape, sf::Vector2f& resultant);
     bool intersects(sf::ConvexShape shape, sf::Vector2f& resultant);
+
+    ///////////////////////////////////////
+    //          CONTAINS
+    //     NOT IMPLEMENTED YET (WIP)
+    ///////////////////////////////////////
 
     /*
     Another intersection type utility we want is to check whether another shape is inside of this one.
@@ -351,9 +624,4 @@ public:
     bool contains(sf::CircleShape shape);
     bool contains(sf::ConvexShape shape);
 
-    /*
-    For finding the area of our polygons given either a set of points or an actual polygon
-    */
-    static void getArea(std::vector<sf::Vector2f> points, float& value);
-    float getArea();
 };

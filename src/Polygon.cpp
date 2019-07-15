@@ -3,16 +3,18 @@
 const float Polygon::DEFAULT_DENSITY = 1.0f;
 const float Polygon::VELOCITY_THRESHOLD = 1.0f;
 
-/**
- * @brief Construct a new Polygon object from a given texture (image).
- * 
- * @param texture The texture for the shape/sprite we want to model
- * @param detail The level of detail to keep in the shape, from least to most: Less, More, Optimal, Exact
- * @param ignoredsf::Colors By default, all pixels that arent (0, 0, 0, 0) will be included, any colors specified here will also be ignored
- */
+/*
+The constructor that will parse our shape from a texture
+
+We have two optional parameters here:
+
+Detail: This could can be either Less or More (enum is defined above, see there for info) which will define either
+approximate accuracy (less) or pixel perfect accuracy (more)
+
+vector<Color>: In case we want to ignore certain parts of a sprite, we can provide their rgb values
+and the parser will pass over them
+*/
 Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ignoredColors) {
-
-
     // First we store the texture such that the polygon looks like the image
     //setTexture(texture);
 
@@ -561,16 +563,16 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     // Setup our polygon
 
     // We need to know how many vertices we have
-    m_numvertices = 0;
+    m_numVertices = 0;
     for (int i = 0; i < textureSize.y; i++) {
         for (int j = 0; j < textureSize.x; j++) {
             if (includedPixels[i][j] == 1)
-                m_numvertices++;
+                m_numVertices++;
 
         }
     }
     
-    m_points.resize(m_numvertices);
+    m_points.resize(m_numVertices);
 
 
     sf::Vector2f directions[8] = {
@@ -585,9 +587,9 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     };
 
 
-    std::cout << "numVericies before adding: " << m_numvertices << std::endl;
+    std::cout << "numVericies before adding: " << m_numVertices << std::endl;
 
-    while (vertexIndex < m_numvertices) {
+    while (vertexIndex < m_numVertices) {
         if (includedPixels[currPixel.y][currPixel.x] == 1 || includedPixels[currPixel.y][currPixel.x] == 3) {
             // Even if it isn't an actual vertex, we record it in our other std::vector
             polygonvertices.push_back(sf::Vector2f(currPixel.x, currPixel.y));
@@ -761,7 +763,7 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     //*/
 
     // Update the size of our vertices
-    m_numvertices = m_points.size();
+    m_numVertices = m_points.size();
 
     //////////////////////////////////////////
     // 
@@ -802,8 +804,8 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
 
                 // Calculate our two areas
                 float a1, a2;
-                Polygon::getArea(m_points, a1);
-                Polygon::getArea(old, a2);
+                Polygon::calculateArea(m_points, a1);
+                Polygon::calculateArea(old, a2);
 
                 // Now we check if they are within the tolerance governed by our level of detail
                 float dA = abs(a2 - a1);
@@ -820,7 +822,7 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
         }
     }
 
-    m_numvertices = m_points.size();
+    m_numVertices = m_points.size();
 
     //std::cout << "Final vertices:\n";
     //for (sf::Vector2f v: m_points)
@@ -875,15 +877,10 @@ Since most other SFML shapes have a getPoints() method, we could easily convert 
 shape to our class here
 */
 
-/**
- * @brief Construct a new Polygon object from a std::vector of points
- * 
- * @param points The points that constitute our shape
- */
 Polygon::Polygon(std::vector<sf::Vector2f> points) {
     m_points = points;
 
-    m_numvertices = m_points.size();
+    m_numVertices = m_points.size();
 
     findCentroid();
     createLines();
@@ -891,18 +888,13 @@ Polygon::Polygon(std::vector<sf::Vector2f> points) {
     Shape::update(); // This makes the shape actually drawable
 }
 
-/**
- * @brief Construct a new Polygon object from a sf::CircleShape object
- * 
- * @param shape The CircleShape object whose points we will use
- */
 Polygon::Polygon(sf::CircleShape shape) {
     m_points.resize(shape.getPointCount());
     for (int i = 0; i < shape.getPointCount(); i++) {
         m_points[i] = shape.getPoint(i);
     }
 
-    m_numvertices = m_points.size();
+    m_numVertices = m_points.size();
 
     findCentroid();
     createLines();
@@ -910,18 +902,13 @@ Polygon::Polygon(sf::CircleShape shape) {
     Shape::update(); // This makes the shape actually drawable
 }
 
-/**
- * @brief Construct a new Polygon object from a sf::RectangleShape object
- * 
- * @param shape The RectangleShape object whose points we will use
- */
 Polygon::Polygon(sf::RectangleShape shape) {
     m_points.resize(shape.getPointCount());
     for (int i = 0; i < shape.getPointCount(); i++) {
         m_points[i] = shape.getPoint(i);
     }
 
-    m_numvertices = m_points.size();
+    m_numVertices = m_points.size();
 
     findCentroid();
     createLines();
@@ -929,103 +916,18 @@ Polygon::Polygon(sf::RectangleShape shape) {
     Shape::update(); // This makes the shape actually drawable
 }
 
-/**
- * @brief Construct a new Polygon object from a sf::ConvexShape object
- * 
- * @param shape The ConvexShape object who points we will use
- */
 Polygon::Polygon(sf::ConvexShape shape) {
     m_points.resize(shape.getPointCount());
     for (int i = 0; i < shape.getPointCount(); i++) {
         m_points[i] = shape.getPoint(i);
     }
 
-    m_numvertices = m_points.size();
+    m_numVertices = m_points.size();
 
     findCentroid();
     createLines();
     calculateMass();
     Shape::update(); // This makes the shape actually drawable
-}
-
-void Polygon::createLines() {
-    //std::cout << "Creating Lines" << std::flush;
-
-    /*
-    This method is mostly linear algebra and (more or less) simple transformations on our std::vector of points.
-    First, we rotate our points, around the origin of the shape, followed by scaling them up, and finally
-    by adding the offset of the shape (its position).
-    */
-
-    /*
-    We don't want any of the transformations we do to be permanant, so we calculate the new points, and then
-    revert to the old so when we then rotate, translate, or scale, we don't have to do some weird math to
-    account for the previous transformations of the points.
-    */
-    std::vector<sf::Vector2f> pointsCopy = m_points;
-
-    /*
-    The first transformation we do on our object is a rotation of the points. This is followed by the scale transform,
-    for no particular reason as both transformations should be commuatative (a rotated then scaled object is the same 
-    as a scaled then rotated object)
-    The rotation is pretty straight forward and defined in the VectorMath class, but the scale has a bit of a caveat.
-    Since we have to scale the object about its origin (since SFML does this) we need to account for the change by
-    first translating such that the origin is at (0, 0), multiplying by the scale factors, and then translating
-    back.
-    */ 
-    for (int i = 0; i < m_numvertices; i++) {
-        VectorMath::rotate(m_points[i], getOrigin(), getRotation());
-        
-        // Align our point such that the origin becomes (0, 0)
-        m_points[i].x -= getOrigin().x;
-        m_points[i].y -= getOrigin().y;
-
-        // Scale it
-        m_points[i].x *= getScale().x;
-        m_points[i].y *= getScale().y;
-
-        // Translate our scaled point relative to its original origin
-        m_points[i].x += getOrigin().x;
-        m_points[i].y += getOrigin().y;
-    }
-    
-    /*
-    Now that our first two transformations are out of the way, we have to translate the points to their actual position
-    on the screen. This offset is calculated using the origin and position.
-    */ 
-    sf::Vector2f offset(getPosition().x - getOrigin().x, getPosition().y - getOrigin().y);
-    for (int i = 0; i < m_numvertices; i++) {
-        m_points[i].x += offset.x;
-        m_points[i].y += offset.y; 
-    }
-
-    /*
-    Now that our points properly represent the shape we want, we can create lines between them to check for collisions
-    */
-    m_lines.clear();
-    m_lines.resize(m_numvertices);
-    
-    for (int i = 0; i < m_points.size() - 1; i++) {
-        m_lines[i] = Line(m_points[i], m_points[i+1]);
-    }
-
-    m_lines[m_numvertices - 1] = Line(m_points[m_numvertices - 1], m_points[0]);
-
-    m_points = pointsCopy;
-
-    m_lineUpdateRequired = false;
-}
-
-/**
- * @brief Return the lines that represent the polygon's outline/border
- * 
- * @return std::vector<Line> A std::vector of lines that represent the outline
- */
-std::vector<Line> Polygon::getLines() {
-    if (m_lineUpdateRequired)
-        createLines();
-
-    return m_lines;
 }
 
 
@@ -1062,50 +964,76 @@ void Polygon::findCentroid() {
     m_centroid.y = top + (bottom - top) / 2;
 }
 
-/**
- * @brief Get the number of vertices on our polygon
- * 
- * @return size_t The number of vertices
- */
-size_t Polygon::getPointCount() const {
-    return m_numvertices;
+void Polygon::createLines() {
+    //std::cout << "Creating Lines" << std::flush;
+
+    /*
+    This method is mostly linear algebra and (more or less) simple transformations on our std::vector of points.
+    First, we rotate our points, around the origin of the shape, followed by scaling them up, and finally
+    by adding the offset of the shape (its position).
+    */
+
+    /*
+    We don't want any of the transformations we do to be permanant, so we calculate the new points, and then
+    revert to the old so when we then rotate, translate, or scale, we don't have to do some weird math to
+    account for the previous transformations of the points.
+    */
+    std::vector<sf::Vector2f> pointsCopy = m_points;
+
+    /*
+    The first transformation we do on our object is a rotation of the points. This is followed by the scale transform,
+    for no particular reason as both transformations should be commuatative (a rotated then scaled object is the same 
+    as a scaled then rotated object)
+    The rotation is pretty straight forward and defined in the VectorMath class, but the scale has a bit of a caveat.
+    Since we have to scale the object about its origin (since SFML does this) we need to account for the change by
+    first translating such that the origin is at (0, 0), multiplying by the scale factors, and then translating
+    back.
+    */ 
+    for (int i = 0; i < m_numVertices; i++) {
+        VectorMath::rotate(m_points[i], getOrigin(), getRotation());
+        
+        // Align our point such that the origin becomes (0, 0)
+        m_points[i].x -= getOrigin().x;
+        m_points[i].y -= getOrigin().y;
+
+        // Scale it
+        m_points[i].x *= getScale().x;
+        m_points[i].y *= getScale().y;
+
+        // Translate our scaled point relative to its original origin
+        m_points[i].x += getOrigin().x;
+        m_points[i].y += getOrigin().y;
+    }
+    
+    /*
+    Now that our first two transformations are out of the way, we have to translate the points to their actual position
+    on the screen. This offset is calculated using the origin and position.
+    */ 
+    sf::Vector2f offset(getPosition().x - getOrigin().x, getPosition().y - getOrigin().y);
+    for (int i = 0; i < m_numVertices; i++) {
+        m_points[i].x += offset.x;
+        m_points[i].y += offset.y; 
+    }
+
+    /*
+    Now that our points properly represent the shape we want, we can create lines between them to check for collisions
+    */
+    m_lines.clear();
+    m_lines.resize(m_numVertices);
+    
+    for (int i = 0; i < m_points.size() - 1; i++) {
+        m_lines[i] = Line(m_points[i], m_points[i+1]);
+    }
+
+    m_lines[m_numVertices - 1] = Line(m_points[m_numVertices - 1], m_points[0]);
+
+    m_points = pointsCopy;
+
+    m_lineUpdateRequired = false;
 }
 
-/**
- * @brief Get the vertex at index in the std::vector m_points
- * 
- * @param index The index of the point we are looking for
- * @return sf::Vector2f The point at index in m_points
- */
-sf::Vector2f Polygon::getPoint(size_t index) const {
-    return m_points[index];
-}
-
-/**
- * @brief Returns the entire std::vector of points that represent the shape, without any modifications from
- * transformations (rotate, move, scale)
- * 
- * @return std::vector<sf::Vector2f> Our shape's std::vector of vertices
- */
-std::vector<sf::Vector2f> Polygon::getPoints() {
-    return m_points;
-}
-
-/**
- * @brief Return the area of the polygon
- * 
- * @return float The area of the polygon
- */
-float Polygon::getArea() {
-     return m_area;
-}
-
-/**
- * @brief Calculate the mass of the polygon using the area and density
- * 
- */
 void Polygon::calculateMass() {
-    Polygon::getArea(getPoints(), m_area);
+    Polygon::calculateArea(getPoints(), m_area);
     m_mass = m_density * m_area;
 }
 
@@ -1140,74 +1068,81 @@ void Polygon::calculateMomentOfInertia() {
 
 }
 
-sf::Vector2f Polygon::getCenterOfMass() {
-    return m_centerOfMass;
+///////////////////////////////////////
+//        VERTEX INFO
+///////////////////////////////////////
+
+size_t Polygon::getPointCount() const {
+    return m_numVertices;
 }
 
-/**
- * @brief Set whether the shape is solid (can collide with other shapes)
- * 
- * @param state Whether or not the shape is solid
- */
+sf::Vector2f Polygon::getPoint(size_t index) const {
+    return m_points[index];
+}
+
+std::vector<sf::Vector2f> Polygon::getPoints() {
+    return m_points;
+}
+
+std::vector<Line> Polygon::getLines() {
+    if (m_lineUpdateRequired)
+        createLines();
+
+    return m_lines;
+}
+
+sf::Vector2f Polygon::getCentroid() {
+    return m_centroid;
+}
+
+
+///////////////////////////////////////
+//        PHYSICAL PROPERTIES
+///////////////////////////////////////
+
 void Polygon::setSolid(bool state) {
     m_isSolid = state;
 }
 
-/**
- * @brief Check whether or not the shape can collide with other shapes
- * 
- * @return true Can collide
- * @return false Cannot collide
- */
 bool Polygon::isSolid() {
     return m_isSolid;
 }
 
-/**
- * @brief Set how much energy is conserved when this object collides with another. 0 for no energy conserved
- * (completely inelastic collision) and 1 for completely elastic (all energy conserved)
- * 
- * @param value The new rigidity, 0 for complete inelastic, 1 for complete elastic
- */
-void Polygon::setRigidity(float value) {
-    m_rigidity = value;
-}
-
-/**
- * @brief Get how much energy is conserved when this object collides with another. 0 for no energy conserved
- * (completely inelastic collision) and 1 for completely elastic (all energy conserved)
- * 
- * @return float The rigidity, 0 for complete inelastic, 1 for complete elastic
- */
-float Polygon::getRigidity() {
-    return m_rigidity;
-}
-
-/**
- * @brief Set whether the shape can be moved by being collided with by another object
- * 
- * @param value Whether or not the shape can be moved by another polygon
- */
 void Polygon::setMovableByCollision(bool value) {
     m_moveableByCollision = value;
 }
 
-/**
- * @brief This will return the parameter that describes how the polygon responds to forces
- * and how it bends and distorts
- * 
- * @return float The Young's Modulus of the shape, default is 1
- */
+bool Polygon::isMovableByCollision() {
+    return m_moveableByCollision;
+}
+
+void Polygon::setDensity(float newDensity) {
+    m_density = newDensity;
+    // Now recalculate the mass
+    calculateMass();
+    calculateMomentOfInertia();
+}
+
+float Polygon::getDensity() {
+    return m_density;
+}
+
+float Polygon::getMass() {
+    return m_mass;
+}
+
+float Polygon::getMomentOfInertia() {
+    return m_momentOfInertia;
+}
+
+sf::Vector2f Polygon::getCenterOfMass() {
+    return m_centerOfMass;
+}
+
 float Polygon::getYoungsModulus() {
     return m_youngsModulus;
 }
 
-/**
- * @brief Change the parameter that describes how the polygon responds to forces and how it
- * bends and distorts
- * 
- * @param youngsModulus The new value for the young's modulus, default is 1
- */
 void Polygon::setYoungsModulus(float youngsModulus) {
     m_youngsModulus = youngsModulus;
 }
@@ -1219,6 +1154,27 @@ float Polygon::getGamma() {
 void Polygon::setGamma(float gamma) {
     m_gamma = gamma;
 }
+
+void Polygon::calculateArea(std::vector<sf::Vector2f> points, float& value) {
+    value = 0;
+    for (int i = 0; i < points.size() - 1; i++) {
+        float avgY = (points[i].y + points[i+1].y) / 2;
+        float dX = (points[i+1].x - points[i].x);
+        value += avgY*dX;
+    }
+    value += ((points[points.size()-1].y + points[0].x) / 2) * (points[0].x - points[points.size()-1].y);
+    value *= -1;
+    //cout << value << endl;
+}
+
+float Polygon::getArea() {
+     return m_area;
+}
+
+///////////////////////////////////////
+//              MOTION
+///////////////////////////////////////
+
 
 sf::Vector2f Polygon::getForce() {
     return m_force;
@@ -1232,84 +1188,9 @@ void Polygon::setForce(sf::Vector2f force) {
     m_force = force;
 }
 
-/**
- * @brief Get whether the shape can be moved by being collided with by another object
- * 
- * @return true The shape can be moved
- * @return false The shape cannot be moved
- */
-bool Polygon::isMovableByCollision() {
-    return m_moveableByCollision;
-}
-
-/**
- * @brief Set the density of the object, used in calculate its mass and moment of inertia (default is 1)
- * and recalculate both values
- * 
- * @param newDensity The density of the object (default is 1)
- */
-void Polygon::setDensity(float newDensity) {
-    m_density = newDensity;
-    // Now recalculate the mass
-    calculateMass();
-    calculateMomentOfInertia();
-}
-
-/**
- * @brief Get the relative density of the polygon
- * 
- * @return float The density of the polygon
- */
-float Polygon::getDensity() {
-    return m_density;
-}
-
-/**
- * @brief Return the mass of the polygon, using the density and area to calculate
- * 
- * @return float The mass of the shape
- */
-float Polygon::getMass() {
-    return m_mass;
-}
-
-/**
- * @brief Return the moment of inertia of the polygon, using the density and vertex distribution
- * 
- * @return float The moment of inertia of the shape
- */
-float Polygon::getMomentOfInertia() {
-    return m_momentOfInertia;
-}
-
-/**
- * @brief This is a static method that finds the area of any given shape (std::vector of points)
- * Ngl, I don't remember where I found this method for finding the area of a polygon, but 
- * will post when I find it. 
- * 
- * @param points A Vector of points the represent our shape. See Polygon::getPoints()
- * @param value A referenced float that our area will be stored in
- */
-void Polygon::getArea(std::vector<sf::Vector2f> points, float& value) {
-    value = 0;
-    for (int i = 0; i < points.size() - 1; i++) {
-        float avgY = (points[i].y + points[i+1].y) / 2;
-        float dX = (points[i+1].x - points[i].x);
-        value += avgY*dX;
-    }
-    value += ((points[points.size()-1].y + points[0].x) / 2) * (points[0].x - points[points.size()-1].y);
-    value *= -1;
-    //cout << value << endl;
-}
-
-/**
- * @brief Returns the centroid of the shape (does not recalculate it)
- * 
- * @return sf::Vector2f The centroid of the shape
- */
-sf::Vector2f Polygon::getCentroid() {
-    return m_centroid;
-}
+///////////////////////////////////////
+//          TRANSFORMATIONS
+///////////////////////////////////////
 
 /*
 The following methods are "overridden" versions of there super class methods, but since it will change
@@ -1317,124 +1198,60 @@ the points we have on our polygon, we need to recreate (or hopefully only update
 bound the outside
 */
 
-/**
- * @brief An overriden method from sf::Shape that changes the scale like its super-counterpart
- * and also recreates the lines that represent the shape.
- * 
- * @param scale The scaling factors for our polygon
- */
 void Polygon::setScale(const sf::Vector2f& scale) {
     Transformable::setScale(scale.x, scale.y);
 
     m_lineUpdateRequired = true;
 }
 
-/**
- * @brief An overriden method from sf::Shape that changes the scale like its super-counterpart
- * and also recreates the lines that represent the shape.
- * 
- * @param xFactor The x scaling factor
- * @param yFactor The y scaling factor
- */
 void Polygon::setScale(float xFactor, float yFactor) {
     Transformable::setScale(xFactor, yFactor);
 
     m_lineUpdateRequired = true;
 }
 
-/**
- * @brief An overriden method from sf::Shape that changes the scale like its super-counterpart
- * and also recreates the lines that represent the shape.
- * 
- * @param scale The scaling factors for our polygon
- */
 void Polygon::scale(const sf::Vector2f& scale) {
     Transformable::scale(scale.x, scale.y);
 
     m_lineUpdateRequired = true;
 }
 
-/**
- * @brief An overriden method from sf::Shape that changes the scale like its super-counterpart
- * and also recreates the lines that represent the shape.
- * 
- * @param xFactor The x scaling factor
- * @param yFactor The y scaling factor
- */
 void Polygon::scale(float xFactor, float yFactor) {
     Transformable::scale(xFactor, yFactor);
 
     m_lineUpdateRequired = true;
 }
 
-/**
- * @brief An overriden method from sf::Shape that changes the rotation like its super-counterpart
- * and also recreates the lines that represent the shape.
- * 
- * @param angle The angle we are setting the rotation to (default is 0)
- */
 void Polygon::setRotation(float angle) {
     Transformable::setRotation(angle);
 
     m_lineUpdateRequired = true;
 }
 
-/**
- * @brief An overriden method from sf::Shape that changes the rotation like its super-counterpart
- * and also recreates the lines that represent the shape.
- * 
- * @param angle The angle we are rotating the shape by
- */
 void Polygon::rotate(float angle) {
     Transformable::rotate(angle);
 
     m_lineUpdateRequired = true;
 }
 
-/**
- * @brief An overriden method from sf::Shape that changes the position like its super-counterpart
- * and also recreates the lines that represent the shape.
- * 
- * @param position The new x and y coordinates of the shape
- */
 void Polygon::setPosition(const sf::Vector2f& position) {
     Transformable::setPosition(position.x, position.y);
 
     m_lineUpdateRequired = true;
 }
 
-/**
- * @brief An overriden method from sf::Shape that changes the position like its super-counterpart
- * and also recreates the lines that represent the shape.
- * 
- * @param x New x coordinate
- * @param y New y coordinate
- */
 void Polygon::setPosition(float x, float y) {
     Transformable::setPosition(x, y);
 
     m_lineUpdateRequired = true;
 }
 
-/**
- * @brief An overriden method from sf::Shape that changes the position like its super-counterpart
- * and also recreates the lines that represent the shape.
- * 
- * @param d The amount to change x and y by 
- */
 void Polygon::move(const sf::Vector2f& d) {
     Transformable::move(d.x, d.y);
 
     m_lineUpdateRequired = true;
 }
 
-/**
- * @brief An overriden method from sf::Shape that changes the position like its super-counterpart
- * and also recreates the lines that represent the shape.
- * 
- * @param dx Amount to change the x coordinate by
- * @param dy Amount to change the y coordinate by
- */
 void Polygon::move(float dx, float dy) {
     Transformable::move(dx, dy);
 

@@ -1,72 +1,14 @@
 #include "Polygon.hpp"
 
-/*
-We have constructors to convert other SFML shapes into polygons, so these wrappers are all going
-to be exactly the same. The constructors and defined in Polygon.cpp, but essentially just copy
-over the points and update a few values.
-*/
-
-
-/**
- * @brief A wrapper method to check the intersection between a Polygon shape and a RectangleShape
- * by converting it to a polygon and then using our full intersection method
- * See intersects(Polygon shape) for the full intersection method
- * 
- * @param shape The shape we are checking to be colliding with the current one
- * @return true The two shapes are colliding
- * @return false The two shapes aren't colliding
- */
-bool Polygon::intersects(sf::RectangleShape shape) {
-    Polygon poly(shape);
-    //return intersects(poly);
-    return false;
-}
-
-/**
- * @brief A wrapper method to check the intersection between a Polygon shape and a CircleShape
- * by converting it to a polygon and then using our full intersection method
- * See intersects(Polygon shape) for the full intersection method
-
- * @param shape The shape we are checking to be colliding with the current one
- * @return true The two shapes are colliding
- * @return false The two shapes aren't colliding
- */
-bool Polygon::intersects(sf::CircleShape shape) {
-    Polygon poly(shape);
-    //return intersects(poly);
-    return false;
-}
-
-/**
- * @brief A wrapper method to check the intersection between a Polygon shape and a ConvexShape
- * by converting it to a polygon and then using our full intersection method
- * See intersects(Polygon shape) for the full intersection method
- * 
- * @param shape The shape we are checking to be colliding with the current one
- * @return true The two shapes are colliding
- * @return false The two shapes aren't colliding
- */
-bool Polygon::intersects(sf::ConvexShape shape) {
-    Polygon poly(shape);
-    //return intersects(poly);
-    return false;
-}
+///////////////////////////////////////
+//          INTERSECTION
+///////////////////////////////////////
 
 /*
 The big one
 
 This is the actual intersection method, that is called in all of the above "wrappers" for it
 */
-
-/**
- * @brief Check the intersection between two polygon shapes. Has three levels of detection, to reduce
- * unecessary calculations and resource usage. Returns no information about collision after-effects
- * or resultants. For that, see intersects(Polygon shape, sf::Vector2f& resultant).
- * 
- * @param shape The shape we are checking to be colliding with the current one
- * @return true The two shapes are colliding
- * @return false The two shapes aren't colliding
- */
 std::vector<sf::Vector2u> Polygon::intersects(Polygon shape) {
     
     std::vector<sf::Vector2u> intersectingLines;
@@ -115,6 +57,30 @@ std::vector<sf::Vector2u> Polygon::intersects(Polygon shape) {
     }
     
     return intersectingLines;
+}
+
+/*
+We have constructors to convert other SFML shapes into polygons, so these wrappers are all going
+to be exactly the same. The constructors and defined in Polygon.cpp, but essentially just copy
+over the points and update a few values.
+*/
+
+bool Polygon::intersects(sf::RectangleShape shape) {
+    Polygon poly(shape);
+    //return intersects(poly);
+    return false;
+}
+
+bool Polygon::intersects(sf::CircleShape shape) {
+    Polygon poly(shape);
+    //return intersects(poly);
+    return false;
+}
+
+bool Polygon::intersects(sf::ConvexShape shape) {
+    Polygon poly(shape);
+    //return intersects(poly);
+    return false;
 }
 
 /**
@@ -216,7 +182,7 @@ void Polygon::adjustFromForce(sf::Vector2f resultant, sf::Vector2f collisionPoin
     sf::Vector2f v2f;
     float w1f;
     float w2f;
-    float loss = getRigidity() * shape.getRigidity();
+    float loss = getYoungsModulus() * shape.getYoungsModulus();
 
     ///*
 
@@ -242,7 +208,7 @@ void Polygon::adjustFromForce(sf::Vector2f resultant, sf::Vector2f collisionPoin
     // We are going to rename some variables so we can simplify the montrous equations below
     float ma = getMass();
     float mb = shape.getMass();
-    float e = getRigidity() * shape.getRigidity();
+    float e = getYoungsModulus() * shape.getYoungsModulus();
     float Ia = getMomentOfInertia();
     float Ib = getMomentOfInertia();
     sf::Vector2f ra = (getPosition() - getOrigin() + getCenterOfMass()) - collisionPoint;
@@ -288,7 +254,7 @@ void Polygon::adjustFromForce(sf::Vector2f resultant, sf::Vector2f collisionPoin
     float initialKineticEnergy = poly1TransKE0 + poly2TransKE0;
 
     // We want to model things as springs, with a displacement based on the rigidity of both shapes
-    float displacement = MIN_DISPLACEMENT / (pow(getRigidity() * shape.getRigidity(), 2));
+    float displacement = MIN_DISPLACEMENT / (pow(getYoungsModulus() * shape.getYoungsModulus(), 2));
 
     VectorMath::normalize(resultant, displacement);
 
@@ -311,7 +277,7 @@ void Polygon::adjustFromForce(sf::Vector2f resultant, sf::Vector2f collisionPoin
     v2f.y = (shape.getMass() * shape.getVelocity().y - impulse.y) / shape.getMass();
 
 
-    float loss = getRigidity() * shape.getRigidity();
+    float loss = getYoungsModulus() * shape.getYoungsModulus();
 
     //VectorMath::normalize(v1f, loss * VectorMath::mag((shape.getMass() / (shape.getMass() + getMass())) * (shape.getVelocity() + getVelocity())));
     //VectorMath::normalize(v2f, loss * VectorMath::mag((getMass() / (shape.getMass() + getMass())) * (getVelocity() + shape.getVelocity())));
@@ -329,7 +295,7 @@ void Polygon::adjustFromForce(sf::Vector2f resultant, sf::Vector2f collisionPoin
 
     /*
     // Whether our collision is elastic or not
-    float energyConserved = getRigidity() * shape.getRigidity();
+    float energyConserved = getYoungsModulus() * shape.getYoungsModulus();
 
     // The values we are solving for
     float v1f = 0;
@@ -456,5 +422,5 @@ least one intersection point is on either side of the shape, the shape must be i
  * @return false 
  */
 bool Polygon::contains(Polygon shape) {
-
+    return false;
 }
