@@ -8,22 +8,22 @@ using namespace sf;
 int main() {
 
     Texture* t = new Texture();
-    t->loadFromFile("Images/test2.png");
+    t->loadFromFile("Images/test.png");
     
     // Create both polygons (the level of detail is that important here)
-    Polygon polygons[2] = {Polygon(t, Detail::More),
-                         Polygon(t, Detail::More)};
+    //Polygon polygons[2] = {Polygon(t, Detail::More),
+    //                     Polygon(t, Detail::More)};
 
-    //CircleShape c(10);
-    //Polygon polygons[2] = {Polygon(c), Polygon(c)};
+    CircleShape c(10);
+    Polygon polygons[2] = {Polygon(c), Polygon(c)};
 
     for (int i = 0; i < 2; i++) {
         polygons[i].setOrigin(polygons[i].getCentroid());
         polygons[i].setScale(5, 5);
-        polygons[i].setPosition(100 + 200*i, 130 + i*90);
+        polygons[i].setPosition(100 + 200*i, 130 + i*70);
     }
 
-    polygons[0].setVelocity(sf::Vector2f(50, 0));
+    polygons[0].setVelocity(sf::Vector2f(75, 0));
 
     // Setup the window
     RenderWindow window;
