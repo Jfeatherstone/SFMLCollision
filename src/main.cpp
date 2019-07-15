@@ -10,47 +10,71 @@ int main() {
     Texture* t = new Texture();
     t->loadFromFile("Images/test.png");
     
-    // Create all four polygons for each level of detail
-    Polygon polygons[4] = {Polygon(t, Detail::Less),
-                         Polygon(t, Detail::Optimal),
-                         Polygon(t, Detail::More),
-                         Polygon(t, Detail::Exact)};
+    // Create both polygons (the level of detail is that important here)
+    Polygon polygons[2] = {Polygon(t, Detail::More),
+                         Polygon(t, Detail::More)};
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 2; i++) {
         polygons[i].setOrigin(polygons[i].getCentroid());
         polygons[i].setScale(5, 5);
         polygons[i].setPosition(100 + 200*i, 130);
     }
 
-    // Print out the number of vertices on each level of detail
-    cout << "Less: " << polygons[0].getPointCount() << endl;
-    cout << "Optimal: " << polygons[1].getPointCount() << endl;
-    cout << "More: " << polygons[2].getPointCount() << endl;
-    cout << "Exact: " << polygons[3].getPointCount() << endl;
-
     // Setup the window
     RenderWindow window;
-    window.create(VideoMode(800, 300), "Detail Comparison", Style::Default);
-    window.setFramerateLimit(30);
+    window.create(VideoMode(400, 300), "Collision test", Style::Default);
+    window.setFramerateLimit(60);
         
     while (window.isOpen()) {
+        
+        ///////////////////////////////////////
+        //          INPUT
+        ///////////////////////////////////////
+
+        if (Keyboard::isKeyPressed(Keyboard::Right)) {
+            polygons[0].setPosition(polygons[0].getPosition() + Vector2f(1, 0));
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Left)) {
+            polygons[0].setPosition(polygons[0].getPosition() + Vector2f(-1, 0));
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Up)) {
+            polygons[0].setPosition(polygons[0].getPosition() + Vector2f(0, -1));
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Down)) {
+            polygons[0].setPosition(polygons[0].getPosition() + Vector2f(0, 1));
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Q)) {
+            polygons[0].rotate(1);
+        }
+        if (Keyboard::isKeyPressed(Keyboard::E)) {
+            polygons[0].rotate(-1);
+        }
+        if (Keyboard::isKeyPressed(Keyboard::W)) {
+            polygons[0].setScale(polygons[0].getScale() + Vector2f(.03, .03));
+        }
+        if (Keyboard::isKeyPressed(Keyboard::S)) {
+            polygons[0].setScale(polygons[0].getScale() - Vector2f(.03, .03));
+        }
 
         ///////////////////////////////////////
         //          DRAWING
         ///////////////////////////////////////
         window.clear();
-        
-        // We could also just draw each shape here, but drawing the lines makes it a bit easier to
-        // see the difference between the levels of detail (see below)
+
+        // At this point, the intersects method only returns this vector of points
+        // as a debuggin tool. This will later be changed to simply a bool, and
+        // so this example may not longer work because of that.
+        vector<Vector2u> intersectingLines = polygons[0].intersects(polygons[1]);
 
         for (Polygon p: polygons) {
             for (Line l: p.getLines())
                 window.draw(*l.getDrawable());
         }
 
-        // If you prefer the actual shapes
-        //for (Polygon p: polygons)
-        //    window.draw(p);
+        for (Vector2u v: intersectingLines) {
+            window.draw(*polygons[0].getLines()[v.x].getDrawable(Color::Red));
+            window.draw(*polygons[1].getLines()[v.y].getDrawable(Color::Blue));
+        }
 
         window.display();
     }

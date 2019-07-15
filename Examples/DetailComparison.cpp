@@ -37,7 +37,7 @@ int main() {
     // Setup the window
     RenderWindow window;
     window.create(VideoMode(800, 300), "Detail Comparison", Style::Default);
-    window.setFramerateLimit(30);
+    window.setFramerateLimit(60);
         
     while (window.isOpen()) {
 
