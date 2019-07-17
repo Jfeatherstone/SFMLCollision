@@ -172,6 +172,7 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
 
     //return l.getDrawable();
 
+    /*
     sf::Vector2f poly1CentroidPosition(getPosition().x + (getCentroid().x - getOrigin().x) * getScale().x,
                                         getPosition().y + (getCentroid().y - getOrigin().y) * getScale().y);
 
@@ -189,6 +190,13 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
     float penetration = abs(centroidDistance - VectorMath::mag(poly1CentroidToCollision) - VectorMath::mag(poly2CentroidToCollision));
 
     std::cout << penetration << std::endl;
+    */
+
+    sf::Vector2f poly1CentroidToCollision = (getPosition() - sf::Vector2f(getOrigin().x * getScale().x, getOrigin().y * getScale().y) 
+            + sf::Vector2f(getCenterOfMass().x * getScale().x, getCenterOfMass().y * getScale().y)) - averageCollision;
+
+    sf::Vector2f poly2CentroidToCollision = (shape.getPosition() - sf::Vector2f(shape.getOrigin().x * shape.getScale().x, shape.getOrigin().y * shape.getScale().y) 
+            + sf::Vector2f(shape.getCenterOfMass().x * shape.getScale().x, shape.getCenterOfMass().y * shape.getScale().y)) - averageCollision;
 
     vec.push_back(Line((getPosition() - sf::Vector2f(getOrigin().x * getScale().x, getOrigin().y * getScale().y) 
             + sf::Vector2f(getCenterOfMass().x * getScale().x, getCenterOfMass().y * getScale().y)), averageCollision).getDrawable(sf::Color::White));
@@ -199,8 +207,9 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
     vec.push_back(c);
     vec.push_back(l.getDrawable(sf::Color::Red));
 
-    return vec;
+    //return vec;
 
+    /*
     sf::Vector2f poly1MomentVector = 
         getMomentOfInertia() * ((getPosition() - sf::Vector2f(getOrigin().x * getScale().x, getOrigin().y * getScale().y) 
             + sf::Vector2f(getCenterOfMass().x * getScale().x, getCenterOfMass().y * getScale().y))
@@ -242,6 +251,29 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
     shape.setVelocity(poly2Vf);
     setAngularVelocity(poly1Wf);
     shape.setAngularVelocity(poly2Wf);
+    */
+
+    float coeffOfRestitution = (getYoungsModulus() + shape.getYoungsModulus());
+
+    //std::cout << coeffOfRestitution << std::endl;
+
+    float totalVel = (isMovableByCollision() ? VectorMath::mag(getVelocity()) : 0.f) + (shape.isMovableByCollision() ? VectorMath::mag(shape.getVelocity()) : 0.f) + .5f;
+
+    VectorMath::normalize(poly1CentroidToCollision);
+    VectorMath::normalize(poly2CentroidToCollision);
+
+    float totalMass = (isMovableByCollision() ? getMass() : 0.f) + (shape.isMovableByCollision() ? shape.getMass() : 0.f);
+
+    sf::Vector2f poly1Vf = getMass() / totalMass * totalVel * poly1CentroidToCollision * coeffOfRestitution / 2.0f;
+    sf::Vector2f poly2Vf = shape.getMass() / totalMass * totalVel * poly2CentroidToCollision * coeffOfRestitution / 2.0f;
+
+    //std::cout << poly1Vf.x << " " << poly1Vf.y << std::endl;
+    //std::cout << poly2Vf.x << " " << poly2Vf.y << std::endl;
+
+    if (isMovableByCollision())
+        setVelocity(poly1Vf);
+    if (shape.isMovableByCollision())
+        shape.setVelocity(poly2Vf);
 
     return vec;
     //return true;

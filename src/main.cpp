@@ -4,7 +4,7 @@
 
 using namespace std;
 using namespace sf;
-
+/*
 int main() {
 
     Texture* t = new Texture();
@@ -24,6 +24,7 @@ int main() {
     }
 
     polygons[0].setVelocity(sf::Vector2f(75, 0));
+    polygons[1].setVelocity(sf::Vector2f(-75, 0));
 
     // Setup the window
     RenderWindow window;
@@ -67,7 +68,7 @@ int main() {
         if (Keyboard::isKeyPressed(Keyboard::S)) {
             polygons[0].setScale(polygons[0].getScale() - Vector2f(.03, .03));
         }
-        */
+        ///
 
         Event event;
         while(window.pollEvent(event)) {
@@ -99,9 +100,10 @@ int main() {
     
     return 0;
 }
+//*/
 
 // This main method creates a ball pit style simulation
-/*
+///*
 int main() {
 
     sf::Clock timeSinceCircle;
@@ -112,11 +114,11 @@ int main() {
 
     Polygon bin(binTex, Detail::Exact);
     bin.setOrigin(bin.getCentroid());
-    bin.setPosition(250, 150);
+    bin.setPosition(250, 230);
     bin.setFillColor(sf::Color::Blue);
-    bin.setScale(14, 16);
+    bin.setScale(14, 22);
     bin.setMovableByCollision(false);
-    bin.setRigidity(.75f);
+    bin.setYoungsModulus(.75f);
 
     std::cout << bin.getPointCount() << std::endl;
 
@@ -136,7 +138,6 @@ int main() {
 
     while (window.isOpen()) {
         float elapsed = clock.restart().asSeconds();
-        sf::Vector2f res;
         
         for (int i = 0; i < objects.size(); i++)
             objects[i].update(elapsed);
@@ -146,12 +147,12 @@ int main() {
             // Apply gravity
             bool colliding = false;
 
-            colliding = objects[i].intersects(bin, res);
+            colliding = objects[i].intersectAndResolve(bin).size() > 0;
                 
 
             for (int j = 0; j < objects.size(); j++) {
                 if (j != i) {
-                    if (objects[i].intersects(objects[j], res))
+                    if (objects[i].intersectAndResolve(objects[j]).size() > 0)
                         colliding = true;
                 }
             }
@@ -168,8 +169,8 @@ int main() {
             Polygon ball(c);
             ball.setOrigin(ball.getCentroid());
             ball.setPosition( (sf::Vector2f)(sf::Mouse::getPosition() - window.getPosition()));
-            if (!ball.intersects(bin)) {
-                ball.setRigidity(1.0f);
+            if (!ball.intersects(bin).size() > 0) {
+                //ball.setRigidity(1.0f);
                 objects.push_back(ball);
                 std::stringstream s;
                 s << "Polyon Test (" << objects.size() << ")";
@@ -198,7 +199,7 @@ int main() {
 
     return 0;
 }
-*/
+//*/
 
 /*
 using namespace sf;
