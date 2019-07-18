@@ -4,18 +4,18 @@
 
 using namespace std;
 using namespace sf;
-/*
+///*
 int main() {
 
     Texture* t = new Texture();
     t->loadFromFile("Images/test.png");
     
     // Create both polygons (the level of detail is that important here)
-    //Polygon polygons[2] = {Polygon(t, Detail::More),
-    //                     Polygon(t, Detail::More)};
+    Polygon polygons[2] = {Polygon(t, Detail::More),
+                         Polygon(t, Detail::More)};
 
-    CircleShape c(10);
-    Polygon polygons[2] = {Polygon(c), Polygon(c)};
+    //CircleShape c(10);
+    //Polygon polygons[2] = {Polygon(c), Polygon(c)};
 
     for (int i = 0; i < 2; i++) {
         polygons[i].setOrigin(polygons[i].getCentroid());
@@ -68,7 +68,7 @@ int main() {
         if (Keyboard::isKeyPressed(Keyboard::S)) {
             polygons[0].setScale(polygons[0].getScale() - Vector2f(.03, .03));
         }
-        ///
+        //*/
 
         Event event;
         while(window.pollEvent(event)) {
@@ -103,7 +103,7 @@ int main() {
 //*/
 
 // This main method creates a ball pit style simulation
-///*
+/*
 int main() {
 
     sf::Clock timeSinceCircle;
@@ -131,7 +131,7 @@ int main() {
     std::vector<Polygon> objects;
 
     //RectangleShape c;
-    //c.setSize(Vector2f(30, 30));
+    //c.setSize(Vector2f(50, 30));
     sf::CircleShape c(20);
 
     sf::Vector2f gravity(0, 1000);
@@ -170,7 +170,7 @@ int main() {
             ball.setOrigin(ball.getCentroid());
             ball.setPosition( (sf::Vector2f)(sf::Mouse::getPosition() - window.getPosition()));
             if (!ball.intersects(bin).size() > 0) {
-                //ball.setRigidity(1.0f);
+                //ball.setYoungsModulus(.995f);
                 objects.push_back(ball);
                 std::stringstream s;
                 s << "Polyon Test (" << objects.size() << ")";

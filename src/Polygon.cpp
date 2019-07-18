@@ -1278,13 +1278,15 @@ void Polygon::move(float dx, float dy) {
  * @param elapsedTime The amount of time that has elapsed since the last update
  */
 void Polygon::update(float elapsedTime) {
-    // Update the position
-    setPosition(getPosition() + m_velocity * elapsedTime);
-    setRotation(getRotation() + m_angularVelocity * elapsedTime);
 
     if (VectorMath::mag(m_velocity) <= VELOCITY_THRESHOLD) {
         m_velocity = sf::Vector2f(0, 0);
     }
+
+    // Update the position
+    setPosition(getPosition() + m_velocity * elapsedTime);
+    setRotation(getRotation() + m_angularVelocity * elapsedTime);
+
 }
 
 /**
