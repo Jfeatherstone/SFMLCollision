@@ -16,7 +16,7 @@ and the parser will pass over them
 */
 Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ignoredColors) {
     // First we store the texture such that the polygon looks like the image
-    //setTexture(texture);
+    setTexture(texture);
 
     ////////////////////////////////////////
     //      BEGINNING OF SHAPE GENERATION

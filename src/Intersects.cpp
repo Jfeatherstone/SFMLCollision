@@ -134,43 +134,50 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
 
     // We now take the "average of all of our lines"
     // This actually means we just take the average of their slopes
-    float averageSlope = 0;
+    sf::Vector2f averageSlope;
     for (Line l: intersectingLines) {
         //cout << l.getSlope() << endl;
-        averageSlope += l.getSlope();
+        averageSlope += l.getPerpendicular();
     }
-    averageSlope /= intersectingLines.size();
+    averageSlope.x /= intersectingLines.size();
+    averageSlope.y /= intersectingLines.size();
 
     // Take the negative reciprical of the slope
-    float pSlope = -1.0f / averageSlope;
+    float pSlope = averageSlope.y / averageSlope.x;
 
     //cout << pSlope << endl;
 
     // Now our slope is y/x, so our vector is (1, slope)
-    sf::Vector2f normal(pSlope, abs(pSlope)/pSlope);
+    sf::Vector2f normal(pSlope, (pSlope == 0) ? 1.0f : abs(pSlope) / pSlope);
     
     // And normalize it
-    VectorMath::normalize(normal, 30);
+    VectorMath::normalize(normal);
 
     // Since there could be more than one collision point, we want to take the average
     sf::Vector2f averageCollision(0, 0);
     for (sf::Vector2f p: intersectingPoints) {
+        sf::CircleShape* c = new sf::CircleShape();
+        c->setRadius(5);
+        c->setPosition(p);
+        c->setFillColor(sf::Color::Red);
+        c->setOrigin(Polygon(*c).getCentroid());
+        vec.push_back(c);
+
         averageCollision += p;
     }
 
     averageCollision.x /= intersectingPoints.size();
     averageCollision.y /= intersectingPoints.size();
 
-    Line l(averageCollision, averageCollision + normal);
+    std::cout << normal.x << " " << normal.y << std::endl;
+
+    Line l(averageCollision, averageCollision + normal * 100.0f);
 
     sf::CircleShape* c = new sf::CircleShape();
     c->setRadius(5);
     c->setPosition(averageCollision);
     c->setOrigin(Polygon(*c).getCentroid());
-    //return c;
-
-    //return l.getDrawable();
-
+    c->setFillColor(sf::Color::Blue);
     
     sf::Vector2f poly1CentroidPosition(getPosition().x + (getCentroid().x - getOrigin().x) * getScale().x,
                                         getPosition().y + (getCentroid().y - getOrigin().y) * getScale().y);
@@ -193,11 +200,11 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
 
     //std::cout << penetration << std::endl;
 
-    vec.push_back(Line((getPosition() - sf::Vector2f(getOrigin().x * getScale().x, getOrigin().y * getScale().y) 
-            + sf::Vector2f(getCenterOfMass().x * getScale().x, getCenterOfMass().y * getScale().y)), averageCollision).getDrawable(sf::Color::White));
+    //vec.push_back(Line((getPosition() - sf::Vector2f(getOrigin().x * getScale().x, getOrigin().y * getScale().y) 
+    //        + sf::Vector2f(getCenterOfMass().x * getScale().x, getCenterOfMass().y * getScale().y)), averageCollision).getDrawable(sf::Color::White));
 
-    vec.push_back(Line((shape.getPosition() - sf::Vector2f(shape.getOrigin().x * shape.getScale().x, shape.getOrigin().y * shape.getScale().y) 
-            + sf::Vector2f(shape.getCenterOfMass().x * shape.getScale().x, shape.getCenterOfMass().y * shape.getScale().y)), averageCollision).getDrawable(sf::Color::White));
+    //vec.push_back(Line((shape.getPosition() - sf::Vector2f(shape.getOrigin().x * shape.getScale().x, shape.getOrigin().y * shape.getScale().y) 
+    //        + sf::Vector2f(shape.getCenterOfMass().x * shape.getScale().x, shape.getCenterOfMass().y * shape.getScale().y)), averageCollision).getDrawable(sf::Color::White));
 
     vec.push_back(c);
     vec.push_back(l.getDrawable(sf::Color::Red));
@@ -273,7 +280,7 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
         shape.setVelocity(poly2Vf);
 
     return vec;
-    */
+    //*/
 
     return vec;
     //return true;

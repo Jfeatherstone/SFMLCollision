@@ -143,8 +143,14 @@ sf::RectangleShape* Line::getDrawable(sf::Color color) {
 }
 
 sf::Vector2f Line::getPerpendicular() {
-    // Take the negative reciprical of the slope
-    float pSlope = -1 / getSlope();
+
+    // Check for nan
+    float pSlope;
+    if (getSlope() == 0)
+        pSlope = 1000.0f;
+    else
+        // Take the negative reciprical of the slope
+        pSlope = -1 / getSlope();
 
     // Now our slope is y/x, so our vector is (1, slope)
     sf::Vector2f perpendicular(1, pSlope);
