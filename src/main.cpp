@@ -4,11 +4,11 @@
 
 using namespace std;
 using namespace sf;
-/*
+///*
 int main() {
 
     Texture* t = new Texture();
-    t->loadFromFile("Images/test.png");
+    t->loadFromFile("Images/test2.png");
     
     // Create both polygons (the level of detail is that important here)
     Polygon polygons[2] = {Polygon(t, Detail::More),
@@ -44,36 +44,38 @@ int main() {
         //          INPUT
         ///////////////////////////////////////
 
-        if (Keyboard::isKeyPressed(Keyboard::Right)) {
-            polygons[0].setPosition(polygons[0].getPosition() + Vector2f(1, 0));
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Left)) {
-            polygons[0].setPosition(polygons[0].getPosition() + Vector2f(-1, 0));
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Up)) {
-            polygons[0].setPosition(polygons[0].getPosition() + Vector2f(0, -1));
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Down)) {
-            polygons[0].setPosition(polygons[0].getPosition() + Vector2f(0, 1));
-        }
-        if (Keyboard::isKeyPressed(Keyboard::Q)) {
-            polygons[0].rotate(1);
-        }
-        if (Keyboard::isKeyPressed(Keyboard::E)) {
-            polygons[0].rotate(-1);
-        }
-        if (Keyboard::isKeyPressed(Keyboard::W)) {
-            polygons[0].setScale(polygons[0].getScale() + Vector2f(.03, .03));
-        }
-        if (Keyboard::isKeyPressed(Keyboard::S)) {
-            polygons[0].setScale(polygons[0].getScale() - Vector2f(.03, .03));
-        }
-        ///
+        if (window.hasFocus()) {
+            if (Keyboard::isKeyPressed(Keyboard::Right)) {
+                polygons[0].setPosition(polygons[0].getPosition() + Vector2f(1, 0));
+            }
+            if (Keyboard::isKeyPressed(Keyboard::Left)) {
+                polygons[0].setPosition(polygons[0].getPosition() + Vector2f(-1, 0));
+            }
+            if (Keyboard::isKeyPressed(Keyboard::Up)) {
+                polygons[0].setPosition(polygons[0].getPosition() + Vector2f(0, -1));
+            }
+            if (Keyboard::isKeyPressed(Keyboard::Down)) {
+                polygons[0].setPosition(polygons[0].getPosition() + Vector2f(0, 1));
+            }
+            if (Keyboard::isKeyPressed(Keyboard::Q)) {
+                polygons[0].rotate(1);
+            }
+            if (Keyboard::isKeyPressed(Keyboard::E)) {
+                polygons[0].rotate(-1);
+            }
+            if (Keyboard::isKeyPressed(Keyboard::W)) {
+                polygons[0].setScale(polygons[0].getScale() + Vector2f(.03, .03));
+            }
+            if (Keyboard::isKeyPressed(Keyboard::S)) {
+                polygons[0].setScale(polygons[0].getScale() - Vector2f(.03, .03));
+            }
+        //*/
 
-        Event event;
-        while(window.pollEvent(event)) {
-            if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {
-                paused = !paused;
+            Event event;
+            while(window.pollEvent(event)) {
+                if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape) {
+                    paused = !paused;
+                }
             }
         }
 
@@ -103,7 +105,7 @@ int main() {
 //*/
 
 // This main method creates a ball pit style simulation
-///*
+/*
 int main() {
 
     sf::Clock timeSinceCircle;

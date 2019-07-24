@@ -132,27 +132,6 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
         //return false;
         return vec;
 
-    // We now take the "average of all of our lines"
-    // This actually means we just take the average of their slopes
-    sf::Vector2f averageSlope;
-    for (Line l: intersectingLines) {
-        //cout << l.getSlope() << endl;
-        averageSlope += l.getPerpendicular();
-    }
-    averageSlope.x /= intersectingLines.size();
-    averageSlope.y /= intersectingLines.size();
-
-    // Take the negative reciprical of the slope
-    float pSlope = averageSlope.y / averageSlope.x;
-
-    //cout << pSlope << endl;
-
-    // Now our slope is y/x, so our vector is (1, slope)
-    sf::Vector2f normal(pSlope, (pSlope == 0) ? 1.0f : abs(pSlope) / pSlope);
-    
-    // And normalize it
-    VectorMath::normalize(normal);
-
     // Since there could be more than one collision point, we want to take the average
     sf::Vector2f averageCollision(0, 0);
     for (sf::Vector2f p: intersectingPoints) {
@@ -169,7 +148,36 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
     averageCollision.x /= intersectingPoints.size();
     averageCollision.y /= intersectingPoints.size();
 
-    std::cout << normal.x << " " << normal.y << std::endl;
+    // We now take the "average of all of our lines"
+    // This actually means we just take the average of their slopes
+    sf::Vector2f averageSlope;
+
+    int i = 0;
+
+    for (Line l: intersectingLines) {
+        //cout << l.getSlope() << endl;
+        averageSlope += l.getPerpendicular();
+
+        std::cout << intersectingPoints[i].x << " " << intersectingPoints[i].y << std::endl;
+
+        vec.push_back(Line(intersectingPoints[i], intersectingPoints[i++] + l.getPerpendicular()).getDrawable(sf::Color::Green));
+    }
+
+    averageSlope.x /= intersectingLines.size();
+    averageSlope.y /= intersectingLines.size();
+
+    // Take the negative reciprical of the slope
+    float pSlope = averageSlope.y / averageSlope.x;
+
+    //cout << pSlope << endl;
+
+    // Now our slope is y/x, so our vector is (1, slope)
+    sf::Vector2f normal(pSlope, (pSlope == 0) ? 1.0f : abs(pSlope) / pSlope);
+    
+    // And normalize it
+    VectorMath::normalize(normal);
+
+    //std::cout << normal.x << " " << normal.y << std::endl;
 
     Line l(averageCollision, averageCollision + normal * 100.0f);
 
@@ -259,7 +267,7 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
     ///////////////////////////////////////////////////////
     //       CIRCLES
     // The following code works for resolving collsiions
-    // between circles (but only circles)
+    // between circles (but only circles and even then it has issues)
     ///////////////////////////////////////////////////////
 
     float coeffOfRestitution = (getYoungsModulus() + shape.getYoungsModulus());

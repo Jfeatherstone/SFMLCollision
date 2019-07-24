@@ -33,8 +33,9 @@ float VectorMath::mag(sf::Vector2f v) {
     return sqrt(v.x * v.x + v.y * v.y);
 }
 
-void VectorMath::normalize(sf::Vector2f& v, float magnitude) {
+sf::Vector2f VectorMath::normalize(sf::Vector2f& v, float magnitude) {
     float denom = magnitude / sqrt(v.x*v.x + v.y*v.y);
     v.x *= denom;
     v.y *= denom;
+    return v;
 }
