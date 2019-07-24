@@ -209,7 +209,7 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
     vec.push_back(c);
     vec.push_back(l.getDrawable(sf::Color::Red));
 
-    return vec;
+    //return vec;
 
     /*
     sf::Vector2f poly1MomentVector = 
@@ -255,7 +255,7 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
     shape.setAngularVelocity(poly2Wf);
     */
 
-    /*
+    ///*
     ///////////////////////////////////////////////////////
     //       CIRCLES
     // The following code works for resolving collsiions

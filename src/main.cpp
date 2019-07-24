@@ -4,7 +4,7 @@
 
 using namespace std;
 using namespace sf;
-///*
+/*
 int main() {
 
     Texture* t = new Texture();
@@ -68,7 +68,7 @@ int main() {
         if (Keyboard::isKeyPressed(Keyboard::S)) {
             polygons[0].setScale(polygons[0].getScale() - Vector2f(.03, .03));
         }
-        //*/
+        ///
 
         Event event;
         while(window.pollEvent(event)) {
@@ -103,7 +103,7 @@ int main() {
 //*/
 
 // This main method creates a ball pit style simulation
-/*
+///*
 int main() {
 
     sf::Clock timeSinceCircle;
@@ -164,7 +164,7 @@ int main() {
         }
 
         // Add balls at the mouse position on click
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && timeSinceCircle.getElapsedTime().asSeconds() > .1) {
+        if (window.hasFocus() && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && timeSinceCircle.getElapsedTime().asSeconds() > .1) {
             //cout << "Added ball!" << endl;
             Polygon ball(c);
             ball.setOrigin(ball.getCentroid());
