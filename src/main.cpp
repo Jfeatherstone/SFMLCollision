@@ -26,7 +26,7 @@ int main() {
     //polygons[0].setVelocity(sf::Vector2f(75, 0));
     //polygons[1].setVelocity(sf::Vector2f(-75, 0));
 
-    polygons[0].setDegreesOfFreedom(false, true);
+    polygons[0].setDegreesOfFreedom(true, true);
 
     // Setup the window
     RenderWindow window;
@@ -82,6 +82,7 @@ int main() {
         }
 
         polygons[0].addForce(Force(sf::Vector2f(1000, 0), 1.0f, sf::Vector2f(0, -10)));
+        //polygons[0].addForce(Force(sf::Vector2f(-.641, -.641), .10f, sf::Vector2f(0, -10)));
 
         //std::cout << polygons[0].getPosition().x << std::endl;
 

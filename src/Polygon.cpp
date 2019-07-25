@@ -1225,7 +1225,6 @@ void Polygon::applyForces() {
         // First adjust the linear velocity
         if (getLinearFreedom()) {
             sf::Vector2f impulse = f.magnitude * f.unitVector * f.impulseTime;
-            std::cout << f.magnitude << std::endl;
             sf::Vector2f dv = impulse / getMass();
             m_velocity += dv;
         }
