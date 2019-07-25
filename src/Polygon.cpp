@@ -1283,6 +1283,8 @@ void Polygon::update(float elapsedTime) {
         m_velocity = sf::Vector2f(0, 0);
     }
 
+    // Apply any forces on the object
+
     // Update the position
     setPosition(getPosition() + m_velocity * elapsedTime);
     setRotation(getRotation() + m_angularVelocity * elapsedTime);

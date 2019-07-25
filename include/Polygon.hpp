@@ -46,6 +46,59 @@ SOFTWARE.
 enum class Detail {Less, More, Optimal, Exact};
 
 /**
+ * @brief A generic force object, used to calculate the impulse and torque applied by a force,
+ * which is then used to adjust the linear and angular velocity of the object.
+ */
+typedef struct Force {
+    /**
+     * @brief The vector from the point where the force acts to the center of mass of the object
+     */
+    sf::Vector2f COMVector;
+
+    /**
+     * @brief The unit vector in the direction of the force (magnitude of 1)
+     */
+    sf::Vector2f unitVector;
+
+    /**
+     * @brief The time the force is acting for
+     */
+    float impulseTime;
+
+    /**
+     * @brief The magnitude of the force acting
+     */
+    float magnitude;
+
+    /**
+     * @brief Construct a new Force object
+     * 
+     * @param unit The unit vector in the direction of the force
+     * @param time How long the force is acting on the object
+     * @param mag The magnitude of the force
+     * @param COMVec The vector to the center of mass of the object from the force point, defaults to (0, 0) ie. no torque is applied
+     */
+    Force(sf::Vector2f unit, float time, float mag, sf::Vector2f COMVec = sf::Vector2f(0, 0)):
+     unitVector(unit), impulseTime(time), magnitude(mag), COMVector(COMVec) {
+
+    }
+
+    /**
+     * @brief Construct a new Force object
+     * 
+     * @param forceVector The vector of the force, NOT a unit vector
+     * @param time How long the force is acting on the object
+     * @param COMVec The vector to the center of mass of the object from the force point, defaults to (0, 0) ie. no torque is applied
+     */
+    Force(sf::Vector2f forceVector, float time, sf::Vector2f COMVec = sf::Vector2f(0, 0)): impulseTime(time),
+            unitVector(VectorMath::normalize(forceVector)),
+            magnitude(VectorMath::mag(forceVector)),
+            COMVector(COMVec) {
+
+    }
+};
+
+/**
  * @brief The polygon object is the most important aspect of our collisions class, and accounts for most
  * of what will likely be used externally. Polygons can be created through either a texture, a vector of points,
  * or any other child class of sf::Shape (sf::CircleShape, sf::RectangleShape, etc.). 
@@ -156,9 +209,10 @@ private:
     float m_gamma = 1.0f;
 
     /**
-     * @brief WIP
+     * @brief A list of forces that are currently acting on the object, and will be applied and cleared
+     * in the next call of the update() method
      */
-    sf::Vector2f m_force;
+    std::vector<Force> m_forces;
     
     // Since this is more or a less a lite physics engine, we need to keep track of the object's
     // velocity
@@ -258,7 +312,6 @@ public:
      * @param shape The ConvexShape object who points will be used
      */
     Polygon(sf::ConvexShape shape);
-
 
 
     ///////////////////////////////////////
@@ -439,8 +492,8 @@ public:
     float getAngularVelocity();
 
     void update(float elapsedTime);
-    void adjustFromForce(sf::Vector2f resultant, sf::Vector2f collisionPoint, Polygon& shape);
-
+    void applyForce(sf::Vector2f force);
+    void applyTorque(sf::Vector2f force, sf::Vector2f distance);
 
     ///////////////////////////////////////
     //          TRANSFORMATIONS

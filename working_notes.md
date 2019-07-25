@@ -11,4 +11,7 @@ This file contains my notes from working on the project, and in no way is a comp
 ### Normal calculation
 - When trying to display the individual normal vectors for each intersecting line, I am getting odd results, namely that (0, 0) seems to always show up. All of the other normals are also 1. not normal to the line, and 2. seem to connect the intersecting points
 
-
+## 7-25-2019
+### Converting resolution to be force based
+- There are several benefits of changing the intersection resolution to be based on force rather than individual resolutions for each object. For one, this would make resolving collisions in which multiple objects are colliding more streamlined and easier. On top of this, it presents a more realistic model, as it would pertain to the equations.
+- One of the biggest benefits of this system though is that it means I can assume that a force struct (or similar) will be passed to the resolution method properly, and I can work on the post force resolution for once, as opposed to trying to calculate that force right now. Hopefully this change of pace will prove to be helpful in actually making some progress.
