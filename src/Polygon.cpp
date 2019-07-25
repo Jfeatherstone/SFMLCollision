@@ -1215,16 +1215,20 @@ void Polygon::update(float elapsedTime) {
  */
 void Polygon::applyForces() {
 
+    std::cout << "Applying forces..." << std::endl;
+
     for (Force f: m_forces) {
         // First adjust the linear velocity
         sf::Vector2f impulse = f.magnitude * f.unitVector * f.impulseTime;
+        std::cout << f.magnitude << std::endl;
         sf::Vector2f dv = impulse / getMass();
+
+        std::cout << dv.x << " " << dv.y << std::endl;
 
         m_velocity += dv;
 
         // Now adjust the torque
         float dw = VectorMath::cross(f.COMVector, f.unitVector * f.magnitude) / getMomentOfInertia();
-
         m_angularVelocity += dw;
     }
 

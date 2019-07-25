@@ -144,7 +144,7 @@ sf::RectangleShape* Line::getDrawable(sf::Color color) {
 
 sf::Vector2f Line::getPerpendicular() {
 
-    // Check for nan
+    // Check for horiztonal
     float pSlope;
     if (getSlope() == 0)
         pSlope = 1000.0f;

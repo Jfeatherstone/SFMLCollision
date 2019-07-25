@@ -90,9 +90,10 @@ struct Force {
      * @param time How long the force is acting on the object
      * @param COMVec The vector to the center of mass of the object from the force point, defaults to (0, 0) ie. no torque is applied
      */
-    Force(sf::Vector2f forceVector, float time, sf::Vector2f COMVec = sf::Vector2f(0, 0)): impulseTime(time),
-            unitVector(VectorMath::normalize(forceVector)),
+    Force(sf::Vector2f forceVector, float time, sf::Vector2f COMVec = sf::Vector2f(0, 0)):
+            impulseTime(time),
             magnitude(VectorMath::mag(forceVector)),
+            unitVector(VectorMath::normalize(forceVector)),
             COMVector(COMVec) {
 
     }

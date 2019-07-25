@@ -96,6 +96,6 @@ public:
      * @param v The vector. The normalized value will overwrite the old value
      * @param magnitude The magnitude we want to the vector to have, defualt is 1
      */
-    static sf::Vector2f normalize(sf::Vector2f& v, float magnitude = 1);
+    static sf::Vector2f normalize(sf::Vector2f v, float magnitude = 1);
 
 };

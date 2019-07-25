@@ -4,7 +4,7 @@
 
 using namespace std;
 using namespace sf;
-/*
+///*
 int main() {
 
     Texture* t = new Texture();
@@ -69,7 +69,7 @@ int main() {
             if (Keyboard::isKeyPressed(Keyboard::S)) {
                 polygons[0].setScale(polygons[0].getScale() - Vector2f(.03, .03));
             }
-        ///
+        //*/
 
             Event event;
             while(window.pollEvent(event)) {
@@ -78,6 +78,10 @@ int main() {
                 }
             }
         }
+
+        polygons[0].addForce(Force(sf::Vector2f(1000, 0), 1.0f));
+
+        //std::cout << polygons[0].getPosition().x << std::endl;
 
         if (!paused) {
             ///////////////////////////////////////
@@ -90,11 +94,11 @@ int main() {
                     window.draw(*l.getDrawable());
             }
 
-            for (sf::Shape* s: polygons[0].intersectAndResolve(polygons[1]))
-                window.draw(*s);
+            //for (sf::Shape* s: polygons[0].intersectAndResolve(polygons[1]))
+            //    window.draw(*s);
 
             polygons[0].update(dt.asSeconds());
-            polygons[1].update(dt.asSeconds());
+            //polygons[1].update(dt.asSeconds());
 
             window.display();
         }
@@ -105,7 +109,7 @@ int main() {
 //*/
 
 // This main method creates a ball pit style simulation
-///*
+/*
 int main() {
 
     sf::Clock timeSinceCircle;
@@ -151,7 +155,7 @@ int main() {
 
             colliding = objects[i].intersectAndResolve(bin).size() > 0;
                 
-
+            
             for (int j = 0; j < objects.size(); j++) {
                 if (j != i) {
                     if (objects[i].intersectAndResolve(objects[j]).size() > 0)
