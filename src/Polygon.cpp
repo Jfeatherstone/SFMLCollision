@@ -1184,16 +1184,52 @@ float Polygon::getArea() {
 ///////////////////////////////////////
 
 
-sf::Vector2f Polygon::getForce() {
-    return m_force;
+void Polygon::addForce(Force force) {
+    m_forces.push_back(force);
 }
 
-void Polygon::addForce(sf::Vector2f force) {
-    m_force += force;
+/**
+ * @brief Updates the shape and applies both linear and angular velocity to update the
+ * position and rotation of the polygon
+ * 
+ * @param elapsedTime The amount of time that has elapsed since the last update
+ */
+void Polygon::update(float elapsedTime) {
+
+    if (VectorMath::mag(m_velocity) <= VELOCITY_THRESHOLD) {
+        m_velocity = sf::Vector2f(0, 0);
+    }
+
+    // Apply any forces on the object
+    applyForces();
+
+    // Update the position
+    setPosition(getPosition() + m_velocity * elapsedTime);
+    setRotation(getRotation() + m_angularVelocity * elapsedTime);
+
 }
 
-void Polygon::setForce(sf::Vector2f force) {
-    m_force = force;
+/**
+ * @brief This just runs through each force in m_forces and uses the impulse formula F dt = dp to adjust
+ * the velocity and angular velocity
+ */
+void Polygon::applyForces() {
+
+    for (Force f: m_forces) {
+        // First adjust the linear velocity
+        sf::Vector2f impulse = f.magnitude * f.unitVector * f.impulseTime;
+        sf::Vector2f dv = impulse / getMass();
+
+        m_velocity += dv;
+
+        // Now adjust the torque
+        float dw = VectorMath::cross(f.COMVector, f.unitVector * f.magnitude) / getMomentOfInertia();
+
+        m_angularVelocity += dw;
+    }
+
+    // And clear the forces now that they've been applied
+    m_forces.clear();
 }
 
 ///////////////////////////////////////
@@ -1270,27 +1306,6 @@ void Polygon::move(float dx, float dy) {
 /**********************************
  * VELOCITY AND MOVEMENT THINGS
 **********************************/
-
-/**
- * @brief Updates the shape and applies both linear and angular velocity to update the
- * position and rotation of the polygon
- * 
- * @param elapsedTime The amount of time that has elapsed since the last update
- */
-void Polygon::update(float elapsedTime) {
-
-    if (VectorMath::mag(m_velocity) <= VELOCITY_THRESHOLD) {
-        m_velocity = sf::Vector2f(0, 0);
-    }
-
-    // Apply any forces on the object
-
-    // Update the position
-    setPosition(getPosition() + m_velocity * elapsedTime);
-    setRotation(getRotation() + m_angularVelocity * elapsedTime);
-
-}
-
 /**
  * @brief Returns the current linear velocity of the shape
  * 

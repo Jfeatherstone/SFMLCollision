@@ -4,7 +4,7 @@
 
 using namespace std;
 using namespace sf;
-///*
+/*
 int main() {
 
     Texture* t = new Texture();
@@ -69,7 +69,7 @@ int main() {
             if (Keyboard::isKeyPressed(Keyboard::S)) {
                 polygons[0].setScale(polygons[0].getScale() - Vector2f(.03, .03));
             }
-        //*/
+        ///
 
             Event event;
             while(window.pollEvent(event)) {
@@ -105,7 +105,7 @@ int main() {
 //*/
 
 // This main method creates a ball pit style simulation
-/*
+///*
 int main() {
 
     sf::Clock timeSinceCircle;

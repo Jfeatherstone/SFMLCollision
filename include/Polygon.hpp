@@ -49,7 +49,7 @@ enum class Detail {Less, More, Optimal, Exact};
  * @brief A generic force object, used to calculate the impulse and torque applied by a force,
  * which is then used to adjust the linear and angular velocity of the object.
  */
-typedef struct Force {
+struct Force {
     /**
      * @brief The vector from the point where the force acts to the center of mass of the object
      */
@@ -477,14 +477,8 @@ public:
     //              MOTION
     ///////////////////////////////////////
 
-    /**
-     * @brief Get the Force object WIP
-     * 
-     * @return sf::Vector2f The current force on the object
-     */
-    sf::Vector2f getForce();
-    void setForce(sf::Vector2f force);
-    void addForce(sf::Vector2f force);
+    void addForce(Force force);
+    void applyForces();
 
     void setVelocity(sf::Vector2f newVelocity);
     sf::Vector2f getVelocity();
@@ -492,8 +486,6 @@ public:
     float getAngularVelocity();
 
     void update(float elapsedTime);
-    void applyForce(sf::Vector2f force);
-    void applyTorque(sf::Vector2f force, sf::Vector2f distance);
 
     ///////////////////////////////////////
     //          TRANSFORMATIONS
