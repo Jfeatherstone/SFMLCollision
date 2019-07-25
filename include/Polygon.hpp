@@ -173,10 +173,16 @@ private:
     bool m_isSolid = true;
 
     /**
-     * @brief Whether the shape can be moved by collisions with other polygons. Doesn't affect movement
+     * @brief Whether the shape can be moved linearly by collisions with other polygons. Doesn't affect movement
      * by setting the velocity of the shape. Default is true.
      */
-    bool m_moveableByCollision = true;
+    bool m_linearFreedom = true;
+
+    /**
+     * @brief Whether the shape can be rotated by collisions with other polygons. Doesn't affect movement
+     * by setting the angular velocity of the shape. Default is true.
+     */
+    bool m_rotationalFreedom = true;
 
     /**
      * @brief The density of the shape, used in calculating the moment of inertia and mass of the shape.
@@ -381,15 +387,23 @@ public:
      * 
      * @param value Whether or not the shape can be moved by another polygon
      */
-    void setMovableByCollision(bool value);
+    void setDegreesOfFreedom(bool canBeMovedLinearly, bool canBeRotated);
 
     /**
-     * @brief Get whether the shape can be moved by being collided with by another object
+     * @brief Get whether the shape can be moved linearly by being collided with by another object
      * 
      * @return true The shape can be moved
      * @return false The shape cannot be moved
      */
-    bool isMovableByCollision();
+    bool getLinearFreedom();
+
+    /**
+     * @brief Get whether the shape can be rotated by being collided with by another object
+     * 
+     * @return true The shape can be rotated
+     * @return false The shape cannot be rotated
+     */
+    bool getRotationalFreedom();
 
     /**
      * @brief Set the density of the object, used in calculate its mass and moment of inertia (default is 1)

@@ -26,6 +26,8 @@ int main() {
     //polygons[0].setVelocity(sf::Vector2f(75, 0));
     //polygons[1].setVelocity(sf::Vector2f(-75, 0));
 
+    polygons[0].setDegreesOfFreedom(false, true);
+
     // Setup the window
     RenderWindow window;
     window.create(VideoMode(500, 400), "Collision test", Style::Default);
@@ -79,7 +81,7 @@ int main() {
             }
         }
 
-        polygons[0].addForce(Force(sf::Vector2f(1000, 0), 1.0f));
+        polygons[0].addForce(Force(sf::Vector2f(1000, 0), 1.0f, sf::Vector2f(0, -10)));
 
         //std::cout << polygons[0].getPosition().x << std::endl;
 

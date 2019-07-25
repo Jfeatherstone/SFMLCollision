@@ -1116,12 +1116,17 @@ bool Polygon::isSolid() {
     return m_isSolid;
 }
 
-void Polygon::setMovableByCollision(bool value) {
-    m_moveableByCollision = value;
+void Polygon::setDegreesOfFreedom(bool canBeMovedLinearly, bool canBeRotated) {
+    m_linearFreedom = canBeMovedLinearly;
+    m_rotationalFreedom = canBeRotated;
 }
 
-bool Polygon::isMovableByCollision() {
-    return m_moveableByCollision;
+bool Polygon::getLinearFreedom() {
+    return m_linearFreedom;
+}
+
+bool Polygon::getRotationalFreedom() {
+    return m_rotationalFreedom;
 }
 
 void Polygon::setDensity(float newDensity) {
@@ -1215,21 +1220,21 @@ void Polygon::update(float elapsedTime) {
  */
 void Polygon::applyForces() {
 
-    std::cout << "Applying forces..." << std::endl;
-
     for (Force f: m_forces) {
+
         // First adjust the linear velocity
-        sf::Vector2f impulse = f.magnitude * f.unitVector * f.impulseTime;
-        std::cout << f.magnitude << std::endl;
-        sf::Vector2f dv = impulse / getMass();
-
-        std::cout << dv.x << " " << dv.y << std::endl;
-
-        m_velocity += dv;
+        if (getLinearFreedom()) {
+            sf::Vector2f impulse = f.magnitude * f.unitVector * f.impulseTime;
+            std::cout << f.magnitude << std::endl;
+            sf::Vector2f dv = impulse / getMass();
+            m_velocity += dv;
+        }
 
         // Now adjust the torque
-        float dw = VectorMath::cross(f.COMVector, f.unitVector * f.magnitude) / getMomentOfInertia();
-        m_angularVelocity += dw;
+        if (getRotationalFreedom()) {
+            float dw = VectorMath::cross(f.COMVector, f.unitVector * f.magnitude) / getMomentOfInertia();
+            m_angularVelocity += dw;
+        }
     }
 
     // And clear the forces now that they've been applied

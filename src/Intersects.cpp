@@ -272,19 +272,19 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
 
     float coeffOfRestitution = (getYoungsModulus() + shape.getYoungsModulus());
 
-    float totalVel = (isMovableByCollision() ? VectorMath::mag(getVelocity()) : 0.f) + (shape.isMovableByCollision() ? VectorMath::mag(shape.getVelocity()) : 0.f) + VELOCITY_THRESHOLD;
+    float totalVel = (getLinearFreedom() ? VectorMath::mag(getVelocity()) : 0.f) + (shape.getLinearFreedom() ? VectorMath::mag(shape.getVelocity()) : 0.f) + VELOCITY_THRESHOLD;
 
     VectorMath::normalize(poly1CentroidToCollision);
     VectorMath::normalize(poly2CentroidToCollision);
 
-    float totalMass = (isMovableByCollision() ? getMass() : 0.f) + (shape.isMovableByCollision() ? shape.getMass() : 0.f);
+    float totalMass = (getLinearFreedom() ? getMass() : 0.f) + (shape.getLinearFreedom() ? shape.getMass() : 0.f);
 
     sf::Vector2f poly1Vf = getMass() / totalMass * totalVel * poly1CentroidToCollision * coeffOfRestitution / 2.0f;
     sf::Vector2f poly2Vf = shape.getMass() / totalMass * totalVel * poly2CentroidToCollision * coeffOfRestitution / 2.0f;
 
-    if (isMovableByCollision())
+    if (getLinearFreedom())
         setVelocity(poly1Vf);
-    if (shape.isMovableByCollision())
+    if (shape.getLinearFreedom())
         shape.setVelocity(poly2Vf);
 
     return vec;
