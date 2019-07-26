@@ -158,8 +158,6 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
         //cout << l.getSlope() << endl;
         averageSlope += l.getPerpendicular();
 
-        std::cout << intersectingPoints[i].x << " " << intersectingPoints[i].y << std::endl;
-
         vec.push_back(Line(intersectingPoints[i], intersectingPoints[i++] + l.getPerpendicular()).getDrawable(sf::Color::Green));
     }
 
@@ -203,11 +201,6 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
 
     sf::Vector2f penetration = centroidDistance - poly1CentroidToCollision - poly2CentroidToCollision;
 
-    //move(-penetration * (isMovableByCollision() ? 1.0f : 0.0f / (isMovableByCollision() ? 1.0f : 0.0f + shape.isMovableByCollision() ? 1.0f : 0.0f)));
-    //shape.move(penetration * (shape.isMovableByCollision() ? 1.0f : 0.0f / (isMovableByCollision() ? 1.0f : 0.0f + shape.isMovableByCollision() ? 1.0f : 0.0f)));
-
-    //std::cout << penetration << std::endl;
-
     //vec.push_back(Line((getPosition() - sf::Vector2f(getOrigin().x * getScale().x, getOrigin().y * getScale().y) 
     //        + sf::Vector2f(getCenterOfMass().x * getScale().x, getCenterOfMass().y * getScale().y)), averageCollision).getDrawable(sf::Color::White));
 
@@ -217,7 +210,7 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
     vec.push_back(c);
     vec.push_back(l.getDrawable(sf::Color::Red));
 
-    //return vec;
+    return vec;
 
     /*
     sf::Vector2f poly1MomentVector = 

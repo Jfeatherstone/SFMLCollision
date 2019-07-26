@@ -81,7 +81,7 @@ int main() {
             }
         }
 
-        polygons[0].addForce(Force(sf::Vector2f(1000, 0), 1.0f, sf::Vector2f(0, -10)));
+        //polygons[0].addForce(Force(sf::Vector2f(1000, 0), 1.0f, sf::Vector2f(0, -10)));
         //polygons[0].addForce(Force(sf::Vector2f(-.641, -.641), .10f, sf::Vector2f(0, -10)));
 
         //std::cout << polygons[0].getPosition().x << std::endl;
@@ -97,8 +97,8 @@ int main() {
                     window.draw(*l.getDrawable());
             }
 
-            //for (sf::Shape* s: polygons[0].intersectAndResolve(polygons[1]))
-            //    window.draw(*s);
+            for (sf::Shape* s: polygons[0].intersectAndResolve(polygons[1]))
+                window.draw(*s);
 
             polygons[0].update(dt.asSeconds());
             //polygons[1].update(dt.asSeconds());

@@ -1,7 +1,7 @@
 #include "Polygon.hpp"
 
 const float Polygon::DEFAULT_DENSITY = 1.0f;
-const float Polygon::VELOCITY_THRESHOLD = 1.0f;
+const float Polygon::VELOCITY_THRESHOLD = .10f;
 
 /*
 The constructor that will parse our shape from a texture
@@ -1201,9 +1201,8 @@ void Polygon::addForce(Force force) {
  */
 void Polygon::update(float elapsedTime) {
 
-    if (VectorMath::mag(m_velocity) <= VELOCITY_THRESHOLD) {
-        m_velocity = sf::Vector2f(0, 0);
-    }
+    //if (VectorMath::mag(m_velocity) <= VELOCITY_THRESHOLD)
+    //    m_velocity = sf::Vector2f(0, 0);
 
     // Apply any forces on the object
     applyForces();
@@ -1226,6 +1225,7 @@ void Polygon::applyForces() {
         if (getLinearFreedom()) {
             sf::Vector2f impulse = f.magnitude * f.unitVector * f.impulseTime;
             sf::Vector2f dv = impulse / getMass();
+            std::cout << dv.x << " " << dv.y << std::endl;
             m_velocity += dv;
         }
 

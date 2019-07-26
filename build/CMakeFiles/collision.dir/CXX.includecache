@@ -16,29 +16,13 @@ tgmath.h
 VectorMath.hpp
 ../include/VectorMath.hpp
 
-../include/Polygon.hpp
+../include/VectorMath.hpp
 SFML/Graphics.hpp
--
-iostream
 -
 tgmath.h
 -
+
+/home/jack/cpp-workspace/SFMLCollision/src/Line.cpp
 Line.hpp
-../include/Line.hpp
-VectorMath.hpp
-../include/VectorMath.hpp
-
-../include/VectorMath.hpp
-SFML/Graphics.hpp
--
-tgmath.h
--
-
-/home/jack/cpp-workspace/SFMLCollision/src/main.cpp
-Polygon.hpp
-/home/jack/cpp-workspace/SFMLCollision/src/Polygon.hpp
-SFML/Graphics.hpp
--
-sstream
--
+/home/jack/cpp-workspace/SFMLCollision/src/Line.hpp
 

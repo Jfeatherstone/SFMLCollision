@@ -150,13 +150,13 @@ sf::Vector2f Line::getPerpendicular() {
         pSlope = 1000.0f;
     else
         // Take the negative reciprical of the slope
-        pSlope = -1 / getSlope();
+        pSlope = -1.0f / getSlope();
 
     // Now our slope is y/x, so our vector is (1, slope)
     sf::Vector2f perpendicular(1, pSlope);
     
     // And normalize it
-    VectorMath::normalize(perpendicular);
+    perpendicular = VectorMath::normalize(perpendicular);
 
     return perpendicular;
 }
