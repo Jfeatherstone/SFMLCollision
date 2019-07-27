@@ -157,8 +157,9 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
     for (Line l: intersectingLines) {
         //cout << l.getSlope() << endl;
         averageSlope += l.getPerpendicular();
-
-        vec.push_back(Line(intersectingPoints[i], intersectingPoints[i++] + l.getPerpendicular()).getDrawable(sf::Color::Green));
+        std::cout << l.getPerpendicular().x << " " << l.getPerpendicular().y << std::endl;
+        vec.push_back(Line(intersectingPoints[i], intersectingPoints[i] + VectorMath::normalize(l.getPerpendicular(), 50)).getDrawable(sf::Color::Green));
+        i++;
     }
 
     averageSlope.x /= intersectingLines.size();

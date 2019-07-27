@@ -14,6 +14,8 @@ int main() {
     Polygon polygons[2] = {Polygon(t, Detail::More),
                          Polygon(t, Detail::More)};
 
+    //delete t;
+
     //CircleShape c(10);
     //Polygon polygons[2] = {Polygon(c), Polygon(c)};
 
@@ -95,13 +97,14 @@ int main() {
             for (Polygon p: polygons) {
                 for (Line l: p.getLines())
                     window.draw(*l.getDrawable());
+                //window.draw(p);
             }
 
-            for (sf::Shape* s: polygons[0].intersectAndResolve(polygons[1]))
+            for (sf::Shape* s: polygons[1].intersectAndResolve(polygons[0]))
                 window.draw(*s);
 
             polygons[0].update(dt.asSeconds());
-            //polygons[1].update(dt.asSeconds());
+            polygons[1].update(dt.asSeconds());
 
             window.display();
         }
