@@ -121,7 +121,7 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
         for (int j = 0; j < l2.size(); j++) {
             sf::Vector2f p;
             if (l1[i].intersects(l2[j], p)) {
-                //cout << i << " " << j << endl;
+                // We are going to focus on the first shape, so we add the line of the second
                 intersectingLines.push_back(l2[j]);
                 intersectingPoints.push_back(p);
             }
@@ -132,6 +132,70 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
         //return false;
         return vec;
 
+    for (int i = 0; i < intersectingLines.size(); i++) {
+
+        // The size of intersectingLines and intersectingPoints should always be the same
+        // so either size will work in the for loop above
+        sf::Vector2f p = intersectingPoints[i];
+        Line l = intersectingLines[i];
+
+        // DEBUG
+        sf::CircleShape* c = new sf::CircleShape();
+        c->setRadius(5);
+        c->setPosition(p);
+        c->setFillColor(sf::Color::Red);
+        c->setOrigin(Polygon(*c).getCentroid());
+        vec.push_back(c);
+
+        sf::Vector2f poly1CentroidPosition(getPosition().x + (getCentroid().x - getOrigin().x) * getScale().x,
+                                            getPosition().y + (getCentroid().y - getOrigin().y) * getScale().y);
+
+        sf::Vector2f poly2CentroidPosition(shape.getPosition().x + (shape.getCentroid().x - shape.getOrigin().x) * shape.getScale().x,
+                                            shape.getPosition().y + (shape.getCentroid().y - shape.getOrigin().y) * shape.getScale().y);
+
+        sf::Vector2f poly1PToCOM = p - poly1CentroidPosition;
+        sf::Vector2f poly2PToCOM = p - poly2CentroidPosition;
+
+        // We grab the normal from our line
+        sf::Vector2f normal = l.getPerpendicular();
+
+        // We also have to make sure the normal is pointing towards the outside of the first shape
+        // We could also focus on the second shape, but then we would have to add the other line in the
+        // loop where we check for intersecting lines above.
+
+        // To do this, we extend the normal line in one direction and see how many other lines it intersects with
+        // if this number is even, it is pointing in the correct direction. Otherwise we switch it
+
+        // We extend it by 2X the distance from one corner to the centroid, which should be the max distance any other line
+        // could be
+        /*
+        Line extendedNormal(p, p + VectorMath::normalize(normal, 10 * VectorMath::mag(getCentroid())));
+
+        vec.push_back(extendedNormal.getDrawable(sf::Color::Red));
+
+        int intersectCount = 0;
+        for (Line line: shape.getLines()) {
+            if (extendedNormal.intersects(line))
+                intersectCount++;
+        }
+
+        std::cout << intersectCount << std::endl;
+
+        if (intersectCount % 2 == 0 && intersectCount != 0)
+            normal = -normal;
+        */
+
+        // DEBUG
+        vec.push_back(Line(intersectingPoints[i], intersectingPoints[i] + normal * 50.0f).getDrawable(sf::Color::Green));
+        vec.push_back(Line(intersectingPoints[i], intersectingPoints[i] - normal * 50.0f).getDrawable(sf::Color::Red));
+
+        addForce(Force(-normal, 10000.0f, 1.0f, poly1PToCOM));
+        shape.addForce(Force(normal, 10000.0f, 1.0f, poly2PToCOM));
+
+
+    }
+
+    /*
     // Since there could be more than one collision point, we want to take the average
     sf::Vector2f averageCollision(0, 0);
     for (sf::Vector2f p: intersectingPoints) {
@@ -257,7 +321,7 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
     shape.setAngularVelocity(poly2Wf);
     */
 
-    ///*
+    /*
     ///////////////////////////////////////////////////////
     //       CIRCLES
     // The following code works for resolving collsiions

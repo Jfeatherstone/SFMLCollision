@@ -1225,13 +1225,14 @@ void Polygon::applyForces() {
         if (getLinearFreedom()) {
             sf::Vector2f impulse = f.magnitude * f.unitVector * f.impulseTime;
             sf::Vector2f dv = impulse / getMass();
-            std::cout << dv.x << " " << dv.y << std::endl;
+            //std::cout << dv.x << " " << dv.y << std::endl;
             m_velocity += dv;
         }
 
         // Now adjust the torque
         if (getRotationalFreedom()) {
-            float dw = VectorMath::cross(f.COMVector, f.unitVector * f.magnitude) / getMomentOfInertia();
+            float dw = VectorMath::cross(f.COMVector, f.unitVector * f.magnitude) / getMomentOfInertia() * 5000.0f;
+            std::cout << dw << std::endl;
             m_angularVelocity += dw;
         }
     }
