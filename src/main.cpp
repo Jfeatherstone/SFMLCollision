@@ -4,7 +4,7 @@
 
 using namespace std;
 using namespace sf;
-///*
+/*
 int main() {
 
     Texture* t = new Texture();
@@ -73,7 +73,7 @@ int main() {
             if (Keyboard::isKeyPressed(Keyboard::S)) {
                 polygons[0].setScale(polygons[0].getScale() - Vector2f(.03, .03));
             }
-        //*/
+        //*
 
             Event event;
             while(window.pollEvent(event)) {
@@ -115,7 +115,7 @@ int main() {
 //*/
 
 // This main method creates a ball pit style simulation
-/*
+///*
 int main() {
 
     sf::Clock timeSinceCircle;
@@ -129,7 +129,7 @@ int main() {
     bin.setPosition(250, 230);
     bin.setFillColor(sf::Color::Blue);
     bin.setScale(14, 22);
-    bin.setMovableByCollision(false);
+    bin.setDegreesOfFreedom(false, false);
     bin.setYoungsModulus(.75f);
 
     std::cout << bin.getPointCount() << std::endl;
@@ -146,7 +146,7 @@ int main() {
     //c.setSize(Vector2f(50, 30));
     sf::CircleShape c(20);
 
-    sf::Vector2f gravity(0, 1000);
+    float gravity = 20000;
 
     while (window.isOpen()) {
         float elapsed = clock.restart().asSeconds();
@@ -170,7 +170,7 @@ int main() {
             }
 
             if (!colliding)
-                objects[i].setVelocity(objects[i].getVelocity() + gravity * elapsed);
+                objects[i].addForce(Force(sf::Vector2f(0, 1), gravity));
 
             //cout << objects[i].getAngularVelocity() << endl;
         }

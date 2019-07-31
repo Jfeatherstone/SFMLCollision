@@ -878,8 +878,8 @@ Since most other SFML shapes have a getPoints() method, we could easily convert 
 shape to our class here
 */
 
-Polygon::Polygon(std::vector<sf::Vector2f> points) {
-    m_points = points;
+Polygon::Polygon(std::vector<sf::Vector2f> points):
+        m_points(points) {
 
     m_numVertices = m_points.size();
 

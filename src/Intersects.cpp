@@ -189,8 +189,14 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
         vec.push_back(Line(intersectingPoints[i], intersectingPoints[i] + normal * 50.0f).getDrawable(sf::Color::Green));
         vec.push_back(Line(intersectingPoints[i], intersectingPoints[i] - normal * 50.0f).getDrawable(sf::Color::Red));
 
-        addForce(Force(-normal, 10000.0f, 1.0f, poly1PToCOM));
-        shape.addForce(Force(normal, 10000.0f, 1.0f, poly2PToCOM));
+
+        // This is all just temporary stuff, to see if the normal above works at all
+        // Instead of using velocity, this should probably look at the penetration of the shapes or something
+        float coeffOfRestitution = (getYoungsModulus() + shape.getYoungsModulus());
+        float forceMag = coeffOfRestitution / 2.0f * (VectorMath::mag(getVelocity()) * getMass() + VectorMath::mag(shape.getVelocity()) * shape.getMass());
+
+        addForce(Force(-normal, forceMag, 1.0f, poly1PToCOM));
+        shape.addForce(Force(normal, forceMag, 1.0f, poly2PToCOM));
 
 
     }

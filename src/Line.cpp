@@ -3,12 +3,10 @@
 /*
     CONSTRUCTORS
 */
-Line::Line(sf::Vector2f p1, sf::Vector2f p2) {
+Line::Line(const sf::Vector2f p1, const sf::Vector2f p2):
+        m_start(p1), m_end(p2) {
+    
     // This automatically assigns our slope member variable so we don't need to set it here
-
-    m_start = p1;
-    m_end = p2;
-
     calculateSlope();
     calculateIntercept();
     calculateAngle();
