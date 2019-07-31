@@ -114,15 +114,14 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
     are intersecting which ones
     We also record the points at which each pair of lines intersect
     */
-    std::vector<Line> intersectingLines;
+    std::vector<std::pair<Line, Line>> intersectingLines;
     std::vector<sf::Vector2f> intersectingPoints;
 
     for (int i = 0; i < l1.size(); i++) {
         for (int j = 0; j < l2.size(); j++) {
             sf::Vector2f p;
             if (l1[i].intersects(l2[j], p)) {
-                // We are going to focus on the first shape, so we add the line of the second
-                intersectingLines.push_back(l2[j]);
+                intersectingLines.push_back(std::pair<Line, Line>(l1[i], l2[j]));
                 intersectingPoints.push_back(p);
             }
         }
@@ -137,7 +136,7 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
         // The size of intersectingLines and intersectingPoints should always be the same
         // so either size will work in the for loop above
         sf::Vector2f p = intersectingPoints[i];
-        Line l = intersectingLines[i];
+        Line l = intersectingLines[i].second; // Use the second line
 
         // DEBUG
         sf::CircleShape* c = new sf::CircleShape();
@@ -189,14 +188,22 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
         vec.push_back(Line(intersectingPoints[i], intersectingPoints[i] + normal * 50.0f).getDrawable(sf::Color::Green));
         vec.push_back(Line(intersectingPoints[i], intersectingPoints[i] - normal * 50.0f).getDrawable(sf::Color::Red));
 
+        // Doesn't work, needs to consider whether the portion of the lines being compared below are actually inside of the shape
+        float penetration = std::max(
+            {VectorMath::mag(p - intersectingLines[i].first.getStart()),
+            VectorMath::mag(p - intersectingLines[i].first.getEnd()),
+            VectorMath::mag(p - intersectingLines[i].second.getStart()),
+            VectorMath::mag(p - intersectingLines[i].second.getEnd())});
+
+        std::cout << penetration << std::endl;
 
         // This is all just temporary stuff, to see if the normal above works at all
         // Instead of using velocity, this should probably look at the penetration of the shapes or something
         float coeffOfRestitution = (getYoungsModulus() + shape.getYoungsModulus());
         float forceMag = coeffOfRestitution / 2.0f * (VectorMath::mag(getVelocity()) * getMass() + VectorMath::mag(shape.getVelocity()) * shape.getMass());
 
-        addForce(Force(-normal, forceMag, 1.0f, poly1PToCOM));
-        shape.addForce(Force(normal, forceMag, 1.0f, poly2PToCOM));
+        //addForce(Force(-normal, forceMag, 1.0f, poly1PToCOM));
+        //shape.addForce(Force(normal, forceMag, 1.0f, poly2PToCOM));
 
 
     }

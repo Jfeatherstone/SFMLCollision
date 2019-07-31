@@ -5,7 +5,7 @@
 */
 Line::Line(const sf::Vector2f p1, const sf::Vector2f p2):
         m_start(p1), m_end(p2) {
-    
+            
     // This automatically assigns our slope member variable so we don't need to set it here
     calculateSlope();
     calculateIntercept();

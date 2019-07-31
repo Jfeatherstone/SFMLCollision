@@ -4,7 +4,7 @@
 
 using namespace std;
 using namespace sf;
-/*
+///*
 int main() {
 
     Texture* t = new Texture();
@@ -25,7 +25,7 @@ int main() {
         polygons[i].setPosition(100 + 200*i, 130 + i*100);
     }
 
-    polygons[0].setVelocity(sf::Vector2f(75, 0));
+    //polygons[0].setVelocity(sf::Vector2f(75, 0));
     //polygons[1].setVelocity(sf::Vector2f(-75, 0));
 
     polygons[0].setDegreesOfFreedom(true, true);
@@ -73,7 +73,7 @@ int main() {
             if (Keyboard::isKeyPressed(Keyboard::S)) {
                 polygons[0].setScale(polygons[0].getScale() - Vector2f(.03, .03));
             }
-        //*
+        ///*
 
             Event event;
             while(window.pollEvent(event)) {
@@ -115,7 +115,7 @@ int main() {
 //*/
 
 // This main method creates a ball pit style simulation
-///*
+/*
 int main() {
 
     sf::Clock timeSinceCircle;
