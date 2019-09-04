@@ -1099,9 +1099,35 @@ void Polygon::createLines() {
             m_lines[i].setNormal(normalGuess);
             //std::cout << m_lines[i].getNormal().x << " " << m_lines[i].getNormal().y << std::endl;
 
-        }
-    }
+        } 
 
+        } else {
+            // If the line was not generated, that means it must be convex, so this process becomes easier
+            for (int i = 0; i < m_lines.size(); i++) {
+            // We first take a guess at the normal (we may need to take the negative of it)
+            sf::Vector2f normalGuess = m_lines[i].getNormal();
+
+            // Next we take the center of the line as our sample point
+            sf::Vector2f lineCenter = (m_lines[i].getEnd() + m_lines[i].getStart()) / 2.0f;
+
+            // Now we have to accout for the fact that the line center takes the position into account
+            lineCenter -= sf::Vector2f(getPosition().x - (getOrigin().x) * getScale().x, getPosition().y - (getOrigin().y) * getScale().y);
+            lineCenter.x /= getScale().x;
+            lineCenter.y /= getScale().y;
+
+            // After this, we add our normal and see if we end up in an inside square
+            // We have to cast to ints so that we have values at those indicies in the included pixels arr
+            sf::Vector2f newPoint = lineCenter - normalGuess;
+
+            if (VectorMath::mag(getCentroid() - newPoint) < VectorMath::mag(getCentroid() - lineCenter))
+                normalGuess = -normalGuess;
+
+            m_lines[i].setNormal(normalGuess);
+
+            }
+        }
+
+    
 
     m_lineUpdateRequired = false;
 }

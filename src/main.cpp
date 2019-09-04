@@ -154,7 +154,7 @@ int main() {
     //c.setSize(Vector2f(50, 30));
     sf::CircleShape c(20);
 
-    float gravity = 200;
+    float gravity = 10000;
 
     while (window.isOpen()) {
         float elapsed = clock.restart().asSeconds();
@@ -190,7 +190,7 @@ int main() {
             ball.setOrigin(ball.getCentroid());
             ball.setPosition( (sf::Vector2f)(sf::Mouse::getPosition() - window.getPosition()));
             if (!ball.intersects(bin).size() > 0) {
-                //ball.setYoungsModulus(.995f);
+                ball.setYoungsModulus(.95f);
                 objects.push_back(ball);
                 std::stringstream s;
                 s << "Polyon Test (" << objects.size() << ")";
@@ -211,12 +211,14 @@ int main() {
         for (Line l: bin.getLines()) {
             window.draw(*l.getDrawable());
         }
-        window.draw(*bin.getLines()[3].getDrawable(Color::Blue));
-        window.draw(*bin.getLines()[7].getDrawable(Color::Blue));
 
         for (Polygon p: objects) {
             for (Line l: p.getLines()) {
                 window.draw(*l.getDrawable());
+
+                sf::Vector2f lineCenter = (l.getStart() + l.getEnd()) / 2.0f;
+                window.draw(*Line(lineCenter, lineCenter - l.getNormal() * 10.0f).getDrawable(Color::Green));
+
             }
 
             //window.draw(p);

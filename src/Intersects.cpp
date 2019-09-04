@@ -213,8 +213,8 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
         float coeffOfRestitution = (getYoungsModulus() + shape.getYoungsModulus());
         float forceMag = coeffOfRestitution / 2.0f * (VectorMath::mag(getVelocity()) * getMass() + VectorMath::mag(shape.getVelocity()) * shape.getMass());
 
-        addForce(Force(-normal, forceMag, 1.0f, poly1PToCOM));
-        shape.addForce(Force(normal, forceMag, 1.0f, poly2PToCOM));
+        addForce(Force(-normal, forceMag, .5f, poly1PToCOM));
+        shape.addForce(Force(normal, forceMag, .1f, poly2PToCOM));
 
 
     }
