@@ -4,11 +4,11 @@
 
 using namespace sf;
 using namespace std;
-///*
+/*
 int main() {
 
     Texture* t = new Texture();
-    t->loadFromFile("Images/test2.png");
+    t->loadFromFile("Images/test4.png");
     
     // Create both polygons (the level of detail is that important here)
     Polygon polygons[2] = {Polygon(t, Detail::More),
@@ -123,7 +123,7 @@ int main() {
 //*/
 
 // This main method creates a ball pit style simulation
-/*
+///*
 int main() {
 
     sf::Clock timeSinceCircle;
@@ -154,7 +154,7 @@ int main() {
     //c.setSize(Vector2f(50, 30));
     sf::CircleShape c(20);
 
-    float gravity = 20000;
+    float gravity = 200;
 
     while (window.isOpen()) {
         float elapsed = clock.restart().asSeconds();
