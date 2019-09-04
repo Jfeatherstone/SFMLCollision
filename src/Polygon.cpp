@@ -161,7 +161,14 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
 
     // The +1 makes it so that we don't lose the last right and bottom rows
     // Not sure why they get cut off otherwise, but they do
+    /*int** includedPixels;
+    includedPixels = new int*[bottom - top + 1];
+    for (int i = 0; i < bottom - top + 1; i++)
+        includedPixels[i] = new int[right - left + 1];
+    */
     int includedPixels[bottom - top + 1][right - left + 1];
+
+    std::cout << "After arr" << std::endl;
 
     // And copy the values over (I was having some trouble using std::copy)
     for (int i = 0; i < textureSize.y; i++) {
@@ -169,6 +176,8 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
             includedPixels[i][j] = newArr[i][j];
         }
     }
+
+    std::cout << "After assignment" << std::endl;
 
     textureSize.x = right - left + 1;
     textureSize.y = bottom - top + 1;
@@ -833,6 +842,37 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     calculateMass();
     calculateMomentOfInertia();
     Shape::update(); // This makes the shape actually drawable
+
+    // Now we create our normals
+    // We want to iterate over every line
+    for (int i = 0; i < m_numVertices; i++) {
+
+        // We first take a guess at the normal (we may need to take the negative of it)
+        sf::Vector2f normalGuess = m_lines[i].getNormal();
+
+        // Next we take the center of the line as our sample point
+        sf::Vector2f lineCenter = (m_lines[i].getEnd() + m_lines[i].getStart()) / 2.0f;
+
+        // After this, we add our normal and see if we end up in an inside square
+        // We have to cast to ints so that we have values at those indicies in the included pixels arr
+        sf::Vector2i newPoint = sf::Vector2i(int(lineCenter.x + normalGuess.x), int(lineCenter.y + normalGuess.y));
+
+        // Make sure it isn't out of bounds
+        // If the normal is going out of bounds, it is probably in the correct direction
+        if (newPoint.x > textureSize.x || newPoint.x < 0 || newPoint.y > textureSize.y || newPoint.y < 0)
+            continue;
+
+        // Flip it
+        if (includedPixels[newPoint.y][newPoint.x] == 2) {
+            //normalGuess = -normalGuess;
+            std::cout << "Flipped " << i << std::endl;
+        }
+
+        // And set the normal
+        m_lines[i].setNormal(normalGuess);
+        
+    }
+
 }
 
 /////////////////////////////////////////////////////////////
@@ -1225,16 +1265,18 @@ void Polygon::applyForces() {
         if (getLinearFreedom()) {
             sf::Vector2f impulse = f.magnitude * f.unitVector * f.impulseTime;
             sf::Vector2f dv = impulse / getMass();
-            //std::cout << dv.x << " " << dv.y << std::endl;
+            std::cout << dv.x << " " << dv.y << std::endl;
             m_velocity += dv;
         }
 
         // Now adjust the torque
+        ///*
         if (getRotationalFreedom()) {
             float dw = VectorMath::cross(f.COMVector, f.unitVector * f.magnitude) / getMomentOfInertia() * 5000.0f;
             std::cout << dw << std::endl;
             m_angularVelocity += dw;
         }
+        //*/
     }
 
     // And clear the forces now that they've been applied

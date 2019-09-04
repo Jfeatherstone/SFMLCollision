@@ -2,13 +2,13 @@
 #include <SFML/Graphics.hpp>
 #include <sstream>
 
-using namespace std;
 using namespace sf;
-///*
+using namespace std;
+/*
 int main() {
 
     Texture* t = new Texture();
-    t->loadFromFile("Images/test.png");
+    t->loadFromFile("Images/test2.png");
     
     // Create both polygons (the level of detail is that important here)
     Polygon polygons[2] = {Polygon(t, Detail::More),
@@ -22,11 +22,12 @@ int main() {
     for (int i = 0; i < 2; i++) {
         polygons[i].setOrigin(polygons[i].getCentroid());
         polygons[i].setScale(5, 5);
-        polygons[i].setPosition(100 + 200*i, 130 + i*100);
+        polygons[i].setPosition(100 + 300*i, 130 + i*100);
     }
 
-    //polygons[0].setVelocity(sf::Vector2f(75, 0));
+    polygons[0].setVelocity(sf::Vector2f(75, 0));
     //polygons[1].setVelocity(sf::Vector2f(-75, 0));
+    polygons[0].setAngularVelocity(100);
 
     polygons[0].setDegreesOfFreedom(true, true);
 
@@ -115,7 +116,7 @@ int main() {
 //*/
 
 // This main method creates a ball pit style simulation
-/*
+///*
 int main() {
 
     sf::Clock timeSinceCircle;
@@ -136,7 +137,7 @@ int main() {
 
     // SETUP THE WINDOW
     sf::RenderWindow window;
-    window.create(sf::VideoMode(500, 400), "Ball Simulation", sf::Style::Default);
+    window.create(sf::VideoMode(500, 450), "Ball Simulation", sf::Style::Default);
     window.setFramerateLimit(60);
 
     // Array of current objects to check collisions
@@ -192,6 +193,14 @@ int main() {
         }
 
         window.clear();
+
+        // DEBUG
+        // Add all of the normal lines to the list of drawing objects
+        for (Line l: bin.getLines()) {
+            sf::Vector2f lineCenter = (l.getStart() + l.getEnd()) / 2.0f;
+            window.draw(*Line(lineCenter, lineCenter - l.getNormal() * 50.0f).getDrawable(Color::Green));
+        }
+
 
         for (Line l: bin.getLines()) {
             window.draw(*l.getDrawable());

@@ -156,7 +156,16 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
         sf::Vector2f poly2PToCOM = p - poly2CentroidPosition;
 
         // We grab the normal from our line
-        sf::Vector2f normal = l.getPerpendicular();
+        sf::Vector2f normal = l.getNormal();
+
+        /**
+         * TODO:
+         * Calculate surface normal when generating the shape using the pixels marked as inside
+         * 
+         * Using current timestep, approximate where the shape will be in the next time step to see if
+         * it collides at all, and then make it not collide by changing the time step to be exactly when the
+         * two would touch.
+         */
 
         // We also have to make sure the normal is pointing towards the outside of the first shape
         // We could also focus on the second shape, but then we would have to add the other line in the
@@ -189,6 +198,7 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
         vec.push_back(Line(intersectingPoints[i], intersectingPoints[i] - normal * 50.0f).getDrawable(sf::Color::Red));
 
         // Doesn't work, needs to consider whether the portion of the lines being compared below are actually inside of the shape
+        /*
         float penetration = std::max(
             {VectorMath::mag(p - intersectingLines[i].first.getStart()),
             VectorMath::mag(p - intersectingLines[i].first.getEnd()),
@@ -196,14 +206,15 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
             VectorMath::mag(p - intersectingLines[i].second.getEnd())});
 
         std::cout << penetration << std::endl;
+        */
 
         // This is all just temporary stuff, to see if the normal above works at all
         // Instead of using velocity, this should probably look at the penetration of the shapes or something
         float coeffOfRestitution = (getYoungsModulus() + shape.getYoungsModulus());
         float forceMag = coeffOfRestitution / 2.0f * (VectorMath::mag(getVelocity()) * getMass() + VectorMath::mag(shape.getVelocity()) * shape.getMass());
 
-        //addForce(Force(-normal, forceMag, 1.0f, poly1PToCOM));
-        //shape.addForce(Force(normal, forceMag, 1.0f, poly2PToCOM));
+        addForce(Force(-normal, forceMag, 1.0f, poly1PToCOM));
+        shape.addForce(Force(normal, forceMag, 1.0f, poly2PToCOM));
 
 
     }

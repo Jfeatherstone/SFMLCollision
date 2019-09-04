@@ -51,6 +51,24 @@ void Line::calculateAngle() {
     m_angle = atan(v.y / v.x) * 180.0f /M_PI;
 }
 
+void Line::calculateNormal() {
+
+    // Check for horiztonal
+    float pSlope;
+    if (getSlope() == 0)
+        pSlope = 1000.0f;
+    else
+        // Take the negative reciprical of the slope
+        pSlope = -1.0f / getSlope();
+
+    // Now our slope is y/x, so our vector is (1, slope)
+    sf::Vector2f perpendicular(1, pSlope);
+    
+    // And normalize it
+    perpendicular = VectorMath::normalize(perpendicular);
+
+    m_normal = perpendicular;
+}
 
 /*
     Y VALUE
@@ -140,21 +158,12 @@ sf::RectangleShape* Line::getDrawable(sf::Color color) {
     return r;
 }
 
-sf::Vector2f Line::getPerpendicular() {
+sf::Vector2f Line::getNormal() {
+    if (m_normal == sf::Vector2f(0, 0))
+        calculateNormal();
+    return m_normal;
+}
 
-    // Check for horiztonal
-    float pSlope;
-    if (getSlope() == 0)
-        pSlope = 1000.0f;
-    else
-        // Take the negative reciprical of the slope
-        pSlope = -1.0f / getSlope();
-
-    // Now our slope is y/x, so our vector is (1, slope)
-    sf::Vector2f perpendicular(1, pSlope);
-    
-    // And normalize it
-    perpendicular = VectorMath::normalize(perpendicular);
-
-    return perpendicular;
+void Line::setNormal(sf::Vector2f norm) {
+    m_normal = norm;
 }

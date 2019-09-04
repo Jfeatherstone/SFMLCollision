@@ -76,6 +76,12 @@ private:
     sf::Vector2f m_end;
 
     /**
+     * @brief The normal to the line, calculated during shape generation so that it always points
+     * outward
+     */
+    sf::Vector2f m_normal;
+
+    /**
      * @brief Calculates the slope of the line, given the two points, m_start and m_end, and stores it
      * in the m_slope variable.
      */
@@ -92,6 +98,12 @@ private:
      * function, which is converted to degrees (which is what SFML uses) and stored in m_angle
      */
     void calculateAngle();
+
+    /**
+     * @brief In the case that we don't set the normal externally (eg during shape generation)
+     * we can calculate it here by using -1/slope. Note that this may lead to an incorrect direction
+     */
+    void calculateNormal();
     
 public:
 
@@ -194,7 +206,14 @@ public:
      * 
      * @return sf::Vector2f A vector that is perpendicular to the line, with a magnitude of 1
      */
-    sf::Vector2f getPerpendicular();
+    sf::Vector2f getNormal();
+
+    /**
+     * @brief Set the Normal object
+     * 
+     * @param norm The new normal to the line
+     */
+    void setNormal(sf::Vector2f norm);
 
     /**
      * @brief Get a drawable instance (RectangleShape) of the line, such that it can be drawn on a window
