@@ -198,13 +198,14 @@ int main() {
         // Add all of the normal lines to the list of drawing objects
         for (Line l: bin.getLines()) {
             sf::Vector2f lineCenter = (l.getStart() + l.getEnd()) / 2.0f;
-            window.draw(*Line(lineCenter, lineCenter - l.getNormal() * 50.0f).getDrawable(Color::Green));
+            window.draw(*Line(lineCenter, lineCenter - l.getNormal() * 30.0f).getDrawable(Color::Green));
         }
-
 
         for (Line l: bin.getLines()) {
             window.draw(*l.getDrawable());
         }
+        window.draw(*bin.getLines()[3].getDrawable(Color::Blue));
+        window.draw(*bin.getLines()[7].getDrawable(Color::Blue));
 
         for (Polygon p: objects) {
             for (Line l: p.getLines()) {

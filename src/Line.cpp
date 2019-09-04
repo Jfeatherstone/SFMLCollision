@@ -10,6 +10,7 @@ Line::Line(const sf::Vector2f p1, const sf::Vector2f p2):
     calculateSlope();
     calculateIntercept();
     calculateAngle();
+    calculateNormal();
 }
 
 Line::Line() {
@@ -159,8 +160,6 @@ sf::RectangleShape* Line::getDrawable(sf::Color color) {
 }
 
 sf::Vector2f Line::getNormal() {
-    if (m_normal == sf::Vector2f(0, 0))
-        calculateNormal();
     return m_normal;
 }
 

@@ -855,22 +855,25 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
 
         // After this, we add our normal and see if we end up in an inside square
         // We have to cast to ints so that we have values at those indicies in the included pixels arr
-        sf::Vector2i newPoint = sf::Vector2i(int(lineCenter.x + normalGuess.x), int(lineCenter.y + normalGuess.y));
+        sf::Vector2i newPoint = sf::Vector2i(int(lineCenter.x + 2.0f * normalGuess.x), int(lineCenter.y + 2.0f * normalGuess.y));
 
         // Make sure it isn't out of bounds
         // If the normal is going out of bounds, it is probably in the correct direction
         if (newPoint.x > textureSize.x || newPoint.x < 0 || newPoint.y > textureSize.y || newPoint.y < 0)
             continue;
 
+        //std::cout << normalGuess.x << " " << normalGuess.y << std::endl;
+        std::cout << includedPixels[newPoint.y][newPoint.x] << std::endl;
         // Flip it
         if (includedPixels[newPoint.y][newPoint.x] == 2) {
-            //normalGuess = -normalGuess;
+            normalGuess = -normalGuess;
             std::cout << "Flipped " << i << std::endl;
         }
 
         // And set the normal
         m_lines[i].setNormal(normalGuess);
-        
+        //std::cout << m_lines[i].getNormal().x << " " << m_lines[i].getNormal().y << std::endl;
+
     }
 
 }
