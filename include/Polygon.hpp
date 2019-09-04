@@ -161,6 +161,17 @@ private:
     std::vector<Line> m_lines;
 
     /**
+     * @brief This variable is used in deciding how to adjust the normals (ie. if there is an includedPixels arr)
+     */
+    bool m_wasGeneratedFromImage = false;
+
+    /**
+     * @brief 
+     * 
+     */
+    std::vector<std::vector<int>> m_includedPixels;
+
+    /**
      * @brief Whether or not the lines need to be updated to account for a transformation, including rotation,
      * translation, scale adjustment, etc.
      */

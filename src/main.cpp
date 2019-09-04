@@ -4,7 +4,7 @@
 
 using namespace sf;
 using namespace std;
-/*
+///*
 int main() {
 
     Texture* t = new Texture();
@@ -101,6 +101,13 @@ int main() {
                 //window.draw(p);
             }
 
+            // DEBUG
+            // Add all of the normal lines to the list of drawing objects
+            for (Line l: polygons[0].getLines()) {
+                sf::Vector2f lineCenter = (l.getStart() + l.getEnd()) / 2.0f;
+                window.draw(*Line(lineCenter, lineCenter - l.getNormal() * 30.0f).getDrawable(Color::Green));
+            }
+
             for (sf::Shape* s: polygons[0].intersectAndResolve(polygons[1]))
                 window.draw(*s);
 
@@ -116,7 +123,7 @@ int main() {
 //*/
 
 // This main method creates a ball pit style simulation
-///*
+/*
 int main() {
 
     sf::Clock timeSinceCircle;

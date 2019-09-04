@@ -833,6 +833,15 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
 
     m_numVertices = m_points.size();
 
+    // Copy over our array into the member variable
+    m_includedPixels.resize(textureSize.y);
+    for (int i = 0; i < textureSize.y; i++) {
+        m_includedPixels[i].resize(textureSize.x);
+
+        for (int j = 0; j < textureSize.x; j++)
+            m_includedPixels[i][j] = includedPixels[i][j];
+    }
+
     //std::cout << "Final vertices:\n";
     //for (sf::Vector2f v: m_points)
     //    std::cout << v.x << " " << v.y << std::endl;
@@ -843,38 +852,7 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     calculateMomentOfInertia();
     Shape::update(); // This makes the shape actually drawable
 
-    // Now we create our normals
-    // We want to iterate over every line
-    for (int i = 0; i < m_numVertices; i++) {
-
-        // We first take a guess at the normal (we may need to take the negative of it)
-        sf::Vector2f normalGuess = m_lines[i].getNormal();
-
-        // Next we take the center of the line as our sample point
-        sf::Vector2f lineCenter = (m_lines[i].getEnd() + m_lines[i].getStart()) / 2.0f;
-
-        // After this, we add our normal and see if we end up in an inside square
-        // We have to cast to ints so that we have values at those indicies in the included pixels arr
-        sf::Vector2i newPoint = sf::Vector2i(int(lineCenter.x + 2.0f * normalGuess.x), int(lineCenter.y + 2.0f * normalGuess.y));
-
-        // Make sure it isn't out of bounds
-        // If the normal is going out of bounds, it is probably in the correct direction
-        if (newPoint.x > textureSize.x || newPoint.x < 0 || newPoint.y > textureSize.y || newPoint.y < 0)
-            continue;
-
-        //std::cout << normalGuess.x << " " << normalGuess.y << std::endl;
-        std::cout << includedPixels[newPoint.y][newPoint.x] << std::endl;
-        // Flip it
-        if (includedPixels[newPoint.y][newPoint.x] == 2) {
-            normalGuess = -normalGuess;
-            std::cout << "Flipped " << i << std::endl;
-        }
-
-        // And set the normal
-        m_lines[i].setNormal(normalGuess);
-        //std::cout << m_lines[i].getNormal().x << " " << m_lines[i].getNormal().y << std::endl;
-
-    }
+    m_wasGeneratedFromImage = true;
 
 }
 
@@ -1066,6 +1044,7 @@ void Polygon::createLines() {
     /*
     Now that our points properly represent the shape we want, we can create lines between them to check for collisions
     */
+
     m_lines.clear();
     m_lines.resize(m_numVertices);
     
@@ -1075,7 +1054,54 @@ void Polygon::createLines() {
 
     m_lines[m_numVertices - 1] = Line(m_points[m_numVertices - 1], m_points[0]);
 
-    m_points = pointsCopy;
+    m_points = pointsCopy;   
+
+    if (m_wasGeneratedFromImage) {
+        // Now we create our normals
+        // We want to iterate over every line
+        for (int i = 0; i < m_lines.size(); i++) {
+
+            // We first take a guess at the normal (we may need to take the negative of it)
+            sf::Vector2f normalGuess = m_lines[i].getNormal();
+
+            // Next we take the center of the line as our sample point
+            sf::Vector2f lineCenter = (m_lines[i].getEnd() + m_lines[i].getStart()) / 2.0f;
+
+            // Now we have to accout for the fact that the line center takes the position into account
+            lineCenter -= sf::Vector2f(getPosition().x - (getOrigin().x) * getScale().x, getPosition().y - (getOrigin().y) * getScale().y);
+            lineCenter.x /= getScale().x;
+            lineCenter.y /= getScale().y;
+
+            // After this, we add our normal and see if we end up in an inside square
+            // We have to cast to ints so that we have values at those indicies in the included pixels arr
+            sf::Vector2i newPoint = sf::Vector2i(int(lineCenter.x - normalGuess.x), int(lineCenter.y - normalGuess.y));
+
+
+            // Make sure it isn't out of bounds
+            sf::Vector2i textureSize(m_includedPixels[0].size(), m_includedPixels.size());
+            // If the normal is going out of bounds, it is probably in the correct direction
+            if (newPoint.x >= textureSize.x || newPoint.x < 0 || newPoint.y >= textureSize.y || newPoint.y < 0)
+                continue;
+
+            std::cout << newPoint.x << " " << newPoint.y << std::endl;
+
+            //std::cout << normalGuess.x << " " << normalGuess.y << std::endl;
+            std::cout << m_includedPixels[newPoint.y][newPoint.x] << std::endl;
+
+
+            // Flip it
+            if (m_includedPixels[newPoint.y][newPoint.x] == 2) {
+                normalGuess = -normalGuess;
+                std::cout << "Flipped " << i << std::endl;
+            }
+
+            // And set the normal
+            m_lines[i].setNormal(normalGuess);
+            //std::cout << m_lines[i].getNormal().x << " " << m_lines[i].getNormal().y << std::endl;
+
+        }
+    }
+
 
     m_lineUpdateRequired = false;
 }
