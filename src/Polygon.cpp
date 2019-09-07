@@ -899,18 +899,6 @@ Since most other SFML shapes have a getPoints() method, we could easily convert 
 shape to our class here
 */
 
-Polygon::Polygon(std::vector<sf::Vector2f> points):
-        m_points(points) {
-
-    m_numVertices = m_points.size();
-
-    findCentroid();
-    createLines();
-    calculateMass();
-    calculateMomentOfInertia();
-    Shape::update(); // This makes the shape actually drawable
-}
-
 Polygon::Polygon(sf::CircleShape shape) {
     m_points.resize(shape.getPointCount());
     for (int i = 0; i < shape.getPointCount(); i++) {
@@ -1101,9 +1089,9 @@ void Polygon::createLines() {
 
         } 
 
-        } else {
-            // If the line was not generated, that means it must be convex, so this process becomes easier
-            for (int i = 0; i < m_lines.size(); i++) {
+    } else {
+        // If the line was not generated, that means it must be convex, so this process becomes easier
+        for (int i = 0; i < m_lines.size(); i++) {
             // We first take a guess at the normal (we may need to take the negative of it)
             sf::Vector2f normalGuess = m_lines[i].getNormal();
 
@@ -1124,10 +1112,8 @@ void Polygon::createLines() {
 
             m_lines[i].setNormal(normalGuess);
 
-            }
         }
-
-    
+    }
 
     m_lineUpdateRequired = false;
 }

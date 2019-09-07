@@ -304,13 +304,6 @@ public:
     Polygon(sf::Texture* texture, Detail detail = Detail::Optimal, std::vector<sf::Color> ignoredColors = {});
 
     /**
-     * @brief Construct a new Polygon object from a std::vector of points
-     * 
-     * @param points The points that constitute our shape
-     */
-    Polygon(std::vector<sf::Vector2f> points);
-
-    /**
      * @brief Construct a new Polygon object from a sf::CircleShape object
      * 
      * @param shape The CircleShape object whose points will be used
@@ -634,7 +627,7 @@ public:
      * @return true The two shapes are colliding
      * @return false The two shapes aren't colliding
      */
-    std::vector<sf::Vector2u> intersects(Polygon shape);
+    bool intersects(Polygon shape);
 
     /**
      * @brief A wrapper method to check the intersection between a Polygon shape and a RectangleShape

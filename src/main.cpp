@@ -140,6 +140,9 @@ int main() {
     bin.setDegreesOfFreedom(false, false);
     bin.setYoungsModulus(.75f);
 
+    //bin.setVelocity(Vector2f(0, -1));
+    //bin.setAngularVelocity(10);
+
     std::cout << bin.getPointCount() << std::endl;
 
     // SETUP THE WINDOW
@@ -159,6 +162,7 @@ int main() {
     while (window.isOpen()) {
         float elapsed = clock.restart().asSeconds();
         
+        bin.update(elapsed);
         for (int i = 0; i < objects.size(); i++)
             objects[i].update(elapsed);
 
@@ -189,7 +193,7 @@ int main() {
             Polygon ball(c);
             ball.setOrigin(ball.getCentroid());
             ball.setPosition( (sf::Vector2f)(sf::Mouse::getPosition() - window.getPosition()));
-            if (!ball.intersects(bin).size() > 0) {
+            if (!ball.intersects(bin)) {
                 ball.setYoungsModulus(.95f);
                 objects.push_back(ball);
                 std::stringstream s;

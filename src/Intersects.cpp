@@ -9,10 +9,8 @@ The big one
 
 This is the actual intersection method, that is called in all of the above "wrappers" for it
 */
-std::vector<sf::Vector2u> Polygon::intersects(Polygon shape) {
+bool Polygon::intersects(Polygon shape) {
     
-    std::vector<sf::Vector2u> intersectingLines;
-
     // We first creating a circle around our objects with the radius equal to the farthest vertex distance and see if they intersect
     /*
     sf::Vector2f poly1CentroidPosition(getPosition().x + (getCentroid().x - getOrigin().x) * getScale().x,
@@ -38,7 +36,7 @@ std::vector<sf::Vector2u> Polygon::intersects(Polygon shape) {
     // Next, we check to make sure the two polygons are actually capable of intersecting by checking their rectangular boundary
     if (!getGlobalBounds().intersects(shape.getGlobalBounds())) {
         //cout << "Rect bounds" << endl;
-        return intersectingLines;
+        return false;
     }
 
     //The next order of business here is that we need to grab the lines of each shape 
@@ -50,12 +48,12 @@ std::vector<sf::Vector2u> Polygon::intersects(Polygon shape) {
         for (int j = 0; j < l2.size(); j++) {
             if (l1[i].intersects(l2[j])) {
                 //std::cout << i << " " << j << std::endl;
-                intersectingLines.push_back(sf::Vector2u(i, j));
+                return true;
             }
         }
     }
     
-    return intersectingLines;
+    return false;
 }
 
 /*
@@ -194,8 +192,8 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
         */
 
         // DEBUG
-        vec.push_back(Line(intersectingPoints[i], intersectingPoints[i] + normal * 50.0f).getDrawable(sf::Color::Green));
-        vec.push_back(Line(intersectingPoints[i], intersectingPoints[i] - normal * 50.0f).getDrawable(sf::Color::Red));
+        //vec.push_back(Line(intersectingPoints[i], intersectingPoints[i] + normal * 50.0f).getDrawable(sf::Color::Green));
+        //vec.push_back(Line(intersectingPoints[i], intersectingPoints[i] - normal * 50.0f).getDrawable(sf::Color::Red));
 
         // Doesn't work, needs to consider whether the portion of the lines being compared below are actually inside of the shape
         /*
@@ -208,34 +206,72 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
         std::cout << penetration << std::endl;
         */
 
+        
         // This is all just temporary stuff, to see if the normal above works at all
         // Instead of using velocity, this should probably look at the penetration of the shapes or something
         float coeffOfRestitution = (getYoungsModulus() + shape.getYoungsModulus());
+        
         float forceMag = coeffOfRestitution / 2.0f * (VectorMath::mag(getVelocity()) * getMass() + VectorMath::mag(shape.getVelocity()) * shape.getMass());
 
-        addForce(Force(-normal, forceMag, .5f, poly1PToCOM));
-        shape.addForce(Force(normal, forceMag, .1f, poly2PToCOM));
+        /*
+        addForce(Force(-normal, forceMag * .5f, 1.f, poly1PToCOM));
+        shape.addForce(Force(normal, forceMag * .5f, 1.f, poly2PToCOM));
 
+        // Calculating impuse from https://www.physicsforums.com/threads/calculating-impulse-due-to-rigid-body-collision-with-friction.186335/
 
+        /*
+        sf::Vector2f relativeVelocity = shape.getVelocity() - getVelocity();
+        float a = VectorMath::cross(poly1PToCOM, normal) / getMomentOfInertia();
+        float b = VectorMath::cross(poly2PToCOM, normal) / shape.getMomentOfInertia();
+
+        float J = VectorMath::mag(relativeVelocity) * coeffOfRestitution / (1.0f / getMass() + 1.0f / shape.getMass() + a + b);
+        
+        addForce(Force(-normal, J, 1.0f, poly1PToCOM));
+        shape.addForce(Force(normal, J, 1.0f, poly2PToCOM));
+        */
+
+        /*
+        // No dice
+        // https://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-the-basics-and-impulse-resolution--gamedev-6331
+
+        sf::Vector2f relativeVelocity = shape.getVelocity() - getVelocity();
+        float velocityAlongNormal = VectorMath::dot(relativeVelocity, normal);
+
+        if (velocityAlongNormal < 0)
+            continue;
+
+        float j = - (coeffOfRestitution) * velocityAlongNormal / (1.0f / getMass() + 1.0f / shape.getMass());
+
+        addForce(Force(-normal, j, 1.f, poly1PToCOM));
+        shape.addForce(Force(normal, j, 1.f, poly2PToCOM));
+        */
     }
 
-    /*
+    // Now that we've gone through the lines and forces, we want to physically move the objects so that
+    // they aren't colliding anymore
+
     // Since there could be more than one collision point, we want to take the average
     sf::Vector2f averageCollision(0, 0);
     for (sf::Vector2f p: intersectingPoints) {
-        sf::CircleShape* c = new sf::CircleShape();
-        c->setRadius(5);
-        c->setPosition(p);
-        c->setFillColor(sf::Color::Red);
-        c->setOrigin(Polygon(*c).getCentroid());
-        vec.push_back(c);
-
         averageCollision += p;
     }
 
     averageCollision.x /= intersectingPoints.size();
     averageCollision.y /= intersectingPoints.size();
 
+
+    float dl = .1f;
+
+    /*
+    while (intersects(shape)) {
+        // Move both backwards based on their velocities
+        setPosition(getPosition() - VectorMath::normalize(getVelocity(), dl * .5f));
+        //shape.setPosition(shape.getPosition() - VectorMath::normalize(shape.getVelocity(), dl * .5f));
+    }*/
+
+    
+    
+    /*
     // We now take the "average of all of our lines"
     // This actually means we just take the average of their slopes
     sf::Vector2f averageSlope;
