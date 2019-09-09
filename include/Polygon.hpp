@@ -604,6 +604,20 @@ public:
      */
     void move(float dx, float dy);
 
+    /**
+     * @brief Set the Size object in pixels, (will scale the object to the proper size)
+     * 
+     * @param size The new size of the object
+     */
+    void setSize(sf::Vector2f size);
+
+    /**
+     * @brief Set the Size object in pixels, (will scale the object to the proper size)
+     * 
+     * @param width The new width of the object
+     * @param height The new height of the object
+     */
+    void setSize(float width, float height);
 
     ///////////////////////////////////////
     //          INTERSECTION

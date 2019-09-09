@@ -65,6 +65,10 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     // The actual array of pixels
     const sf::Uint8* arr = image.getPixelsPtr();
 
+
+    // Take the average color to find a background color
+    sf::Vector3f backgroundAverage;
+
     // Separate out each color and create an object to add to our std::vector
     for (int i = 0; i < length; i++) {
         int red = (int) arr[4*i];
@@ -72,8 +76,20 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
         int blue = (int) arr[4*i + 2];
         int alpha = (int) arr[4*i + 3];
         sf::Color c(red, green, blue, alpha);
+
+        std::cout << float(red) << " " << float(blue) << " " << float(green) << " " << float(alpha) << "||";
+        backgroundAverage += sf::Vector3f(float(red), float(green), float(blue));
+
         pixels[i] = c;
     }
+
+    float backgroundTolerance = 15.f;
+
+    backgroundAverage.x /= length;
+    backgroundAverage.y /= length;
+    backgroundAverage.z /= length;
+
+    std::cout << backgroundAverage.x << " " << backgroundAverage.y << " " << backgroundAverage.z << std::endl;
 
     ///////////////////////////////////////////
     //     Create our first set of vertices
@@ -101,7 +117,9 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
             //std::cout << i << " " << j << " - " << int(c.r) << " " << int(c.g) << " " << int(c.b) << " " << int(c.a) << std::endl;
 
             // If the color is not ignored and has a non-zero alpha value, we keep it
-            if (!contains(ignoredColors, c) && c.a > 0)
+            if ((!contains(ignoredColors, c) && c.a > 0) || !(pixels[i].r - backgroundAverage.x <= backgroundTolerance
+            && pixels[i].g - backgroundAverage.y <= backgroundTolerance
+            && pixels[i].b - backgroundAverage.z <= backgroundTolerance))
                 preCropPixels[i][j] = 1;
             else
                 preCropPixels[i][j] = 0;
@@ -1071,16 +1089,16 @@ void Polygon::createLines() {
             if (newPoint.x >= textureSize.x || newPoint.x < 0 || newPoint.y >= textureSize.y || newPoint.y < 0)
                 continue;
 
-            std::cout << newPoint.x << " " << newPoint.y << std::endl;
+            //std::cout << newPoint.x << " " << newPoint.y << std::endl;
 
             //std::cout << normalGuess.x << " " << normalGuess.y << std::endl;
-            std::cout << m_includedPixels[newPoint.y][newPoint.x] << std::endl;
+            //std::cout << m_includedPixels[newPoint.y][newPoint.x] << std::endl;
 
 
             // Flip it
             if (m_includedPixels[newPoint.y][newPoint.x] == 2) {
                 normalGuess = -normalGuess;
-                std::cout << "Flipped " << i << std::endl;
+                //std::cout << "Flipped " << i << std::endl;
             }
 
             // And set the normal
@@ -1392,6 +1410,20 @@ void Polygon::move(float dx, float dy) {
     Transformable::move(dx, dy);
 
     m_lineUpdateRequired = true;
+}
+
+void Polygon::setSize(sf::Vector2f size) {
+
+    sf::Vector2f actualSize = sf::Vector2f(getLocalBounds().width, getLocalBounds().height);
+
+    sf::Vector2f scale = sf::Vector2f(size.x / actualSize.x, size.y / actualSize.y);
+
+    Polygon::setScale(scale);
+
+}
+
+void Polygon::setSize(float width, float height) {
+    Polygon::setSize(sf::Vector2f(width, height));
 }
 
 
