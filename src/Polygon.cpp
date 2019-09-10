@@ -77,20 +77,23 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
         int alpha = (int) arr[4*i + 3];
         sf::Color c(red, green, blue, alpha);
 
-        std::cout << float(red) << " " << float(blue) << " " << float(green) << " " << float(alpha) << "||";
+        //std::cout << float(red) << " " << float(blue) << " " << float(green) << " " << float(alpha) << "||";
         backgroundAverage += sf::Vector3f(float(red), float(green), float(blue));
 
         pixels[i] = c;
     }
 
-    float backgroundTolerance = 15.f;
+    float backgroundTolerance = 7.f;
 
     backgroundAverage.x /= length;
     backgroundAverage.y /= length;
     backgroundAverage.z /= length;
 
-    std::cout << backgroundAverage.x << " " << backgroundAverage.y << " " << backgroundAverage.z << std::endl;
+    std::cout << pixels[0].r - backgroundAverage.x << " " << pixels[0].g - backgroundAverage.y << " " << pixels[0].b - backgroundAverage.z << std::endl;
 
+    std::cout << (pixels[0].r - backgroundAverage.x <= backgroundTolerance
+            && pixels[0].g - backgroundAverage.y <= backgroundTolerance
+            && pixels[0].b - backgroundAverage.z <= backgroundTolerance) << std::endl;
     ///////////////////////////////////////////
     //     Create our first set of vertices
     ///////////////////////////////////////////
@@ -105,6 +108,15 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
 
     std::cout << "Pre crop\n";
 
+    for (int i = 0; i < length; i++) {
+        if (!(pixels[i].r - backgroundAverage.x <= backgroundTolerance
+            && pixels[i].g - backgroundAverage.y <= backgroundTolerance
+            && pixels[i].b - backgroundAverage.z <= backgroundTolerance))
+                pixels[i] = sf::Color(0, 0, 0, 0);
+            else
+                std::cout << "Not removed" << std::endl;
+    }
+
     // Next, we want to go through every color and if it isn't empty or on the ignore list, we
     // add it to our include for the hitbox calculation
 
@@ -117,9 +129,7 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
             //std::cout << i << " " << j << " - " << int(c.r) << " " << int(c.g) << " " << int(c.b) << " " << int(c.a) << std::endl;
 
             // If the color is not ignored and has a non-zero alpha value, we keep it
-            if ((!contains(ignoredColors, c) && c.a > 0) || !(pixels[i].r - backgroundAverage.x <= backgroundTolerance
-            && pixels[i].g - backgroundAverage.y <= backgroundTolerance
-            && pixels[i].b - backgroundAverage.z <= backgroundTolerance))
+            if (!contains(ignoredColors, c) && c.a > 0)
                 preCropPixels[i][j] = 1;
             else
                 preCropPixels[i][j] = 0;

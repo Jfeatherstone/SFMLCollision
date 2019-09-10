@@ -9,7 +9,7 @@ using namespace std;
  * This example will show all four levels of detail for a given image.
  * Note that you may have to readjust the window if you decide to try another image.
  */
-const string IMAGE_PATH = "Images/daniels_particles_test_1.png";
+const string IMAGE_PATH = "Images/daniels_particles_test_4.png";
 //const string IMAGE_PATH = "Images/test.png";
 
 int main() {
@@ -57,7 +57,7 @@ int main() {
 
         // If you prefer the actual shapes
         //for (Polygon p: polygons)
-        //    window.draw(p);
+            //window.draw(p);
 
         window.display();
     }
