@@ -46,6 +46,60 @@ SOFTWARE.
 enum class Detail {Less, More, Optimal, Exact};
 
 /**
+ * @brief A generic force object, used to calculate the impulse and torque applied by a force,
+ * which is then used to adjust the linear and angular velocity of the object.
+ */
+struct Force {
+    /**
+     * @brief The vector from the point where the force acts to the center of mass of the object
+     */
+    sf::Vector2f COMVector;
+
+    /**
+     * @brief The unit vector in the direction of the force (magnitude of 1)
+     */
+    sf::Vector2f unitVector;
+
+    /**
+     * @brief The time the force is acting for
+     */
+    float impulseTime;
+
+    /**
+     * @brief The magnitude of the force acting
+     */
+    float magnitude;
+
+    /**
+     * @brief Construct a new Force object
+     * 
+     * @param unit The unit vector in the direction of the force
+     * @param time How long the force is acting on the object
+     * @param mag The magnitude of the force
+     * @param COMVec The vector to the center of mass of the object from the force point, defaults to (0, 0) ie. no torque is applied
+     */
+    Force(sf::Vector2f unit, float time, float mag, sf::Vector2f COMVec = sf::Vector2f(0, 0)):
+     unitVector(unit), impulseTime(time), magnitude(mag), COMVector(COMVec) {
+
+    }
+
+    /**
+     * @brief Construct a new Force object
+     * 
+     * @param forceVector The vector of the force, NOT a unit vector
+     * @param time How long the force is acting on the object
+     * @param COMVec The vector to the center of mass of the object from the force point, defaults to (0, 0) ie. no torque is applied
+     */
+    Force(sf::Vector2f forceVector, float time, sf::Vector2f COMVec = sf::Vector2f(0, 0)):
+            impulseTime(time),
+            magnitude(VectorMath::mag(forceVector)),
+            unitVector(VectorMath::normalize(forceVector)),
+            COMVector(COMVec) {
+
+    }
+};
+
+/**
  * @brief The polygon object is the most important aspect of our collisions class, and accounts for most
  * of what will likely be used externally. Polygons can be created through either a texture, a vector of points,
  * or any other child class of sf::Shape (sf::CircleShape, sf::RectangleShape, etc.). 
@@ -107,6 +161,17 @@ private:
     std::vector<Line> m_lines;
 
     /**
+     * @brief This variable is used in deciding how to adjust the normals (ie. if there is an includedPixels arr)
+     */
+    bool m_wasGeneratedFromImage = false;
+
+    /**
+     * @brief 
+     * 
+     */
+    std::vector<std::vector<int>> m_includedPixels;
+
+    /**
      * @brief Whether or not the lines need to be updated to account for a transformation, including rotation,
      * translation, scale adjustment, etc.
      */
@@ -119,10 +184,16 @@ private:
     bool m_isSolid = true;
 
     /**
-     * @brief Whether the shape can be moved by collisions with other polygons. Doesn't affect movement
+     * @brief Whether the shape can be moved linearly by collisions with other polygons. Doesn't affect movement
      * by setting the velocity of the shape. Default is true.
      */
-    bool m_moveableByCollision = true;
+    bool m_linearFreedom = true;
+
+    /**
+     * @brief Whether the shape can be rotated by collisions with other polygons. Doesn't affect movement
+     * by setting the angular velocity of the shape. Default is true.
+     */
+    bool m_rotationalFreedom = true;
 
     /**
      * @brief The density of the shape, used in calculating the moment of inertia and mass of the shape.
@@ -156,9 +227,10 @@ private:
     float m_gamma = 1.0f;
 
     /**
-     * @brief WIP
+     * @brief A list of forces that are currently acting on the object, and will be applied and cleared
+     * in the next call of the update() method
      */
-    sf::Vector2f m_force;
+    std::vector<Force> m_forces;
     
     // Since this is more or a less a lite physics engine, we need to keep track of the object's
     // velocity
@@ -232,13 +304,6 @@ public:
     Polygon(sf::Texture* texture, Detail detail = Detail::Optimal, std::vector<sf::Color> ignoredColors = {});
 
     /**
-     * @brief Construct a new Polygon object from a std::vector of points
-     * 
-     * @param points The points that constitute our shape
-     */
-    Polygon(std::vector<sf::Vector2f> points);
-
-    /**
      * @brief Construct a new Polygon object from a sf::CircleShape object
      * 
      * @param shape The CircleShape object whose points will be used
@@ -258,7 +323,6 @@ public:
      * @param shape The ConvexShape object who points will be used
      */
     Polygon(sf::ConvexShape shape);
-
 
 
     ///////////////////////////////////////
@@ -327,15 +391,23 @@ public:
      * 
      * @param value Whether or not the shape can be moved by another polygon
      */
-    void setMovableByCollision(bool value);
+    void setDegreesOfFreedom(bool canBeMovedLinearly, bool canBeRotated);
 
     /**
-     * @brief Get whether the shape can be moved by being collided with by another object
+     * @brief Get whether the shape can be moved linearly by being collided with by another object
      * 
      * @return true The shape can be moved
      * @return false The shape cannot be moved
      */
-    bool isMovableByCollision();
+    bool getLinearFreedom();
+
+    /**
+     * @brief Get whether the shape can be rotated by being collided with by another object
+     * 
+     * @return true The shape can be rotated
+     * @return false The shape cannot be rotated
+     */
+    bool getRotationalFreedom();
 
     /**
      * @brief Set the density of the object, used in calculate its mass and moment of inertia (default is 1)
@@ -424,14 +496,8 @@ public:
     //              MOTION
     ///////////////////////////////////////
 
-    /**
-     * @brief Get the Force object WIP
-     * 
-     * @return sf::Vector2f The current force on the object
-     */
-    sf::Vector2f getForce();
-    void setForce(sf::Vector2f force);
-    void addForce(sf::Vector2f force);
+    void addForce(Force force);
+    void applyForces();
 
     void setVelocity(sf::Vector2f newVelocity);
     sf::Vector2f getVelocity();
@@ -439,8 +505,6 @@ public:
     float getAngularVelocity();
 
     void update(float elapsedTime);
-    void adjustFromForce(sf::Vector2f resultant, sf::Vector2f collisionPoint, Polygon& shape);
-
 
     ///////////////////////////////////////
     //          TRANSFORMATIONS
@@ -540,6 +604,20 @@ public:
      */
     void move(float dx, float dy);
 
+    /**
+     * @brief Set the Size object in pixels, (will scale the object to the proper size)
+     * 
+     * @param size The new size of the object
+     */
+    void setSize(sf::Vector2f size);
+
+    /**
+     * @brief Set the Size object in pixels, (will scale the object to the proper size)
+     * 
+     * @param width The new width of the object
+     * @param height The new height of the object
+     */
+    void setSize(float width, float height);
 
     ///////////////////////////////////////
     //          INTERSECTION
@@ -563,7 +641,7 @@ public:
      * @return true The two shapes are colliding
      * @return false The two shapes aren't colliding
      */
-    std::vector<sf::Vector2u> intersects(Polygon shape);
+    bool intersects(Polygon shape);
 
     /**
      * @brief A wrapper method to check the intersection between a Polygon shape and a RectangleShape
@@ -602,7 +680,7 @@ public:
     We also may want to know which direction to move the objects after they have collided, so we can do that
     by passing in a reference to a vector
     */
-    bool intersects(Polygon& shape, sf::Vector2f& resultant);
+    std::vector<sf::Shape*> intersectAndResolve(Polygon& shape);
     bool intersects(sf::RectangleShape shape, sf::Vector2f& resultant);
     bool intersects(sf::CircleShape shape, sf::Vector2f& resultant);
     bool intersects(sf::ConvexShape shape, sf::Vector2f& resultant);

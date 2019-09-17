@@ -3,15 +3,14 @@
 /*
     CONSTRUCTORS
 */
-Line::Line(sf::Vector2f p1, sf::Vector2f p2) {
+Line::Line(const sf::Vector2f p1, const sf::Vector2f p2):
+        m_start(p1), m_end(p2) {
+            
     // This automatically assigns our slope member variable so we don't need to set it here
-
-    m_start = p1;
-    m_end = p2;
-
     calculateSlope();
     calculateIntercept();
     calculateAngle();
+    calculateNormal();
 }
 
 Line::Line() {
@@ -53,6 +52,24 @@ void Line::calculateAngle() {
     m_angle = atan(v.y / v.x) * 180.0f /M_PI;
 }
 
+void Line::calculateNormal() {
+
+    // Check for horiztonal
+    float pSlope;
+    if (getSlope() == 0)
+        pSlope = 1000.0f;
+    else
+        // Take the negative reciprical of the slope
+        pSlope = -1.0f / getSlope();
+
+    // Now our slope is y/x, so our vector is (1, slope)
+    sf::Vector2f perpendicular(1, pSlope);
+    
+    // And normalize it
+    perpendicular = VectorMath::normalize(perpendicular);
+
+    m_normal = perpendicular;
+}
 
 /*
     Y VALUE
@@ -142,15 +159,10 @@ sf::RectangleShape* Line::getDrawable(sf::Color color) {
     return r;
 }
 
-sf::Vector2f Line::getPerpendicular() {
-    // Take the negative reciprical of the slope
-    float pSlope = -1 / getSlope();
+sf::Vector2f Line::getNormal() {
+    return m_normal;
+}
 
-    // Now our slope is y/x, so our vector is (1, slope)
-    sf::Vector2f perpendicular(1, pSlope);
-    
-    // And normalize it
-    VectorMath::normalize(perpendicular);
-
-    return perpendicular;
+void Line::setNormal(sf::Vector2f norm) {
+    m_normal = norm;
 }

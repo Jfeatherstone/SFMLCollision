@@ -1,7 +1,7 @@
 #include "Polygon.hpp"
 
 const float Polygon::DEFAULT_DENSITY = 1.0f;
-const float Polygon::VELOCITY_THRESHOLD = 1.0f;
+const float Polygon::VELOCITY_THRESHOLD = .10f;
 
 /*
 The constructor that will parse our shape from a texture
@@ -16,7 +16,7 @@ and the parser will pass over them
 */
 Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ignoredColors) {
     // First we store the texture such that the polygon looks like the image
-    //setTexture(texture);
+    setTexture(texture);
 
     ////////////////////////////////////////
     //      BEGINNING OF SHAPE GENERATION
@@ -65,6 +65,10 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     // The actual array of pixels
     const sf::Uint8* arr = image.getPixelsPtr();
 
+
+    // Take the average color to find a background color
+    sf::Vector3f backgroundAverage;
+
     // Separate out each color and create an object to add to our std::vector
     for (int i = 0; i < length; i++) {
         int red = (int) arr[4*i];
@@ -72,9 +76,24 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
         int blue = (int) arr[4*i + 2];
         int alpha = (int) arr[4*i + 3];
         sf::Color c(red, green, blue, alpha);
+
+        //std::cout << float(red) << " " << float(blue) << " " << float(green) << " " << float(alpha) << "||";
+        backgroundAverage += sf::Vector3f(float(red), float(green), float(blue));
+
         pixels[i] = c;
     }
 
+    float backgroundTolerance = 7.f;
+
+    backgroundAverage.x /= length;
+    backgroundAverage.y /= length;
+    backgroundAverage.z /= length;
+
+    std::cout << pixels[0].r - backgroundAverage.x << " " << pixels[0].g - backgroundAverage.y << " " << pixels[0].b - backgroundAverage.z << std::endl;
+
+    std::cout << (pixels[0].r - backgroundAverage.x <= backgroundTolerance
+            && pixels[0].g - backgroundAverage.y <= backgroundTolerance
+            && pixels[0].b - backgroundAverage.z <= backgroundTolerance) << std::endl;
     ///////////////////////////////////////////
     //     Create our first set of vertices
     ///////////////////////////////////////////
@@ -88,6 +107,15 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     int preCropPixels[textureSize.y][textureSize.x];
 
     std::cout << "Pre crop\n";
+
+    for (int i = 0; i < length; i++) {
+        if (!(pixels[i].r - backgroundAverage.x <= backgroundTolerance
+            && pixels[i].g - backgroundAverage.y <= backgroundTolerance
+            && pixels[i].b - backgroundAverage.z <= backgroundTolerance))
+                pixels[i] = sf::Color(0, 0, 0, 0);
+            else
+                std::cout << "Not removed" << std::endl;
+    }
 
     // Next, we want to go through every color and if it isn't empty or on the ignore list, we
     // add it to our include for the hitbox calculation
@@ -161,7 +189,14 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
 
     // The +1 makes it so that we don't lose the last right and bottom rows
     // Not sure why they get cut off otherwise, but they do
+    /*int** includedPixels;
+    includedPixels = new int*[bottom - top + 1];
+    for (int i = 0; i < bottom - top + 1; i++)
+        includedPixels[i] = new int[right - left + 1];
+    */
     int includedPixels[bottom - top + 1][right - left + 1];
+
+    std::cout << "After arr" << std::endl;
 
     // And copy the values over (I was having some trouble using std::copy)
     for (int i = 0; i < textureSize.y; i++) {
@@ -169,6 +204,8 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
             includedPixels[i][j] = newArr[i][j];
         }
     }
+
+    std::cout << "After assignment" << std::endl;
 
     textureSize.x = right - left + 1;
     textureSize.y = bottom - top + 1;
@@ -824,6 +861,15 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
 
     m_numVertices = m_points.size();
 
+    // Copy over our array into the member variable
+    m_includedPixels.resize(textureSize.y);
+    for (int i = 0; i < textureSize.y; i++) {
+        m_includedPixels[i].resize(textureSize.x);
+
+        for (int j = 0; j < textureSize.x; j++)
+            m_includedPixels[i][j] = includedPixels[i][j];
+    }
+
     //std::cout << "Final vertices:\n";
     //for (sf::Vector2f v: m_points)
     //    std::cout << v.x << " " << v.y << std::endl;
@@ -831,7 +877,11 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
     findCentroid();
     createLines();
     calculateMass();
+    calculateMomentOfInertia();
     Shape::update(); // This makes the shape actually drawable
+
+    m_wasGeneratedFromImage = true;
+
 }
 
 /////////////////////////////////////////////////////////////
@@ -877,17 +927,6 @@ Since most other SFML shapes have a getPoints() method, we could easily convert 
 shape to our class here
 */
 
-Polygon::Polygon(std::vector<sf::Vector2f> points) {
-    m_points = points;
-
-    m_numVertices = m_points.size();
-
-    findCentroid();
-    createLines();
-    calculateMass();
-    Shape::update(); // This makes the shape actually drawable
-}
-
 Polygon::Polygon(sf::CircleShape shape) {
     m_points.resize(shape.getPointCount());
     for (int i = 0; i < shape.getPointCount(); i++) {
@@ -899,6 +938,7 @@ Polygon::Polygon(sf::CircleShape shape) {
     findCentroid();
     createLines();
     calculateMass();
+    calculateMomentOfInertia();
     Shape::update(); // This makes the shape actually drawable
 }
 
@@ -913,6 +953,7 @@ Polygon::Polygon(sf::RectangleShape shape) {
     findCentroid();
     createLines();
     calculateMass();
+    calculateMomentOfInertia();
     Shape::update(); // This makes the shape actually drawable
 }
 
@@ -925,6 +966,7 @@ Polygon::Polygon(sf::ConvexShape shape) {
     m_numVertices = m_points.size();
 
     findCentroid();
+    calculateMomentOfInertia();
     createLines();
     calculateMass();
     Shape::update(); // This makes the shape actually drawable
@@ -1018,6 +1060,7 @@ void Polygon::createLines() {
     /*
     Now that our points properly represent the shape we want, we can create lines between them to check for collisions
     */
+
     m_lines.clear();
     m_lines.resize(m_numVertices);
     
@@ -1027,7 +1070,78 @@ void Polygon::createLines() {
 
     m_lines[m_numVertices - 1] = Line(m_points[m_numVertices - 1], m_points[0]);
 
-    m_points = pointsCopy;
+    m_points = pointsCopy;   
+
+    if (m_wasGeneratedFromImage) {
+        // Now we create our normals
+        // We want to iterate over every line
+        for (int i = 0; i < m_lines.size(); i++) {
+
+            // We first take a guess at the normal (we may need to take the negative of it)
+            sf::Vector2f normalGuess = m_lines[i].getNormal();
+
+            // Next we take the center of the line as our sample point
+            sf::Vector2f lineCenter = (m_lines[i].getEnd() + m_lines[i].getStart()) / 2.0f;
+
+            // Now we have to accout for the fact that the line center takes the position into account
+            lineCenter -= sf::Vector2f(getPosition().x - (getOrigin().x) * getScale().x, getPosition().y - (getOrigin().y) * getScale().y);
+            lineCenter.x /= getScale().x;
+            lineCenter.y /= getScale().y;
+
+            // After this, we add our normal and see if we end up in an inside square
+            // We have to cast to ints so that we have values at those indicies in the included pixels arr
+            sf::Vector2i newPoint = sf::Vector2i(int(lineCenter.x - normalGuess.x), int(lineCenter.y - normalGuess.y));
+
+
+            // Make sure it isn't out of bounds
+            sf::Vector2i textureSize(m_includedPixels[0].size(), m_includedPixels.size());
+            // If the normal is going out of bounds, it is probably in the correct direction
+            if (newPoint.x >= textureSize.x || newPoint.x < 0 || newPoint.y >= textureSize.y || newPoint.y < 0)
+                continue;
+
+            //std::cout << newPoint.x << " " << newPoint.y << std::endl;
+
+            //std::cout << normalGuess.x << " " << normalGuess.y << std::endl;
+            //std::cout << m_includedPixels[newPoint.y][newPoint.x] << std::endl;
+
+
+            // Flip it
+            if (m_includedPixels[newPoint.y][newPoint.x] == 2) {
+                normalGuess = -normalGuess;
+                //std::cout << "Flipped " << i << std::endl;
+            }
+
+            // And set the normal
+            m_lines[i].setNormal(normalGuess);
+            //std::cout << m_lines[i].getNormal().x << " " << m_lines[i].getNormal().y << std::endl;
+
+        } 
+
+    } else {
+        // If the line was not generated, that means it must be convex, so this process becomes easier
+        for (int i = 0; i < m_lines.size(); i++) {
+            // We first take a guess at the normal (we may need to take the negative of it)
+            sf::Vector2f normalGuess = m_lines[i].getNormal();
+
+            // Next we take the center of the line as our sample point
+            sf::Vector2f lineCenter = (m_lines[i].getEnd() + m_lines[i].getStart()) / 2.0f;
+
+            // Now we have to accout for the fact that the line center takes the position into account
+            lineCenter -= sf::Vector2f(getPosition().x - (getOrigin().x) * getScale().x, getPosition().y - (getOrigin().y) * getScale().y);
+            lineCenter.x /= getScale().x;
+            lineCenter.y /= getScale().y;
+
+            // After this, we add our normal and see if we end up in an inside square
+            // We have to cast to ints so that we have values at those indicies in the included pixels arr
+            sf::Vector2f newPoint = lineCenter - normalGuess;
+
+            if (VectorMath::mag(getCentroid() - newPoint) < VectorMath::mag(getCentroid() - lineCenter))
+                normalGuess = -normalGuess;
+
+            m_lines[i].setNormal(normalGuess);
+
+        }
+    }
 
     m_lineUpdateRequired = false;
 }
@@ -1048,15 +1162,16 @@ void Polygon::calculateMomentOfInertia() {
 
     This makes the calculation super easy, as we just add up the distance from the origin to the points\
     */
-    m_centerOfMass = sf::Vector2f(0, 0);
+    m_centerOfMass.x = 0;
+    m_centerOfMass.y = 0;
     m_momentOfInertia = 0;
 
     for (sf::Vector2f p: m_points) {
         m_centerOfMass += p;
     }
 
-    m_centerOfMass.x /= getPointCount();
-    m_centerOfMass.y /= getPointCount();
+    m_centerOfMass.x /= m_numVertices;
+    m_centerOfMass.y /= m_numVertices;
 
     // Now find the average distance from the center of mass to the points
     for (sf::Vector2f p: m_points) {
@@ -1064,7 +1179,9 @@ void Polygon::calculateMomentOfInertia() {
     }
 
     m_momentOfInertia /= getPointCount();
-    m_momentOfInertia *= m_momentOfInertia * getMass();
+    m_momentOfInertia *= getMass();
+
+    //std::cout << m_momentOfInertia << std::endl;
 
 }
 
@@ -1108,12 +1225,17 @@ bool Polygon::isSolid() {
     return m_isSolid;
 }
 
-void Polygon::setMovableByCollision(bool value) {
-    m_moveableByCollision = value;
+void Polygon::setDegreesOfFreedom(bool canBeMovedLinearly, bool canBeRotated) {
+    m_linearFreedom = canBeMovedLinearly;
+    m_rotationalFreedom = canBeRotated;
 }
 
-bool Polygon::isMovableByCollision() {
-    return m_moveableByCollision;
+bool Polygon::getLinearFreedom() {
+    return m_linearFreedom;
+}
+
+bool Polygon::getRotationalFreedom() {
+    return m_rotationalFreedom;
 }
 
 void Polygon::setDensity(float newDensity) {
@@ -1176,16 +1298,58 @@ float Polygon::getArea() {
 ///////////////////////////////////////
 
 
-sf::Vector2f Polygon::getForce() {
-    return m_force;
+void Polygon::addForce(Force force) {
+    m_forces.push_back(force);
 }
 
-void Polygon::addForce(sf::Vector2f force) {
-    m_force += force;
+/**
+ * @brief Updates the shape and applies both linear and angular velocity to update the
+ * position and rotation of the polygon
+ * 
+ * @param elapsedTime The amount of time that has elapsed since the last update
+ */
+void Polygon::update(float elapsedTime) {
+
+    //if (VectorMath::mag(m_velocity) <= VELOCITY_THRESHOLD)
+    //    m_velocity = sf::Vector2f(0, 0);
+
+    // Apply any forces on the object
+    applyForces();
+
+    // Update the position
+    setPosition(getPosition() + m_velocity * elapsedTime);
+    setRotation(getRotation() + m_angularVelocity * elapsedTime);
+
 }
 
-void Polygon::setForce(sf::Vector2f force) {
-    m_force = force;
+/**
+ * @brief This just runs through each force in m_forces and uses the impulse formula F dt = dp to adjust
+ * the velocity and angular velocity
+ */
+void Polygon::applyForces() {
+
+    for (Force f: m_forces) {
+
+        // First adjust the linear velocity
+        if (getLinearFreedom()) {
+            sf::Vector2f impulse = f.magnitude * f.unitVector * f.impulseTime;
+            sf::Vector2f dv = impulse / getMass();
+            std::cout << dv.x << " " << dv.y << std::endl;
+            m_velocity += dv;
+        }
+
+        // Now adjust the torque
+        ///*
+        if (getRotationalFreedom()) {
+            float dw = VectorMath::cross(f.COMVector, f.unitVector * f.magnitude) / getMomentOfInertia() * 5000.0f;
+            std::cout << dw << std::endl;
+            m_angularVelocity += dw;
+        }
+        //*/
+    }
+
+    // And clear the forces now that they've been applied
+    m_forces.clear();
 }
 
 ///////////////////////////////////////
@@ -1258,27 +1422,24 @@ void Polygon::move(float dx, float dy) {
     m_lineUpdateRequired = true;
 }
 
+void Polygon::setSize(sf::Vector2f size) {
+
+    sf::Vector2f actualSize = sf::Vector2f(getLocalBounds().width, getLocalBounds().height);
+
+    sf::Vector2f scale = sf::Vector2f(size.x / actualSize.x, size.y / actualSize.y);
+
+    Polygon::setScale(scale);
+
+}
+
+void Polygon::setSize(float width, float height) {
+    Polygon::setSize(sf::Vector2f(width, height));
+}
+
 
 /**********************************
  * VELOCITY AND MOVEMENT THINGS
 **********************************/
-
-/**
- * @brief Updates the shape and applies both linear and angular velocity to update the
- * position and rotation of the polygon
- * 
- * @param elapsedTime The amount of time that has elapsed since the last update
- */
-void Polygon::update(float elapsedTime) {
-    // Update the position
-    setPosition(getPosition() + m_velocity * elapsedTime);
-    setRotation(getRotation() + m_angularVelocity * elapsedTime);
-
-    if (VectorMath::mag(m_velocity) <= VELOCITY_THRESHOLD) {
-        m_velocity = sf::Vector2f(0, 0);
-    }
-}
-
 /**
  * @brief Returns the current linear velocity of the shape
  * 
