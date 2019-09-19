@@ -630,14 +630,14 @@ Polygon::Polygon(sf::Texture* texture, Detail detail, std::vector<sf::Color> ign
         if (includedPixels[currPixel.y][currPixel.x] == 1 || includedPixels[currPixel.y][currPixel.x] == 3) {
             // Even if it isn't an actual vertex, we record it in our other std::vector
             polygonvertices.push_back(sf::Vector2f(currPixel.x, currPixel.y));
-            std::cout << currPixel.x << " " << currPixel.y;
+            //std::cout << currPixel.x << " " << currPixel.y;
 
             if (includedPixels[currPixel.y][currPixel.x] == 1) {
                 // We record the vertex in our polygon
-                std::cout << " - Added " << vertexIndex << std::endl;
+                //std::cout << " - Added " << vertexIndex << std::endl;
                 m_points[vertexIndex++] = sf::Vector2f(currPixel.x, currPixel.y);
             } else {
-                std::cout << std::endl;
+                //std::cout << std::endl;
             }
 
             // We now look for the next pixel that is marked either as a 3 or a 1
