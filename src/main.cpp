@@ -9,10 +9,11 @@ using namespace std;
  * This example will show all four levels of detail for a given image.
  * Note that you may have to readjust the window if you decide to try another image.
  */
-const string IMAGE_PATH = "Images/daniels_particles_test_4.png";
-//const string IMAGE_PATH = "Images/test.png";
+const string IMAGE_PATH = "Images/test.png";
 
-int main() {
+int main(int argc, char** args) {
+
+    //cout << args[1] << endl;
 
     Texture* t = new Texture();
     t->loadFromFile(IMAGE_PATH);
@@ -29,6 +30,7 @@ int main() {
         polygons[i].setPosition(90 + 200*i, 130);
     }
 
+    cout << "\n\n\n\n\n\n\n\n\n\n\n";
     // Print out the number of vertices on each level of detail
     cout << "Less: " << polygons[0].getPointCount() << endl;
     cout << "Optimal: " << polygons[1].getPointCount() << endl;
@@ -53,6 +55,15 @@ int main() {
         for (Polygon p: polygons) {
             for (Line l: p.getLines())
                 window.draw(*l.getDrawable());
+
+            /*
+            // DEBUG
+            // Add all of the normal lines to the list of drawing objects
+            for (Line l: p.getLines()) {
+                sf::Vector2f lineCenter = (l.getStart() + l.getEnd()) / 2.0f;
+                window.draw(*Line(lineCenter, lineCenter - l.getNormal() * 30.0f).getDrawable(Color::Green));
+            }*/
+
         }
 
         // If you prefer the actual shapes
