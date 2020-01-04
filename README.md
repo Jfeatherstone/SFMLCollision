@@ -22,9 +22,11 @@ What it can do so far:
 What is being worked on currently:
 
 1. Detecting whether one shape is inside of another
-2. Resolving collisions by moving each shape appropriately
-3. Optimizing vertex reduction for objects even more
-4. General refactoring, cleaning up code, and documentation
+2. Sometimes when a shape has too sharp of edges, the shape detection breaks
+3. Setting up objects in a k-d tree to optimize collision detections
+3. Resolving collisions by moving each shape appropriately (for non-circles)
+4. Optimizing vertex reduction for objects even more
+5. General refactoring, cleaning up code, and documentation
 
 ## Theory
 
