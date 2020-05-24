@@ -96,14 +96,13 @@ int main() {
         polygons[i].setOrigin(polygons[i].getCentroid());
         polygons[i].setScale(5, 5);
         polygons[i].setPosition(100 + 300*i, 130 + i*100);
+        polygons[i].setDegreesOfFreedom(true, false);
+
     }
 
     polygons[0].setVelocity(sf::Vector2f(10, 0));
     //polygons[1].setVelocity(sf::Vector2f(-75, 0));
     //polygons[0].setAngularVelocity(100);
-
-    polygons[0].setDegreesOfFreedom(true, true);
-
     // Setup the window
     RenderWindow window;
     window.create(VideoMode(500, 400), "float", Style::Default);
@@ -123,29 +122,31 @@ int main() {
         ///////////////////////////////////////
 
         if (window.hasFocus()) {
-            if (Keyboard::isKeyPressed(Keyboard::Right)) {
-                polygons[0].setPosition(polygons[0].getPosition() + Vector2f(1, 0));
-            }
-            if (Keyboard::isKeyPressed(Keyboard::Left)) {
-                polygons[0].setPosition(polygons[0].getPosition() + Vector2f(-1, 0));
-            }
-            if (Keyboard::isKeyPressed(Keyboard::Up)) {
-                polygons[0].setPosition(polygons[0].getPosition() + Vector2f(0, -1));
-            }
-            if (Keyboard::isKeyPressed(Keyboard::Down)) {
-                polygons[0].setPosition(polygons[0].getPosition() + Vector2f(0, 1));
-            }
-            if (Keyboard::isKeyPressed(Keyboard::Q)) {
-                polygons[0].rotate(1);
-            }
-            if (Keyboard::isKeyPressed(Keyboard::E)) {
-                polygons[0].rotate(-1);
-            }
-            if (Keyboard::isKeyPressed(Keyboard::W)) {
-                polygons[0].setScale(polygons[0].getScale() + Vector2f(.03, .03));
-            }
-            if (Keyboard::isKeyPressed(Keyboard::S)) {
-                polygons[0].setScale(polygons[0].getScale() - Vector2f(.03, .03));
+            if (!paused) {
+                if (Keyboard::isKeyPressed(Keyboard::Right)) {
+                    polygons[0].setPosition(polygons[0].getPosition() + Vector2f(1, 0));
+                }
+                if (Keyboard::isKeyPressed(Keyboard::Left)) {
+                    polygons[0].setPosition(polygons[0].getPosition() + Vector2f(-1, 0));
+                }
+                if (Keyboard::isKeyPressed(Keyboard::Up)) {
+                    polygons[0].setPosition(polygons[0].getPosition() + Vector2f(0, -1));
+                }
+                if (Keyboard::isKeyPressed(Keyboard::Down)) {
+                    polygons[0].setPosition(polygons[0].getPosition() + Vector2f(0, 1));
+                }
+                if (Keyboard::isKeyPressed(Keyboard::Q)) {
+                    polygons[0].rotate(1);
+                }
+                if (Keyboard::isKeyPressed(Keyboard::E)) {
+                    polygons[0].rotate(-1);
+                }
+                if (Keyboard::isKeyPressed(Keyboard::W)) {
+                    polygons[0].setScale(polygons[0].getScale() + Vector2f(.03, .03));
+                }
+                if (Keyboard::isKeyPressed(Keyboard::S)) {
+                    polygons[0].setScale(polygons[0].getScale() - Vector2f(.03, .03));
+                }
             }
         ///*
 
@@ -168,18 +169,19 @@ int main() {
             ///////////////////////////////////////
             window.clear();
 
-            for (Polygon p: polygons) {
-                for (Line l: p.getLines())
-                    window.draw(*l.getDrawable());
-                //window.draw(p);
-            }
+            for (Line l: polygons[0].getLines())
+                    window.draw(*l.getDrawable(Color::Green));
+
+            for (Line l: polygons[1].getLines())
+                    window.draw(*l.getDrawable(Color::Cyan));
+            //window.draw(p);
 
             // DEBUG
             // Add all of the normal lines to the list of drawing objects
-            for (Line l: polygons[0].getLines()) {
-                sf::Vector2f lineCenter = (l.getStart() + l.getEnd()) / 2.0f;
-                window.draw(*Line(lineCenter, lineCenter - l.getNormal() * 30.0f).getDrawable(Color::Green));
-            }
+            // for (Line l: polygons[0].getLines()) {
+            //     sf::Vector2f lineCenter = (l.getStart() + l.getEnd()) / 2.0f;
+            //     window.draw(*Line(lineCenter, lineCenter - l.getNormal() * 30.0f).getDrawable(Color::Yellow));
+            // }
 
             for (sf::Shape* s: polygons[0].intersectAndResolve(polygons[1]))
                 window.draw(*s);

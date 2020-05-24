@@ -134,7 +134,6 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
         // The size of intersectingLines and intersectingPoints should always be the same
         // so either size will work in the for loop above
         sf::Vector2f p = intersectingPoints[i];
-        Line l = intersectingLines[i].second; // Use the second line
 
         // DEBUG
         sf::CircleShape* c = new sf::CircleShape();
@@ -150,50 +149,35 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
         sf::Vector2f poly2CentroidPosition(shape.getPosition().x + (shape.getCentroid().x - shape.getOrigin().x) * shape.getScale().x,
                                             shape.getPosition().y + (shape.getCentroid().y - shape.getOrigin().y) * shape.getScale().y);
 
-        sf::Vector2f poly1PToCOM = p - poly1CentroidPosition;
-        sf::Vector2f poly2PToCOM = p - poly2CentroidPosition;
+        sf::Vector2f centroidDistance = poly2CentroidPosition - poly1CentroidPosition;
+
+        sf::Vector2f poly1CentroidToCollision = (getPosition() - sf::Vector2f(getOrigin().x * getScale().x, getOrigin().y * getScale().y) 
+                + sf::Vector2f(getCenterOfMass().x * getScale().x, getCenterOfMass().y * getScale().y)) - p;
+
+        sf::Vector2f poly2CentroidToCollision = (shape.getPosition() - sf::Vector2f(shape.getOrigin().x * shape.getScale().x, shape.getOrigin().y * shape.getScale().y) 
+                + sf::Vector2f(shape.getCenterOfMass().x * shape.getScale().x, shape.getCenterOfMass().y * shape.getScale().y)) - p;
+
+        sf::Vector2f penetration = centroidDistance - poly1CentroidToCollision - poly2CentroidToCollision;
+
+        vec.push_back(Line((getPosition() - sf::Vector2f(getOrigin().x * getScale().x, getOrigin().y * getScale().y) 
+            + sf::Vector2f(getCenterOfMass().x * getScale().x, getCenterOfMass().y * getScale().y)), p).getDrawable(sf::Color::White));
+
+        vec.push_back(Line((shape.getPosition() - sf::Vector2f(shape.getOrigin().x * shape.getScale().x, shape.getOrigin().y * shape.getScale().y) 
+                + sf::Vector2f(shape.getCenterOfMass().x * shape.getScale().x, shape.getCenterOfMass().y * shape.getScale().y)), p).getDrawable(sf::Color::Blue));
 
         // We grab the normal from our line
-        sf::Vector2f normal = l.getNormal();
+        sf::Vector2f normal1 = intersectingLines[i].first.getNormal();
+        sf::Vector2f normal2 = intersectingLines[i].second.getNormal();
 
-        /**
-         * TODO:
-         * Calculate surface normal when generating the shape using the pixels marked as inside
-         * 
-         * Using current timestep, approximate where the shape will be in the next time step to see if
-         * it collides at all, and then make it not collide by changing the time step to be exactly when the
-         * two would touch.
-         */
+        // We define the direction of the force in terms of the currently instanced class of polygon
+        // and later take the negative for the other shape.
+        sf::Vector2f forceUnitVector = sf::Vector2f((-normal1.x + normal2.x) * .5f, (-normal1.y + normal2.y) * .5f);
 
-        // We also have to make sure the normal is pointing towards the outside of the first shape
-        // We could also focus on the second shape, but then we would have to add the other line in the
-        // loop where we check for intersecting lines above.
+        vec.push_back(Line(p, p - forceUnitVector * 70.f).getDrawable(sf::Color::Magenta));
 
-        // To do this, we extend the normal line in one direction and see how many other lines it intersects with
-        // if this number is even, it is pointing in the correct direction. Otherwise we switch it
+        addForce(Force(forceUnitVector, 100.f, 150.f, poly1CentroidToCollision));
+        shape.addForce(Force(-forceUnitVector, 100.f, 150.f, poly2CentroidToCollision));
 
-        // We extend it by 2X the distance from one corner to the centroid, which should be the max distance any other line
-        // could be
-        /*
-        Line extendedNormal(p, p + VectorMath::normalize(normal, 10 * VectorMath::mag(getCentroid())));
-
-        vec.push_back(extendedNormal.getDrawable(sf::Color::Red));
-
-        int intersectCount = 0;
-        for (Line line: shape.getLines()) {
-            if (extendedNormal.intersects(line))
-                intersectCount++;
-        }
-
-        std::cout << intersectCount << std::endl;
-
-        if (intersectCount % 2 == 0 && intersectCount != 0)
-            normal = -normal;
-        */
-
-        // DEBUG
-        //vec.push_back(Line(intersectingPoints[i], intersectingPoints[i] + normal * 50.0f).getDrawable(sf::Color::Green));
-        //vec.push_back(Line(intersectingPoints[i], intersectingPoints[i] - normal * 50.0f).getDrawable(sf::Color::Red));
 
         // Doesn't work, needs to consider whether the portion of the lines being compared below are actually inside of the shape
         /*
@@ -311,11 +295,6 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
     c->setFillColor(sf::Color::Blue);
     
     */
-    sf::CircleShape* c = new sf::CircleShape();
-    c->setRadius(5);
-    c->setPosition(averageCollision);
-    c->setOrigin(Polygon(*c).getCentroid());
-    c->setFillColor(sf::Color::Blue);
 
     sf::Vector2f poly1CentroidPosition(getPosition().x + (getCentroid().x - getOrigin().x) * getScale().x,
                                         getPosition().y + (getCentroid().y - getOrigin().y) * getScale().y);
