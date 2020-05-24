@@ -1,4 +1,4 @@
-# Install script for directory: /home/jack/cpp-workspace/SFMLCollision
+# Install script for directory: /home/jack/workspaces/cpp-workspace/SFMLCollision
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/jack/cpp-workspace/SFMLCollision/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/jack/workspaces/cpp-workspace/SFMLCollision/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

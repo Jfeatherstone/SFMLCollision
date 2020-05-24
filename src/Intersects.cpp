@@ -310,6 +310,13 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
     c->setOrigin(Polygon(*c).getCentroid());
     c->setFillColor(sf::Color::Blue);
     
+    */
+    sf::CircleShape* c = new sf::CircleShape();
+    c->setRadius(5);
+    c->setPosition(averageCollision);
+    c->setOrigin(Polygon(*c).getCentroid());
+    c->setFillColor(sf::Color::Blue);
+
     sf::Vector2f poly1CentroidPosition(getPosition().x + (getCentroid().x - getOrigin().x) * getScale().x,
                                         getPosition().y + (getCentroid().y - getOrigin().y) * getScale().y);
 
@@ -325,6 +332,8 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
             + sf::Vector2f(shape.getCenterOfMass().x * shape.getScale().x, shape.getCenterOfMass().y * shape.getScale().y)) - averageCollision;
 
     sf::Vector2f penetration = centroidDistance - poly1CentroidToCollision - poly2CentroidToCollision;
+
+    /*
 
     //vec.push_back(Line((getPosition() - sf::Vector2f(getOrigin().x * getScale().x, getOrigin().y * getScale().y) 
     //        + sf::Vector2f(getCenterOfMass().x * getScale().x, getCenterOfMass().y * getScale().y)), averageCollision).getDrawable(sf::Color::White));
@@ -390,7 +399,7 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
 
     float coeffOfRestitution = (getYoungsModulus() + shape.getYoungsModulus());
 
-    float totalVel = (getLinearFreedom() ? VectorMath::mag(getVelocity()) : 0.f) + (shape.getLinearFreedom() ? VectorMath::mag(shape.getVelocity()) : 0.f) + VELOCITY_THRESHOLD;
+    float totalVel = (getLinearFreedom() ? VectorMath::mag(getVelocity()) : 0.f) + (shape.getLinearFreedom() ? VectorMath::mag(shape.getVelocity()) : 0.f);
 
     VectorMath::normalize(poly1CentroidToCollision);
     VectorMath::normalize(poly2CentroidToCollision);
@@ -400,11 +409,15 @@ std::vector<sf::Shape*> Polygon::intersectAndResolve(Polygon& shape) {
     sf::Vector2f poly1Vf = getMass() / totalMass * totalVel * poly1CentroidToCollision * coeffOfRestitution / 2.0f;
     sf::Vector2f poly2Vf = shape.getMass() / totalMass * totalVel * poly2CentroidToCollision * coeffOfRestitution / 2.0f;
 
+    sf::Vector2f poly1Force = (poly1Vf - getVelocity()) * getMass();
+    sf::Vector2f poly2Force = (poly2Vf - shape.getVelocity()) * shape.getMass();
+
     if (getLinearFreedom())
         setVelocity(poly1Vf);
+        //addForce(Force(poly1Force, 1.f));
     if (shape.getLinearFreedom())
         shape.setVelocity(poly2Vf);
-
+        //shape.addForce(Force(poly2Force, 1.f));
     return vec;
     //*/
 
