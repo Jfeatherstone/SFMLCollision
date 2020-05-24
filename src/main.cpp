@@ -9,6 +9,7 @@ using namespace std;
  * This example will show all four levels of detail for a given image.
  * Note that you may have to readjust the window if you decide to try another image.
  */
+/*
 const string IMAGE_PATH = "Images/test.png";
 
 int main(int argc, char** args) {
@@ -62,7 +63,7 @@ int main(int argc, char** args) {
             for (Line l: p.getLines()) {
                 sf::Vector2f lineCenter = (l.getStart() + l.getEnd()) / 2.0f;
                 window.draw(*Line(lineCenter, lineCenter - l.getNormal() * 30.0f).getDrawable(Color::Green));
-            }*/
+            }
 
         }
 
@@ -75,8 +76,8 @@ int main(int argc, char** args) {
     
     return 0;
 }
-
-/*
+//*/
+///*
 int main() {
 
     Texture* t = new Texture();
@@ -97,15 +98,15 @@ int main() {
         polygons[i].setPosition(100 + 300*i, 130 + i*100);
     }
 
-    polygons[0].setVelocity(sf::Vector2f(75, 0));
+    polygons[0].setVelocity(sf::Vector2f(10, 0));
     //polygons[1].setVelocity(sf::Vector2f(-75, 0));
-    polygons[0].setAngularVelocity(100);
+    //polygons[0].setAngularVelocity(100);
 
     polygons[0].setDegreesOfFreedom(true, true);
 
     // Setup the window
     RenderWindow window;
-    window.create(VideoMode(500, 400), "Collision test", Style::Default);
+    window.create(VideoMode(500, 400), "float", Style::Default);
     window.setFramerateLimit(60);
         
     Clock time;
@@ -219,7 +220,7 @@ int main() {
 
     // SETUP THE WINDOW
     sf::RenderWindow window;
-    window.create(sf::VideoMode(500, 450), "Ball Simulation", sf::Style::Default);
+    window.create(sf::VideoMode(500, 450), "yad_powermenu", sf::Style::Default);
     window.setFramerateLimit(60);
 
     // Array of current objects to check collisions
@@ -229,7 +230,7 @@ int main() {
     //c.setSize(Vector2f(50, 30));
     sf::CircleShape c(20);
 
-    float gravity = 10000;
+    float gravity = 1000;
 
     while (window.isOpen()) {
         float elapsed = clock.restart().asSeconds();
@@ -260,7 +261,7 @@ int main() {
         }
 
         // Add balls at the mouse position on click
-        if (window.hasFocus() && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && timeSinceCircle.getElapsedTime().asSeconds() > .1) {
+        if (window.hasFocus() && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && timeSinceCircle.getElapsedTime().asSeconds() > .5) {
             //cout << "Added ball!" << endl;
             Polygon ball(c);
             ball.setOrigin(ball.getCentroid());
@@ -268,9 +269,9 @@ int main() {
             if (!ball.intersects(bin)) {
                 ball.setYoungsModulus(.95f);
                 objects.push_back(ball);
-                std::stringstream s;
-                s << "Polyon Test (" << objects.size() << ")";
-                window.setTitle(s.str());
+                //std::stringstream s;
+                //s << "Polyon Test (" << objects.size() << ")";
+                //window.setTitle(s.str());
                 timeSinceCircle.restart();
             }
         }
@@ -279,10 +280,10 @@ int main() {
 
         // DEBUG
         // Add all of the normal lines to the list of drawing objects
-        for (Line l: bin.getLines()) {
-            sf::Vector2f lineCenter = (l.getStart() + l.getEnd()) / 2.0f;
-            window.draw(*Line(lineCenter, lineCenter - l.getNormal() * 30.0f).getDrawable(Color::Green));
-        }
+        // for (Line l: bin.getLines()) {
+        //     sf::Vector2f lineCenter = (l.getStart() + l.getEnd()) / 2.0f;
+        //     window.draw(*Line(lineCenter, lineCenter - l.getNormal() * 30.0f).getDrawable(Color::Green));
+        // }
 
         for (Line l: bin.getLines()) {
             window.draw(*l.getDrawable());
@@ -292,8 +293,8 @@ int main() {
             for (Line l: p.getLines()) {
                 window.draw(*l.getDrawable());
 
-                sf::Vector2f lineCenter = (l.getStart() + l.getEnd()) / 2.0f;
-                window.draw(*Line(lineCenter, lineCenter - l.getNormal() * 10.0f).getDrawable(Color::Green));
+                // sf::Vector2f lineCenter = (l.getStart() + l.getEnd()) / 2.0f;
+                // window.draw(*Line(lineCenter, lineCenter - l.getNormal() * 10.0f).getDrawable(Color::Green));
 
             }
 

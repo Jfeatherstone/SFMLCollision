@@ -1090,8 +1090,9 @@ void Polygon::createLines() {
 
             // After this, we add our normal and see if we end up in an inside square
             // We have to cast to ints so that we have values at those indicies in the included pixels arr
-            sf::Vector2i newPoint = sf::Vector2i(int(lineCenter.x - normalGuess.x), int(lineCenter.y - normalGuess.y));
-
+            // I use twice the magnitude of the guess since I want to make sure I don't end up on a boundary line
+            // I found this out just by experimenting, so there may be a better way
+            sf::Vector2i newPoint = sf::Vector2i(int(lineCenter.x - 2. * normalGuess.x), int(lineCenter.y - 2. * normalGuess.y));
 
             // Make sure it isn't out of bounds
             sf::Vector2i textureSize(m_includedPixels[0].size(), m_includedPixels.size());
